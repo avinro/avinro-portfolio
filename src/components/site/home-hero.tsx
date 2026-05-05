@@ -19,7 +19,7 @@ const CircularText = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div aria-hidden="true" className="rounded-full" style={{ width: 280, height: 280 }} />
+      <div aria-hidden="true" className="rounded-full" style={{ width: 220, height: 220 }} />
     ),
   },
 );
@@ -64,7 +64,7 @@ export function HomeHero() {
               text={hero.circularText}
               spinDuration={20}
               onHover="slowDown"
-              size={280}
+              size={200}
               fontSize="1rem"
               aria-label="Strategy and execution · Product design"
               className="text-foreground/60"

@@ -138,7 +138,7 @@ Two wrapper components live in `src/components/motion/`. Both are `"use client"`
 
 | Component      | Source          | Role in page                                              |
 | -------------- | --------------- | --------------------------------------------------------- |
-| `CircularText` | React Bits port | Hero (280px, 1rem, grid-right) + footer echo (88px, slow) |
+| `CircularText` | React Bits port | Hero (220px, 1rem, grid-right) + footer echo (88px, slow) |
 | `CurvedLoop`   | React Bits port | WorkDivider chapter break                                 |
 
 **Reduced-motion contract**: Both wrappers call `useReducedMotion()` from `motion/react`. When `prefers-reduced-motion: reduce` is set:
