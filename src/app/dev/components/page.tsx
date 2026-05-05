@@ -1,6 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 
+import { Container, Grid, GridItem, Section as LayoutSection } from "@/components/layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -223,6 +224,77 @@ function SkeletonMatrix() {
   );
 }
 
+/* ─── Layout primitives (PRO-12) ───────────────────────────────────── */
+
+/*
+ * Container / Section / Grid sample. Each sub-block uses the muted
+ * surface so the boundaries of the primitives are visible without
+ * altering them visually. The outer Section uses spacing="none"
+ * because the parent dev page already controls vertical rhythm.
+ */
+function LayoutPrimitivesMatrix() {
+  return (
+    <div className="flex flex-col gap-6">
+      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+        Container — width variants
+      </p>
+      <div className="border-border flex flex-col gap-2 rounded-md border border-dashed p-2">
+        <Container width="narrow" className="bg-muted rounded-md p-2 text-xs">
+          width=narrow (max-w-prose)
+        </Container>
+        <Container width="default" className="bg-muted rounded-md p-2 text-xs">
+          width=default (max-w-6xl)
+        </Container>
+        <Container width="wide" className="bg-muted rounded-md p-2 text-xs">
+          width=wide (max-w-7xl)
+        </Container>
+        <Container width="full" className="bg-muted rounded-md p-2 text-xs">
+          width=full (max-w-none)
+        </Container>
+      </div>
+
+      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+        Section — spacing variants
+      </p>
+      <div className="border-border flex flex-col gap-2 rounded-md border border-dashed">
+        <LayoutSection spacing="hero" as="div" className="bg-muted/50 text-center text-xs">
+          spacing=hero (clamp 64→96px)
+        </LayoutSection>
+        <LayoutSection spacing="section" as="div" className="bg-muted/50 text-center text-xs">
+          spacing=section (clamp 48→80px)
+        </LayoutSection>
+        <LayoutSection spacing="card" as="div" className="bg-muted/50 text-center text-xs">
+          spacing=card (24px)
+        </LayoutSection>
+        <LayoutSection spacing="none" as="div" className="bg-muted/50 py-2 text-center text-xs">
+          spacing=none (consumer controls)
+        </LayoutSection>
+      </div>
+
+      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+        Grid — 1-col mobile, 12-col on lg
+      </p>
+      <Grid gap="default">
+        <GridItem lg={8} className="bg-muted rounded-md p-3 text-xs">
+          lg=8 (main content)
+        </GridItem>
+        <GridItem lg={4} className="bg-muted rounded-md p-3 text-xs">
+          lg=4 (aside)
+        </GridItem>
+        <GridItem lg={4} className="bg-muted rounded-md p-3 text-xs">
+          lg=4
+        </GridItem>
+        <GridItem lg={4} className="bg-muted rounded-md p-3 text-xs">
+          lg=4
+        </GridItem>
+        <GridItem lg={4} className="bg-muted rounded-md p-3 text-xs">
+          lg=4
+        </GridItem>
+      </Grid>
+    </div>
+  );
+}
+
 /* ─── Section wrapper ──────────────────────────────────────────────── */
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -265,6 +337,7 @@ export default function ComponentsPage() {
           <Section title="Badge">{<BadgeMatrix />}</Section>
           <Section title="Card">{<CardMatrix />}</Section>
           <Section title="Skeleton">{<SkeletonMatrix />}</Section>
+          <Section title="Layout primitives">{<LayoutPrimitivesMatrix />}</Section>
         </div>
       </div>
 
@@ -287,6 +360,7 @@ export default function ComponentsPage() {
           <Section title="Badge">{<BadgeMatrix />}</Section>
           <Section title="Card">{<CardMatrix />}</Section>
           <Section title="Skeleton">{<SkeletonMatrix />}</Section>
+          <Section title="Layout primitives">{<LayoutPrimitivesMatrix />}</Section>
         </div>
       </div>
     </div>
