@@ -58,6 +58,11 @@ export function HomeHero() {
             </Button>
             <span className="text-muted-foreground text-sm">{hero.valueProp}</span>
           </div>
+
+          {/* Bonus line — sharp framing statement below the CTA row */}
+          <p className="animate-in fade-in fill-mode-both text-muted-foreground max-w-xl text-sm italic delay-[400ms] duration-700">
+            {hero.bonusLine}
+          </p>
         </div>
       </Container>
     </Section>

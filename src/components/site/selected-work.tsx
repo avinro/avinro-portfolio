@@ -27,6 +27,11 @@ export function SelectedWork() {
             {selectedWork.sectionTitle}
           </p>
 
+          {/* Framing sentence — context before the case list */}
+          <p className="text-muted-foreground max-w-2xl text-base leading-relaxed sm:text-lg">
+            {selectedWork.body}
+          </p>
+
           {/* Editorial rows — no Grid, straight flex-col */}
           <div>
             {selectedWork.cases.map((case_, i) => (

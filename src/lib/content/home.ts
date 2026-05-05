@@ -1,9 +1,9 @@
 /*
- * Home page content — centralised placeholder copy.
+ * Home page content — centralised copy.
  *
- * All text lives here so a future "content" issue can swap it for real copy
- * without touching component files.  Each field is explicitly typed so TypeScript
- * will catch missing keys when the shape evolves.
+ * All text lives here so copy can be updated without touching component files.
+ * Each field is explicitly typed so TypeScript catches missing keys when the
+ * shape evolves.
  */
 
 export interface WorkCase {
@@ -11,7 +11,7 @@ export interface WorkCase {
   title: string;
   summary: string;
   tags: string[];
-  /** Tailwind gradient classes applied to the thumbnail placeholder */
+  /** Tailwind gradient classes applied to the swatch bar placeholder */
   gradient: string;
 }
 
@@ -27,14 +27,21 @@ export interface HomeContent {
     kicker: string;
     headline: string;
     subheadline: string;
-    /** Short availability note displayed beside the secondary CTA */
+    /**
+     * Italicised line rendered below the CTA row — a single sharp statement
+     * that frames the value proposition.
+     */
+    bonusLine: string;
+    /** Short status note displayed beside the secondary in-page CTA */
     valueProp: string;
-    /** Secondary CTA label (outline/link — not the primary sticky CTA) */
+    /** Secondary in-page CTA — outline button, NOT the persistent primary */
     secondaryCta: string;
     secondaryCtaHref: string;
   };
   selectedWork: {
     sectionTitle: string;
+    /** Short framing sentence rendered below the section label */
+    body: string;
     cases: WorkCase[];
   };
   socialProof: {
@@ -51,7 +58,7 @@ export interface HomeContent {
   };
   finalCta: {
     heading: string;
-    /** Supporting link label (secondary, not primary) */
+    /** Supporting text-link label — secondary, never variant="default" */
     linkLabel: string;
     linkHref: string;
   };
@@ -65,28 +72,32 @@ export interface HomeContent {
 export const homeContent: HomeContent = {
   hero: {
     kicker: "Independent practice · 2026",
-    headline: "Product Designer",
+    headline: "I turn product vision into shipped experiences.",
     subheadline:
-      "Shaping product strategy alongside PMs to turn complex problems into clear, scalable products.",
-    valueProp: "Available for new projects",
-    secondaryCta: "View work",
+      "I work at the intersection of strategy and execution — helping teams go from early concept to a product they can actually ship.",
+    bonusLine: "Most projects fail in the gap between idea and execution. That's where I work.",
+    valueProp: "Open to new projects",
+    secondaryCta: "See the work",
     secondaryCtaHref: "/work",
   },
   selectedWork: {
     sectionTitle: "Selected work",
+    body: "A selection of 0→1 products and multi-app systems. Each one started as an unclear idea — and ended up shipped.",
     cases: [
       {
         slug: "uma",
         title: "UMA",
-        summary: "Brand identity and UX system for a next-generation wellness platform.",
-        tags: ["Brand identity", "UX system", "Mobile"],
+        summary:
+          "Took a wellness platform from early concept to a structured product with a complete UX system — ready for a dev team to pick up and build.",
+        tags: ["Product strategy", "UX system", "Web app"],
         gradient: "from-violet-500 to-purple-700",
       },
       {
         slug: "hello-dojo",
         title: "Hello Dojo",
-        summary: "End-to-end product design for an online martial arts learning experience.",
-        tags: ["Product design", "Web app", "Design system"],
+        summary:
+          "Designed the full product ecosystem — customer app, driver app, vendor portal — and unified them into a single design system that the team can actually maintain.",
+        tags: ["Product design", "Multi-app system", "Design system"],
         gradient: "from-orange-400 to-rose-600",
       },
     ],
@@ -95,7 +106,7 @@ export const homeContent: HomeContent = {
     sectionTitle: "Trusted by",
     testimonial: {
       quote:
-        "Working with Avinro transformed how our team thinks about design. Every screen feels intentional.",
+        "Working with Avinro didn't just improve our product — it helped us define it. The result is something we could actually ship and scale.",
       author: "Client Name",
       role: "CEO, Company",
     },
@@ -103,17 +114,17 @@ export const homeContent: HomeContent = {
   },
   aboutTeaser: {
     sectionTitle: "About",
-    bio: "I'm Avinro — a product designer with a background in strategy. I help teams go from blurry problems to polished, scalable products.",
+    bio: "I'm Avinro. Lead Product Designer working at the intersection of product, design and execution. I help teams go from unclear ideas to structured products — and ship them.",
     linkLabel: "More about me",
     linkHref: "/about",
   },
   finalCta: {
-    heading: "Have a project in mind?",
+    heading: "Have something you're trying to build — but not sure how to structure or ship it?",
     linkLabel: "Let's talk",
     linkHref: "/contact",
   },
   primaryCta: {
-    label: "Book a call",
+    label: "Let's talk",
     href: "/contact",
   },
 };
