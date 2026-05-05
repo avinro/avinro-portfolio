@@ -1,14 +1,19 @@
 import { homeContent } from "@/lib/content/home";
 import { Container } from "@/components/layout/container";
-import { Grid, GridItem } from "@/components/layout/grid";
 import { Section } from "@/components/layout/section";
 import { WorkCard } from "./work-card";
 
 /*
- * SelectedWork — 2-column case study grid.
+ * SelectedWork — editorial numbered list of case studies.
  *
- * Grid layout: single column on mobile, 6/6 on lg+ (two equal columns).
- * The Grid component from PRO-12 handles the 12-col breakpoint logic.
+ * Design intent (PRO-13 visual refinement):
+ *   Rows replace the previous 12-col grid of cards. Each project is a full-
+ *   width row with a number, title, tags, summary and a gradient swatch bar.
+ *   This is a flex-col layout — no Grid/GridItem needed here; Grid is reserved
+ *   for case-study pages that require multi-column layouts.
+ *
+ *   The section heading "Selected work" sits above the rows as a small mono
+ *   kicker — not an h2 competing with the editorial row titles.
  */
 export function SelectedWork() {
   const { selectedWork } = homeContent;
@@ -16,18 +21,18 @@ export function SelectedWork() {
   return (
     <Section>
       <Container>
-        <div className="flex flex-col gap-8">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        <div className="flex flex-col gap-6">
+          {/* Section kicker */}
+          <p className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
             {selectedWork.sectionTitle}
-          </h2>
+          </p>
 
-          <Grid gap="default">
-            {selectedWork.cases.map((case_) => (
-              <GridItem key={case_.slug} lg={6}>
-                <WorkCard case_={case_} />
-              </GridItem>
+          {/* Editorial rows — no Grid, straight flex-col */}
+          <div>
+            {selectedWork.cases.map((case_, i) => (
+              <WorkCard key={case_.slug} case_={case_} index={i + 1} />
             ))}
-          </Grid>
+          </div>
         </div>
       </Container>
     </Section>

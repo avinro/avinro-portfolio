@@ -117,17 +117,36 @@ The public home (`/`) is assembled from section components that live in `src/com
 RootLayout
 └── <main id="main-content">
     ├── <HomeHero>       Section spacing="hero", Container width="wide"
-    ├── <SelectedWork>   Section, Grid 12-col → 2 cards lg:6/6
-    ├── <SocialProof>    Section spacing="card"
-    ├── <AboutTeaser>    Section, Container width="narrow"
-    └── <FinalCta>       Section spacing="hero" — secondary link only
+    ├── <SelectedWork>   Section, numbered editorial rows (flex-col, no Grid)
+    ├── <SocialProof>    Section, large-type testimonial
+    ├── <AboutTeaser>    Section, Container width="narrow", bio-as-heading
+    └── <FinalCta>       Section spacing="hero", full-bleed dark inversion, text-link only
 ```
 
 Global chrome in `RootLayout`:
 
 - `<SiteHeader>` — sticky top, skip link, primary CTA at `md+`
-- `<SiteFooter>` — minimal links, `pb-[var(--space-cta-bar)] md:pb-0`
+- `<SiteFooter>` — wordmark + nav + copyright, `pb-[var(--space-cta-bar)] md:pb-0`
 - `<MobileCtaBar>` — fixed bottom, `md:hidden`, `pb-[env(safe-area-inset-bottom)]`
+
+### Editorial type system (PRO-13 visual refinement)
+
+Three fluid display tokens live in `globals.css` alongside the Tailwind scale. They are applied via `style={{ fontSize: "var(--text-display-*)" }}` because `clamp()` values cannot be used as Tailwind utility classes.
+
+| Token               | Value                           | Used by                   |
+| ------------------- | ------------------------------- | ------------------------- |
+| `--text-display-sm` | `clamp(1.75rem, 3.5vw, 2.5rem)` | `SocialProof` large quote |
+| `--text-display-md` | `clamp(3.5rem, 8vw, 6rem)`      | `FinalCta` heading        |
+| `--text-display-lg` | `clamp(4rem, 12vw, 9rem)`       | `HomeHero` h1             |
+
+All three use `font-display` (Google Sans Flex), `tracking-tight` (`-0.04em`), and `line-height: 0.95` for editorial tightness.
+
+### Section design patterns
+
+- **Kicker**: sections use a small `font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground` label instead of a competing `<h2>`. This reserves the heading level for the actual content.
+- **Editorial rows** (`SelectedWork`): projects are numbered `01`/`02` flex rows. The gradient swatch is a `h-[3px]` full-width bar (`aria-hidden`). No `Grid`/`GridItem` — those are reserved for multi-column case-study pages.
+- **Full-bleed inversion** (`FinalCta`): `bg-foreground text-background` on the `<Section>` element creates a dark block spanning the full viewport width. Contrast: `--foreground` on `--background` ≈ 17:1 (AAA). Dark mode inverts naturally.
+- **Entrance motion** (`HomeHero`): CSS-only stagger using `tw-animate-css` utilities (`animate-in fade-in slide-in-from-bottom-* fill-mode-both duration-* delay-*`). The `fill-mode-both` class ensures elements start in the `from` state before the animation plays. All utilities respect `prefers-reduced-motion: reduce` automatically.
 
 ### CTA strategy — one and only one primary CTA
 
@@ -135,17 +154,17 @@ Global chrome in `RootLayout`:
 
 - **`md+`**: `SiteHeader` renders the primary `Button` ("Book a call") in a sticky bar at the top.
 - **`<md`**: `MobileCtaBar` renders the same CTA in a fixed bar at the bottom.
-- **In-page sections** (`HomeHero`, `FinalCta`) use `variant="outline"` or `variant="link"` only — never `variant="default"`.
+- **In-page sections**: `HomeHero` uses `variant="outline"`; `FinalCta` uses a plain text-link (`<Link>` with underline border). Neither competes with the persistent primary CTA.
 
 ### Accessibility additions (ui-ux-pro-max §1)
 
 - Skip link (`href="#main-content"`) is the first focusable element in `SiteHeader`; it becomes visible on keyboard focus.
 - `<main id="main-content">` is the skip link target.
 - `scroll-padding-top: 4rem` in `globals.css` prevents the sticky header from covering anchor targets or keyboard-focused elements.
-- Decorative thumbnails and logo placeholder blocks carry `aria-hidden="true"`.
-- Touch targets meet ≥44px via `min-h-[44px]` on interactive card rows and the sticky CTA button.
+- Decorative elements (gradient swatch, logo placeholders, quotation mark ornament) carry `aria-hidden="true"`.
+- Touch targets meet ≥44px via `min-h-[44px]` on interactive row content and the sticky CTA button.
 
-### Spacing tokens added in PRO-13
+### Spacing tokens
 
 | Token             | Value    | Use                                                             |
 | ----------------- | -------- | --------------------------------------------------------------- |

@@ -106,6 +106,20 @@
   --radius-3xl: calc(var(--radius) * 2.5);
   --radius-4xl: calc(var(--radius) * 3);
 
+  /* ── Editorial display type (PRO-13 visual refinement) ─────────────
+   * Fluid sizes for hero and closing CTA only — not part of the Tailwind
+   * type scale so they never collide with text-* utilities.
+   * Applied via inline style={{ fontSize: "var(--text-display-*)" }}
+   * to keep Tailwind's JIT from needing to see the clamp() string.
+   *
+   * --text-display-sm   used by: SocialProof large quote
+   * --text-display-md   used by: FinalCta heading
+   * --text-display-lg   used by: HomeHero h1
+   */
+  --text-display-sm: clamp(1.75rem, 3.5vw, 2.5rem);
+  --text-display-md: clamp(3.5rem, 8vw, 6rem);
+  --text-display-lg: clamp(4rem, 12vw, 9rem);
+
   /* ── Portfolio spacing scale (PRO-12) ────────────────────────────────
    * Semantic vertical-rhythm tokens consumed by layout primitives
    * (Container, Section, Grid). Values use clamp() so spacing scales

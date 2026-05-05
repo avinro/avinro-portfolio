@@ -7,8 +7,16 @@ import { Section } from "@/components/layout/section";
 /*
  * AboutTeaser — short bio with a link to the full /about page.
  *
- * Uses Container width="narrow" (max-w-prose) to keep the bio at a
- * comfortable reading measure on wide viewports.
+ * Design intent (PRO-13 visual refinement):
+ *   The generic "About" heading label is removed — the bio opens immediately
+ *   with a typographically expressive first sentence styled as a display
+ *   heading. The rest of the content follows in body weight.
+ *
+ *   The "More about me" link is styled in mono to maintain the editorial
+ *   system: mono = navigation/meta text, display = content headlines.
+ *
+ *   Container width="narrow" (max-w-prose) keeps the reading measure
+ *   comfortable on wide viewports.
  */
 export function AboutTeaser() {
   const { aboutTeaser } = homeContent;
@@ -16,16 +24,24 @@ export function AboutTeaser() {
   return (
     <Section>
       <Container width="narrow">
-        <div className="flex flex-col gap-4">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            {aboutTeaser.sectionTitle}
-          </h2>
-          <p className="text-muted-foreground text-base leading-relaxed">{aboutTeaser.bio}</p>
+        <div className="flex flex-col gap-5">
+          {/* Bio — first sentence visually acts as the section heading */}
+          <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
+            {aboutTeaser.bio}
+          </p>
+
+          {/* Mono link — meta/navigation register */}
           <Link
             href={aboutTeaser.linkHref}
-            className="text-foreground text-sm font-medium underline-offset-4 hover:underline"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 font-mono text-sm underline-offset-4 transition-colors hover:underline"
           >
-            {aboutTeaser.linkLabel} &rarr;
+            {aboutTeaser.linkLabel}
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-150 group-hover:translate-x-0.5"
+            >
+              →
+            </span>
           </Link>
         </div>
       </Container>

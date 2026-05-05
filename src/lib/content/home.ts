@@ -23,8 +23,11 @@ export interface Testimonial {
 
 export interface HomeContent {
   hero: {
+    /** Small mono label above the headline — practice type and year */
+    kicker: string;
     headline: string;
     subheadline: string;
+    /** Short availability note displayed beside the secondary CTA */
     valueProp: string;
     /** Secondary CTA label (outline/link — not the primary sticky CTA) */
     secondaryCta: string;
@@ -61,10 +64,11 @@ export interface HomeContent {
 
 export const homeContent: HomeContent = {
   hero: {
+    kicker: "Independent practice · 2026",
     headline: "Product Designer",
     subheadline:
-      "Crafting digital products that work — shaping product strategy alongside PMs to turn complexity into clarity.",
-    valueProp: "UX systems · Brand identity · Client portals",
+      "Shaping product strategy alongside PMs to turn complex problems into clear, scalable products.",
+    valueProp: "Available for new projects",
     secondaryCta: "View work",
     secondaryCtaHref: "/work",
   },

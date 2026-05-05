@@ -3,48 +3,68 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
 /*
- * SocialProof — testimonial + decorative client logo row.
+ * SocialProof — testimonial section.
  *
- * Accessibility:
- *   - The logo placeholders are purely decorative (aria-hidden="true").
- *     The accessible social proof is the testimonial quote and attribution.
- *   - The section title "Trusted by" is visible text, not color-only signaling.
+ * Design intent (PRO-13 visual refinement):
+ *   The testimonial quote is the entire visual — large, typographically
+ *   expressive, no borders or call-out boxes. The large decorative opening
+ *   quotation mark is aria-hidden (purely visual ornament).
  *
- * Content note: all text is placeholder — swap via homeContent in a future
- * content issue.
+ *   Logo row: demoted to small muted rectangles below the attribution,
+ *   clearly decorative (aria-hidden) — the accessible social proof is the
+ *   text of the quote and its attribution, not logo shapes.
+ *
+ *   "Trusted by" becomes a mono kicker above the quote, not a bold heading.
  */
 export function SocialProof() {
   const { socialProof } = homeContent;
 
   return (
-    <Section spacing="card">
+    <Section>
       <Container>
         <div className="flex flex-col gap-8">
-          <h2 className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
+          {/* Section kicker */}
+          <p className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
             {socialProof.sectionTitle}
-          </h2>
+          </p>
 
-          {/* Decorative logo row — no accessible meaning, actual proof is the quote */}
-          <div aria-hidden="true" className="flex flex-wrap gap-4">
-            {Array.from({ length: socialProof.logoCount }).map((_, i) => (
-              <div key={i} className="bg-muted h-8 w-24 rounded-md sm:h-9 sm:w-28" />
-            ))}
-          </div>
+          {/* Quote block */}
+          <figure className="flex flex-col gap-6">
+            {/* Decorative opening quotation mark */}
+            <span
+              aria-hidden="true"
+              className="font-display text-muted-foreground/30 text-6xl leading-none select-none sm:text-7xl"
+            >
+              &ldquo;
+            </span>
 
-          {/* Testimonial — the meaningful social proof element */}
-          <figure className="border-border border-l-2 pl-5">
+            {/* The testimonial quote is the visual centrepiece */}
             <blockquote>
-              <p className="text-foreground text-base leading-relaxed sm:text-lg">
-                &ldquo;{socialProof.testimonial.quote}&rdquo;
+              <p
+                className="font-display text-foreground leading-tight font-semibold tracking-tight text-balance"
+                style={{ fontSize: "var(--text-display-sm)" }}
+              >
+                {socialProof.testimonial.quote}
               </p>
             </blockquote>
-            <figcaption className="mt-3">
-              <p className="text-muted-foreground text-sm font-medium">
+
+            {/* Attribution */}
+            <figcaption className="flex flex-col gap-0.5">
+              <span className="text-foreground text-sm font-medium">
                 {socialProof.testimonial.author}
-              </p>
-              <p className="text-muted-foreground text-sm">{socialProof.testimonial.role}</p>
+              </span>
+              <span className="text-muted-foreground font-mono text-xs">
+                {socialProof.testimonial.role}
+              </span>
             </figcaption>
           </figure>
+
+          {/* Decorative logo placeholders — purely visual, no a11y meaning */}
+          <ul aria-hidden="true" className="flex flex-wrap gap-3">
+            {Array.from({ length: socialProof.logoCount }).map((_, i) => (
+              <li key={i} className="bg-muted/60 h-6 w-20 rounded-sm opacity-60 sm:h-7 sm:w-24" />
+            ))}
+          </ul>
         </div>
       </Container>
     </Section>

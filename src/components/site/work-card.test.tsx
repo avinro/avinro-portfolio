@@ -24,34 +24,38 @@ const mockCase: WorkCase = {
 
 describe("WorkCard", () => {
   it("renders data-slot=work-card", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
     expect(html).toContain('data-slot="work-card"');
   });
 
   it("links to the correct slug URL", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
     expect(html).toContain('href="/work/test-project"');
   });
 
   it("renders the case title and summary", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
     expect(html).toContain("Test Project");
     expect(html).toContain("A test case study summary.");
   });
 
-  it("renders all tags", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
-    expect(html).toContain("Tag A");
-    expect(html).toContain("Tag B");
+  it("renders all tags as dot-separated text", () => {
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
+    expect(html).toContain("Tag A · Tag B");
   });
 
-  it("marks the thumbnail as aria-hidden for decorative content", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
+  it("marks the gradient swatch as aria-hidden for decorative content", () => {
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
     expect(html).toContain('aria-hidden="true"');
   });
 
   it("includes min-h-[44px] for touch target compliance", () => {
-    const html = renderToStaticMarkup(<WorkCard case_={mockCase} />);
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
     expect(html).toContain("min-h-[44px]");
+  });
+
+  it("renders the zero-padded index number", () => {
+    const html = renderToStaticMarkup(<WorkCard case_={mockCase} index={1} />);
+    expect(html).toContain("01");
   });
 });
