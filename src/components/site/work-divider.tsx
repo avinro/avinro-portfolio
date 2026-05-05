@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 
 import { homeContent } from "@/lib/content/home";
