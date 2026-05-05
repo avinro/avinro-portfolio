@@ -118,7 +118,7 @@ export const homeContent: HomeContent = {
     sectionTitle: "Trusted by",
     testimonial: {
       quote:
-        "Working with Avinro didn't just improve our product — it helped us define it. The result is something we could actually ship and scale.",
+        "Working with Ary didn't just improve our product — it helped us define it. The result is something we could actually ship and scale.",
       author: "Client Name",
       role: "CEO, Company",
     },
@@ -126,7 +126,7 @@ export const homeContent: HomeContent = {
   },
   aboutTeaser: {
     sectionTitle: "About",
-    bio: "I'm Avinro. Lead Product Designer working at the intersection of product, design and execution. I help teams go from unclear ideas to structured products — and ship them.",
+    bio: "I'm Ary. Lead Product Designer working at the intersection of product, design and execution. I help teams go from unclear ideas to structured products — and ship them.",
     linkLabel: "More about me",
     linkHref: "/about",
   },
