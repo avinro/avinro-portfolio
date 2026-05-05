@@ -24,8 +24,8 @@ export function AboutTeaser() {
   return (
     <Section>
       <Container width="narrow">
-        <div className="flex flex-col gap-5">
-          {/* Bio — first sentence visually acts as the section heading */}
+        <div className="flex flex-col items-center gap-5 text-center">
+          {/* Bio — centred, acts as the section heading */}
           <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
             {aboutTeaser.bio}
           </p>
@@ -36,10 +36,7 @@ export function AboutTeaser() {
             className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 font-mono text-sm underline-offset-4 transition-colors hover:underline"
           >
             {aboutTeaser.linkLabel}
-            <span
-              aria-hidden="true"
-              className="transition-transform duration-150 group-hover:translate-x-0.5"
-            >
+            <span aria-hidden="true" className="transition-transform duration-150">
               →
             </span>
           </Link>

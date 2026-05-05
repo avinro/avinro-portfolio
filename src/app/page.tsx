@@ -48,8 +48,8 @@ export const metadata: Metadata = {
  *   1. HomeHero     — headline, sub, secondary CTA + CircularText protagonist
  *   2. WorkDivider  — CurvedLoop chapter break
  *   3. SelectedWork — 3 case study editorial rows
- *   4. SocialProof  — testimonial + decorative logo row
- *   5. AboutTeaser  — short bio + link to /about
+ *   4. AboutTeaser  — short bio + link to /about (centred, below work)
+ *   5. SocialProof  — testimonial + decorative logo row
  *
  * The closing CTA lives inside SiteFooter so the page has one cohesive
  * full-screen closing section rather than a separate CTA block plus footer.
@@ -63,8 +63,8 @@ export default function Home() {
       <HomeHero />
       <WorkDivider />
       <SelectedWork />
-      <SocialProof />
       <AboutTeaser />
+      <SocialProof />
     </main>
   );
 }
