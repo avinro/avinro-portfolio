@@ -126,6 +126,11 @@
   --space-card: 1.5rem;
   --space-section: clamp(3rem, 6vw, 5rem);
   --space-hero: clamp(4rem, 8vw, 6rem);
+
+  /* Height reserved for the fixed MobileCtaBar on <md viewports.
+   * Applied as padding-bottom on SiteFooter (mobile only) so the last
+   * content item is never hidden behind the bar. */
+  --space-cta-bar: 4.5rem;
 }
 
 /* ─── Light mode ──────────────────────────────────────────────────────
@@ -267,6 +272,9 @@
   }
   html {
     @apply font-sans;
+    /* Prevent the sticky header from covering anchor targets and focused
+     * elements when the user navigates via keyboard or an in-page link. */
+    scroll-padding-top: 4rem; /* matches SiteHeader h-14 (~3.5rem) + buffer */
   }
   /* Headings use the display font with tightened tracking */
   h1,

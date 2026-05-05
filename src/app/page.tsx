@@ -1,33 +1,67 @@
-import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+
+import { HomeHero } from "@/components/site/home-hero";
+import { SelectedWork } from "@/components/site/selected-work";
+import { SocialProof } from "@/components/site/social-proof";
+import { AboutTeaser } from "@/components/site/about-teaser";
+import { FinalCta } from "@/components/site/final-cta";
 
 /*
- * Placeholder landing page — replaced in Phase 1 (F1-* portfolio issues).
- * Verifies the full token system is wired correctly after PRO-7:
- *   — Google Sans Flex heading font via font-display
- *   — Manrope body font via font-sans (html default)
- *   — bg-primary = near-black (light) / near-white (dark)
- *   — shadcn Button renders with the new palette
- *   — Mobile-first layout: base targets 375 px, breakpoints expand upward
+ * Home page metadata — Open Graph and Twitter cards are wired to the
+ * dynamic opengraph-image.tsx handler in this directory so they update
+ * automatically whenever the handler changes.
+ */
+export const metadata: Metadata = {
+  title: "Avinro — Product Designer",
+  description:
+    "Product designer crafting thoughtful UX systems, brand identities, and digital products.",
+  openGraph: {
+    title: "Avinro — Product Designer",
+    description:
+      "Product designer crafting thoughtful UX systems, brand identities, and digital products.",
+    url: "https://avinro.com",
+    siteName: "Avinro",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Avinro — Product Designer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Avinro — Product Designer",
+    description:
+      "Product designer crafting thoughtful UX systems, brand identities, and digital products.",
+    images: ["/opengraph-image"],
+  },
+};
+
+/*
+ * Home page — public portfolio landing.
+ *
+ * Sections:
+ *   1. HomeHero    — headline, sub, secondary CTA
+ *   2. SelectedWork — 2 case study cards
+ *   3. SocialProof — testimonial + decorative logo row
+ *   4. AboutTeaser — short bio + link to /about
+ *   5. FinalCta    — closing heading + secondary supporting CTA
+ *
+ * The <main> id="main-content" is the target for the skip link rendered in
+ * SiteHeader, allowing keyboard users to bypass navigation directly.
  */
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-16 text-center">
-      {/* Wordmark placeholder */}
-      <div className="bg-primary text-primary-foreground flex h-12 w-12 items-center justify-center rounded-xl text-xl font-bold select-none">
-        A
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl tracking-tight sm:text-3xl">Avinro — Product Designer</h1>
-        <p className="text-muted-foreground max-w-sm text-sm sm:max-w-md sm:text-base">
-          Strategic design leadership — brand identity, UX systems, and client portals.
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Button>Get in touch</Button>
-        <Button variant="outline">View work</Button>
-      </div>
+    <main id="main-content">
+      <HomeHero />
+      <SelectedWork />
+      <SocialProof />
+      <AboutTeaser />
+      <FinalCta />
     </main>
   );
 }

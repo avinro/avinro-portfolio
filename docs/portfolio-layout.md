@@ -107,6 +107,50 @@ Gap semantics:
 
 > Note: `GridItem` only exposes the `lg` span. Mobile is always single-column. If a layout needs different column tracks at other breakpoints, drop down to plain Tailwind grid utilities — the `Grid/GridItem` API is intentionally narrow.
 
+## Home page composition (PRO-13)
+
+The public home (`/`) is assembled from section components that live in `src/components/site/`. All copy is centralised in `src/lib/content/home.ts` so a future content issue can swap placeholder text without touching component files.
+
+### Section tree
+
+```
+RootLayout
+└── <main id="main-content">
+    ├── <HomeHero>       Section spacing="hero", Container width="wide"
+    ├── <SelectedWork>   Section, Grid 12-col → 2 cards lg:6/6
+    ├── <SocialProof>    Section spacing="card"
+    ├── <AboutTeaser>    Section, Container width="narrow"
+    └── <FinalCta>       Section spacing="hero" — secondary link only
+```
+
+Global chrome in `RootLayout`:
+
+- `<SiteHeader>` — sticky top, skip link, primary CTA at `md+`
+- `<SiteFooter>` — minimal links, `pb-[var(--space-cta-bar)] md:pb-0`
+- `<MobileCtaBar>` — fixed bottom, `md:hidden`, `pb-[env(safe-area-inset-bottom)]`
+
+### CTA strategy — one and only one primary CTA
+
+`ui-ux-pro-max §4 primary-action` requires exactly one primary CTA visible at any scroll depth:
+
+- **`md+`**: `SiteHeader` renders the primary `Button` ("Book a call") in a sticky bar at the top.
+- **`<md`**: `MobileCtaBar` renders the same CTA in a fixed bar at the bottom.
+- **In-page sections** (`HomeHero`, `FinalCta`) use `variant="outline"` or `variant="link"` only — never `variant="default"`.
+
+### Accessibility additions (ui-ux-pro-max §1)
+
+- Skip link (`href="#main-content"`) is the first focusable element in `SiteHeader`; it becomes visible on keyboard focus.
+- `<main id="main-content">` is the skip link target.
+- `scroll-padding-top: 4rem` in `globals.css` prevents the sticky header from covering anchor targets or keyboard-focused elements.
+- Decorative thumbnails and logo placeholder blocks carry `aria-hidden="true"`.
+- Touch targets meet ≥44px via `min-h-[44px]` on interactive card rows and the sticky CTA button.
+
+### Spacing tokens added in PRO-13
+
+| Token             | Value    | Use                                                             |
+| ----------------- | -------- | --------------------------------------------------------------- |
+| `--space-cta-bar` | `4.5rem` | Bottom padding on `SiteFooter` on `<md` to clear `MobileCtaBar` |
+
 ## Validation checklist (ui-ux-pro-max §5)
 
 Apply on every portfolio page before merging:
@@ -118,3 +162,6 @@ Apply on every portfolio page before merging:
 - viewport-units — `min-h-dvh` instead of `100vh` (already applied in [`src/app/layout.tsx`](../src/app/layout.tsx)).
 - horizontal-scroll — verified at 375 px that nothing overflows.
 - safe-area — `Container` gutters keep content away from screen edges.
+- skip-link — `SiteHeader` includes a visible-on-focus skip link targeting `#main-content`.
+- single-primary-cta — only `SiteHeader` (md+) and `MobileCtaBar` (<md) use `variant="default"`.
+- touch-targets — interactive elements have a minimum 44px touch area.
