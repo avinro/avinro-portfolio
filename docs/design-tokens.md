@@ -117,6 +117,35 @@ All radii derive from `--radius: 0.5rem` (8 px):
 
 ---
 
+## Spacing Scale (PRO-12)
+
+Semantic vertical-rhythm tokens consumed by the portfolio layout primitives. Hero and section tokens use `clamp()` so spacing scales fluidly with the viewport — no media queries are needed in components.
+
+| Token             | Value                    | Use                                             |
+| ----------------- | ------------------------ | ----------------------------------------------- |
+| `--space-inline`  | `0.75rem` (12 px)        | gap between adjacent inline elements            |
+| `--space-card`    | `1.5rem` (24 px)         | internal padding of cards / compact blocks      |
+| `--space-section` | `clamp(3rem, 6vw, 5rem)` | vertical gap between page sections (48 → 80 px) |
+| `--space-hero`    | `clamp(4rem, 8vw, 6rem)` | vertical padding for hero blocks (64 → 96 px)   |
+
+These tokens are consumed exclusively by the layout primitives in [`src/components/layout/`](../src/components/layout). Page authors should not reference them directly; instead, use `<Section spacing="hero">` etc.
+
+Full layout system: [`docs/portfolio-layout.md`](portfolio-layout.md).
+
+## PRO-12 Closure Notes
+
+PRO-12 (Design tokens and mobile-first layout system for portfolio) is fully covered by:
+
+- This file (palette, fonts, dark mode, radii, spacing).
+- [`docs/portfolio-layout.md`](portfolio-layout.md) (breakpoints, layout primitives, validation checklist).
+- [`src/components/layout/`](../src/components/layout) (`Container`, `Section`, `Grid/GridItem`).
+- [`src/app/dev/components`](../src/app/dev/components/page.tsx) (live sample of all primitives in light + dark).
+
+Two original ACs were edited at the start of PRO-12 to reflect the actual stack:
+
+- **"Figma tokens match `tailwind.config.ts` values"** — there is no `tailwind.config.ts` in this repo (Tailwind v4 CSS-first), and no Figma source of truth is in scope yet. Removed.
+- **"Dark mode tokens stubbed"** — already fully delivered by PRO-7 with semantic OKLCH variables under `.dark`. Marked as closed instead of stubbed.
+
 ## Consuming Tokens in Phase 1
 
 ### In TSX / Tailwind classes
