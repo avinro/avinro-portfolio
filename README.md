@@ -83,6 +83,17 @@ PRO-7 (F0-3) will define the full token system (colour palette, typography scale
 - Mobile-first CSS — base classes target 375 px; breakpoints expand upward
 - Conventional commit format
 
+## Deployment
+
+| Target     | Branch | URL                       |
+| ---------- | ------ | ------------------------- |
+| Production | `main` | https://avinro.com        |
+| Preview    | any PR | unique `*.vercel.app` URL |
+
+- Security headers (HSTS, X-Frame-Options, CSP) are declared in `vercel.json` and applied at the Vercel CDN level on every request.
+- Preview deploys are created automatically for every pull request — no extra configuration needed.
+- Production deploys are triggered only by pushes to `main`.
+
 ## Phases
 
 | Phase | Scope                       |
