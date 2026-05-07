@@ -29,10 +29,14 @@ export function SelectedWork() {
     <Section>
       <Container>
         <div className="flex flex-col gap-6">
-          {/* Section kicker */}
-          <p className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
+          {/*
+           * Section heading — styled as a kicker (small mono) but promoted to h2
+           * so WorkCard's h3 titles have a proper parent in the heading hierarchy.
+           * h1 (HomeHero headline) → h2 (here) → h3 (WorkCard title) is correct.
+           */}
+          <h2 className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
             {selectedWork.sectionTitle}
-          </p>
+          </h2>
 
           {/* Framing sentence — context before the case list */}
           <p className="text-muted-foreground max-w-2xl text-base leading-relaxed sm:text-lg">

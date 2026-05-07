@@ -111,31 +111,51 @@ Assertions (`.lighthouserc.json`):
 
 ---
 
-## Lighthouse scores (final)
+## CI run — Vercel preview scores (2026-05-08)
 
-> Scores below are to be filled in after this branch is deployed to a Vercel preview and `npm run lighthouse:preview` is run against the preview URL.
+First CI run against `design-leads-gk6y88g75-avinroart-3787s-projects.vercel.app`. Two root-cause issues found and fixed in this commit (see below).
 
-| Route              | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
-| ------------------ | ----------- | ------------- | -------------- | --- | --- | --- | --- |
-| `/`                | —           | —             | —              | —   | —   | —   | —   |
-| `/work`            | —           | —             | —              | —   | —   | —   | —   |
-| `/work/hello-dojo` | —           | —             | —              | —   | —   | —   | —   |
-| `/about`           | —           | —             | —              | —   | —   | —   | —   |
-| `/contact`         | —           | —             | —              | —   | —   | —   | —   |
+| Route              | Performance | Accessibility | Best Practices | SEO       | LCP       | CLS  | TBT      |
+| ------------------ | ----------- | ------------- | -------------- | --------- | --------- | ---- | -------- |
+| `/`                | **95** ✅   | **98** ✅     | **96** ✅      | ~~66~~ ⚠️ | 2851ms ⚠️ | 0 ✅ | 100ms ✅ |
+| `/work`            | 89 ⚠️       | —             | —              | ~~66~~ ⚠️ | 3655ms ⚠️ | —    | —        |
+| `/work/hello-dojo` | —           | **87** ❌     | —              | ~~69~~ ⚠️ | —         | —    | —        |
+| `/about`           | —           | —             | —              | ~~66~~ ⚠️ | 3189ms ⚠️ | —    | —        |
+| `/contact`         | 87 ⚠️       | —             | —              | ~~66~~ ⚠️ | 3914ms ⚠️ | —    | —        |
+
+### Root cause 1 — SEO 0.66 on all routes (FIXED in `.lighthouserc.json`)
+
+**Cause:** Vercel automatically adds `X-Robots-Tag: noindex` to every preview deployment URL. Lighthouse correctly flags the `is-crawlable` audit as failed. This is intentional Vercel behavior to prevent preview URLs from being indexed — it is NOT a code issue.
+
+**Evidence:** Report line: `Blocking Directive Source: x-robots-tag: noindex`
+
+**Fix:** Changed `categories:seo` assertion from `"error"` to `"warn"`. The SEO gate must be verified on `avinro.com` (production), not on a preview URL. All other SEO audits (title, meta description, canonical, robots.txt, link text, crawlable links) already pass.
+
+### Root cause 2 — Accessibility 0.87 on `/work/hello-dojo` (FIXED in components.tsx + selected-work.tsx)
+
+**Cause A:** `BeforeAfter` MDX component used `aria-label` on a plain `<div>` (implicit `role="generic"`). ARIA 1.2 prohibits `aria-label` on `role="generic"` elements. axe-core 4.10 enforces this via `aria-prohibited-attr`. `hello-dojo` is the only page using `BeforeAfter` (two instances).
+
+**Fix A:** Added `role="figure"` to the `BeforeAfter` outer div. The `figure` role permits `aria-label` and is semantically correct for a data comparison widget.
+
+**Cause B:** `SelectedWork` used a `<p>` kicker before `WorkCard`'s `<h3>` titles. Heading order on the home page: H1 → H3 (skip H2), flagged by Lighthouse.
+
+**Fix B:** Promoted `<p>` kicker in `SelectedWork` to `<h2>` with identical visual styles. Heading hierarchy is now correct: H1 → H2 → H3.
 
 ---
 
 ## Remaining risks and post-launch items
 
-| Risk                            | Severity | Notes                                                                                                                                           |
-| ------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Lighthouse score variance       | Low      | Lab scores fluctuate ±5 points between runs. Soft-gate on Performance (warn, not error) accounts for this.                                      |
-| Real INP unknown                | Low      | TBT is the lab proxy. Real INP is measured via Vercel Speed Insights after launch (PRO-22 / post-launch).                                       |
-| Google Sans Flex on cold visits | Low      | With `display: optional`, first-time visitors on slow connections see system sans-serif. Visually acceptable; no CLS. Resolves on second visit. |
-| `/contact` page delta at 85KB   | Low      | Within the 100KB budget but the closest. Main contributor is react-hook-form + @hookform/resolvers + zod. Acceptable given the form complexity. |
+| Risk                            | Severity | Notes                                                                                                                                                                |
+| ------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lighthouse score variance       | Low      | Lab scores fluctuate ±5 points between runs. Soft-gate on Performance (warn) accounts for this.                                                                      |
+| Real INP unknown                | Low      | TBT is the lab proxy. Real INP confirmed with Vercel Speed Insights post-launch.                                                                                     |
+| Google Sans Flex on cold visits | Low      | `display: optional` — first cold visit on slow connections shows system sans-serif, no CLS. Resolves on second visit.                                                |
+| `/contact` page delta at 85KB   | Low      | Within the 100KB budget. Main contributor: react-hook-form + @hookform/resolvers + zod.                                                                              |
+| LCP > 2.5s (soft warning)       | Low      | `/work` 3655ms, `/contact` 3914ms. Hero CSS entry animations delay render of LCP text element. Performance score still 87-95 (passes). Confirm with RUM post-launch. |
+| SEO on preview (structural)     | None     | SEO will always warn on Vercel preview URLs due to noindex. Verify on `avinro.com` after launch.                                                                     |
 
 ---
 
 ## Verdict
 
-All pre-launch code-side requirements of PRO-21 are complete. The issue remains **open** until Lighthouse scores are captured from the Vercel preview and filled into the table above. At that point, if all hard-gate assertions (Accessibility >= 90, SEO >= 90, CLS < 0.1) pass, PRO-21 can be closed.
+All hard-gate issues resolved: Accessibility failures fixed, SEO warning correctly downgraded for preview-URL behavior. The issue remains **open** pending a second CI run after this commit deploys to confirm: Accessibility >= 90 on all routes, CLS < 0.1, no new hard-gate failures.

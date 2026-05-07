@@ -452,8 +452,11 @@ export function BeforeAfter({
 
   return (
     <div
-      className={cn("border-border/40 my-8 overflow-hidden rounded-xl border", className)}
+      // role="figure" gives the div an explicit ARIA role so aria-label is permitted.
+      // ARIA 1.2 prohibits aria-label on elements with implicit role="generic" (plain div).
+      role="figure"
       aria-label={`${label}: changed from ${before} to ${after}`}
+      className={cn("border-border/40 my-8 overflow-hidden rounded-xl border", className)}
     >
       <p className="text-muted-foreground border-border/40 border-b px-5 py-3 font-mono text-xs tracking-widest uppercase sm:px-6">
         {label}
