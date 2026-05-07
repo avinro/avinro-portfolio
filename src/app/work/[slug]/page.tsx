@@ -236,7 +236,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </Section>
 
       {/* Outcome strip — top-level KPIs from frontmatter, visible before the body */}
-      {frontmatter.kpis?.length ? (
+      {Array.isArray(frontmatter.kpis) && frontmatter.kpis.length > 0 ? (
         <Section spacing="card">
           <Container>
             <p className="text-muted-foreground mb-6 font-mono text-xs tracking-widest uppercase">

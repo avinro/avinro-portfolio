@@ -351,11 +351,14 @@ export interface StatItem {
 }
 
 interface StatsProps {
-  data: StatItem[];
+  data?: StatItem[];
   className?: string;
 }
 
 export function Stats({ data, className }: StatsProps) {
+  // Guard: data can be undefined when Stats is called from MDX without props.
+  if (!data?.length) return null;
+
   return (
     <dl
       className={cn(
@@ -425,20 +428,22 @@ export function Stats({ data, className }: StatsProps) {
 
 interface BeforeAfterProps {
   label: string;
-  from: string;
-  to: string;
+  // Renamed from `from`/`to` — those are ES module keywords that cause
+  // MDX compile errors when used as JSX attribute names in .mdx files.
+  before: string;
+  after: string;
   sentiment?: "positive" | "neutral" | "negative";
   className?: string;
 }
 
 export function BeforeAfter({
   label,
-  from,
-  to,
+  before,
+  after,
   sentiment = "neutral",
   className,
 }: BeforeAfterProps) {
-  const toColorClass =
+  const afterColorClass =
     sentiment === "positive"
       ? "text-emerald-500 dark:text-emerald-400"
       : sentiment === "negative"
@@ -448,7 +453,7 @@ export function BeforeAfter({
   return (
     <div
       className={cn("border-border/40 my-8 overflow-hidden rounded-xl border", className)}
-      aria-label={`${label}: changed from ${from} to ${to}`}
+      aria-label={`${label}: changed from ${before} to ${after}`}
     >
       <p className="text-muted-foreground border-border/40 border-b px-5 py-3 font-mono text-xs tracking-widest uppercase sm:px-6">
         {label}
@@ -460,7 +465,7 @@ export function BeforeAfter({
             Before
           </span>
           <span className="font-display text-muted-foreground text-3xl font-semibold tabular-nums sm:text-4xl">
-            {from}
+            {before}
           </span>
         </div>
 
@@ -479,10 +484,10 @@ export function BeforeAfter({
           <span
             className={cn(
               "font-display text-3xl font-semibold tabular-nums sm:text-4xl",
-              toColorClass,
+              afterColorClass,
             )}
           >
-            {to}
+            {after}
           </span>
         </div>
       </div>
