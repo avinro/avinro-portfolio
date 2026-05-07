@@ -63,12 +63,14 @@ As Lead Product Designer, I owned the design system architecture, component libr
 
 Before designing anything new, I audited every existing component across the three surfaces.
 
-<Stats data={[
-  { value: "214", label: "Unique components", sublabel: "Across all three surfaces" },
-  { value: "31%", label: "Functional overlap", sublabel: "Zero visual consistency" },
-  { value: "6", label: "Type scales in use", sublabel: "Across the ecosystem" },
-  { value: "0%", label: "Visual consistency", sublabel: "Between surfaces" },
-]} />
+<Stats
+  data={[
+    { value: "214", label: "Unique components", sublabel: "Across all three surfaces" },
+    { value: "31%", label: "Functional overlap", sublabel: "Zero visual consistency" },
+    { value: "6", label: "Type scales in use", sublabel: "Across the ecosystem" },
+    { value: "0%", label: "Visual consistency", sublabel: "Between surfaces" },
+  ]}
+/>
 
 The audit became the case for a shared design system. Numbers are more persuasive than design principles.
 
@@ -98,7 +100,11 @@ This structure allowed each app to consume the same semantic tokens while mainta
 
 Prioritised components by frequency of use × inconsistency score. Built the top 40 components first, covering approximately **78%** of all UI surface area across the three products.
 
-<Bar value={78} label="UI surface area covered by the top 40 components" caption="The remaining 22% consists of surface-specific screens refactored over time as a feature trigger, not a separate design debt sprint." />
+<Bar
+  value={78}
+  label="UI surface area covered by the top 40 components"
+  caption="The remaining 22% consists of surface-specific screens refactored over time as a feature trigger, not a separate design debt sprint."
+/>
 
 Each component shipped with:
 
@@ -130,10 +136,12 @@ This eliminated the "design debt sprint that goes nowhere" pattern.
 
 ## Results and impact
 
-<Stats data={[
-  { value: "40", label: "Shared components", sublabel: "10 weeks to ship" },
-  { value: "+35%", label: "Feature velocity", sublabel: "Sprint cycle time" },
-]} />
+<Stats
+  data={[
+    { value: "40", label: "Shared components", sublabel: "10 weeks to ship" },
+    { value: "+35%", label: "Feature velocity", sublabel: "Sprint cycle time" },
+  ]}
+/>
 
 <BeforeAfter
   label="Design QA time per sprint"
@@ -142,12 +150,7 @@ This eliminated the "design debt sprint that goes nowhere" pattern.
   sentiment="positive"
 />
 
-<BeforeAfter
-  label="Driver app — App Store rating"
-  before="4.6"
-  after="4.8"
-  sentiment="positive"
-/>
+<BeforeAfter label="Driver app — App Store rating" before="4.6" after="4.8" sentiment="positive" />
 
 ## Learnings
 
