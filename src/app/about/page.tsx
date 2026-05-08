@@ -177,7 +177,13 @@ export default function AboutPage() {
                   {/* Minimal silhouette placeholder */}
                   <div className="bg-muted-foreground/20 h-16 w-16 rounded-full" />
                   <div className="bg-muted-foreground/10 h-20 w-24 rounded-t-full" />
+                  {/*
+                   * Portrait placeholder label — developer-facing only; not
+                   * meaningful to users. aria-hidden removes the low-contrast
+                   * text from the a11y tree. data-testid preserved for tests.
+                   */}
                   <span
+                    aria-hidden="true"
                     className="text-muted-foreground/50 absolute bottom-4 font-mono text-xs tracking-widest uppercase"
                     data-testid="portrait-placeholder"
                   >

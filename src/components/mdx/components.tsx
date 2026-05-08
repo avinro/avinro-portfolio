@@ -472,7 +472,15 @@ export function BeforeAfter({
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr]">
         {/* Before */}
         <div className="bg-muted/20 flex flex-col gap-1 px-5 py-6 sm:px-6">
-          <span className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase">
+          {/*
+           * "Before" label: aria-hidden because the parent aria-label already
+           * describes the full before→after transition. The /50 opacity would
+           * also fail WCAG 1.4.3 contrast on bg-muted/20 at this font size.
+           */}
+          <span
+            aria-hidden="true"
+            className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
+          >
             Before
           </span>
           <span className="font-display text-muted-foreground text-3xl font-semibold tabular-nums sm:text-4xl">
@@ -489,7 +497,11 @@ export function BeforeAfter({
 
         {/* After */}
         <div className="flex flex-col gap-1 px-5 py-6 sm:px-6">
-          <span className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase">
+          {/* "After" label: aria-hidden for same reason as "Before" above. */}
+          <span
+            aria-hidden="true"
+            className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
+          >
             After
           </span>
           <span

@@ -46,7 +46,7 @@ function ContactAside() {
         <div className="flex flex-col gap-1">
           <Link
             href={aside.emailHref}
-            className="text-foreground hover:text-muted-foreground text-sm font-medium underline-offset-4 transition-colors hover:underline"
+            className="focus-ring text-foreground hover:text-muted-foreground rounded-sm text-sm font-medium underline-offset-4 transition-colors hover:underline"
           >
             {aside.emailLabel}
           </Link>

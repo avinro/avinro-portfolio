@@ -76,6 +76,11 @@ export function WorkSnapContainer({ cases }: WorkSnapContainerProps) {
   // Arrow-key navigation between slides.
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      // Do not intercept arrow keys when focus is inside an editable element.
+      // This guards against blocking typing in any future form added to /work.
+      const target = e.target as Element | null;
+      if (target?.matches("input, textarea, select, [contenteditable]")) return;
+
       if (e.key === "ArrowDown" && activeIndex < cases.length - 1) {
         e.preventDefault();
         slideRefs.current[activeIndex + 1]?.scrollIntoView({
