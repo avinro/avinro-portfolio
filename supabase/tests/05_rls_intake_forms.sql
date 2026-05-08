@@ -8,7 +8,7 @@
 begin;
 select plan(10);
 
-\i supabase/tests/00_helpers.sql
+\ir 00_helpers.inc
 
 -- (a) Owner reads intake form
 select tests.authenticate_as(tests.owner_id());
@@ -88,7 +88,7 @@ select results_eq(
 
 -- (i) Owner can insert a new intake form (add a second project first)
 select tests.authenticate_as(tests.owner_id());
-select lives_ok($$
+select lives_ok($test$
   do $$
   declare
     new_project_id uuid := gen_random_uuid();
@@ -99,7 +99,8 @@ select lives_ok($$
     insert into public.intake_forms (project_id, account_id, schema)
     values (new_project_id, tests.account_id(), '{}'::jsonb);
   end;
-  $$ $$,
+  $$;
+$test$,
   'owner can insert an intake form'
 );
 
@@ -108,6 +109,8 @@ select tests.authenticate_as(tests.viewer_id());
 select throws_ok(
   $$ insert into public.intake_forms (project_id, account_id, schema)
      values (tests.project_id(), tests.account_id(), '{}'::jsonb) $$,
+  '42501',
+  'new row violates row-level security policy for table "intake_forms"',
   'viewer cannot insert intake form'
 );
 

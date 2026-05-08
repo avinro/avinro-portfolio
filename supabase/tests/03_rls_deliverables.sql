@@ -4,7 +4,7 @@
 begin;
 select plan(16);
 
-\i supabase/tests/00_helpers.sql
+\ir 00_helpers.inc
 
 -- ── milestones ────────────────────────────────────────────────────────────────
 
@@ -90,6 +90,8 @@ select throws_ok(
   $$ insert into public.deliverables (milestone_id, account_id, type, title, external_link, status)
      values (tests.milestone_active_id(), tests.account_id(), 'link', 'Viewer test link',
              'https://example.com/viewer', 'draft') $$,
+  '42501',
+  'new row violates row-level security policy for table "deliverables"',
   'viewer cannot insert deliverable'
 );
 
@@ -139,6 +141,8 @@ select throws_ok(
   $$ insert into public.deliverables (milestone_id, account_id, type, title, external_link, status)
      values (tests.milestone_active_id(), tests.account_id(), 'link', 'Stranger link',
              'https://example.com/stranger', 'draft') $$,
+  '42501',
+  'new row violates row-level security policy for table "deliverables"',
   'stranger cannot insert deliverable'
 );
 

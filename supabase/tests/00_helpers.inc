@@ -41,3 +41,6 @@ create or replace function tests.deliverable_draft_id()    returns uuid as $$ se
 create or replace function tests.deliverable_published_id()returns uuid as $$ select '50000000-0000-0000-0000-000000000001'::uuid; $$ language sql immutable;
 create or replace function tests.comment_on_deliverable_id()returns uuid as $$ select '60000000-0000-0000-0000-000000000001'::uuid; $$ language sql immutable;
 create or replace function tests.comment_on_milestone_id() returns uuid as $$ select '60000000-0000-0000-0000-000000000002'::uuid; $$ language sql immutable;
+
+grant usage on schema tests to anon, authenticated;
+grant execute on all functions in schema tests to anon, authenticated;

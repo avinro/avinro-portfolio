@@ -3,7 +3,7 @@
 begin;
 select plan(10);
 
-\i supabase/tests/00_helpers.sql
+\ir 00_helpers.inc
 
 -- (a) Owner reads their project
 select tests.authenticate_as(tests.owner_id());

@@ -7,7 +7,7 @@
 begin;
 select plan(14);
 
-\i supabase/tests/00_helpers.sql
+\ir 00_helpers.inc
 
 -- (a) Owner reads all comments
 select tests.authenticate_as(tests.owner_id());
@@ -70,6 +70,8 @@ select tests.authenticate_as(tests.viewer_id());
 select throws_ok(
   $$ insert into public.comments (account_id, milestone_id, author_id, body)
      values (tests.account_id(), tests.milestone_active_id(), tests.viewer_id(), 'Viewer comment') $$,
+  '42501',
+  'new row violates row-level security policy for table "comments"',
   'viewer cannot insert comment'
 );
 
@@ -78,6 +80,8 @@ select tests.authenticate_as(tests.stranger_id());
 select throws_ok(
   $$ insert into public.comments (account_id, milestone_id, author_id, body)
      values (tests.account_id(), tests.milestone_active_id(), tests.stranger_id(), 'Stranger comment') $$,
+  '42501',
+  'new row violates row-level security policy for table "comments"',
   'stranger cannot insert comment'
 );
 

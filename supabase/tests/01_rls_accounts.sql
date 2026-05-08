@@ -3,7 +3,7 @@
 begin;
 select plan(14);
 
-\i supabase/tests/00_helpers.sql
+\ir 00_helpers.inc
 
 -- ── accounts ──────────────────────────────────────────────────────────────────
 
@@ -108,6 +108,8 @@ select tests.authenticate_as(tests.viewer_id());
 select throws_ok(
   $$ insert into public.account_members (account_id, user_id, role, joined_at)
      values (tests.account_id(), tests.stranger_id(), 'viewer', now()) $$,
+  '42501',
+  'new row violates row-level security policy for table "account_members"',
   'viewer cannot add a member'
 );
 
@@ -116,6 +118,8 @@ select tests.authenticate_as(tests.stranger_id());
 select throws_ok(
   $$ insert into public.account_members (account_id, user_id, role, joined_at)
      values (tests.account_id(), tests.stranger_id(), 'viewer', now()) $$,
+  '42501',
+  'new row violates row-level security policy for table "account_members"',
   'stranger cannot add members'
 );
 
@@ -124,6 +128,8 @@ select tests.logout();
 select throws_ok(
   $$ insert into public.account_members (account_id, user_id, role, joined_at)
      values (tests.account_id(), tests.stranger_id(), 'viewer', now()) $$,
+  '42501',
+  'new row violates row-level security policy for table "account_members"',
   'anon cannot add members'
 );
 
