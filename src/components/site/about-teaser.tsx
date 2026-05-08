@@ -33,7 +33,7 @@ export function AboutTeaser() {
           {/* Mono link — meta/navigation register */}
           <Link
             href={aboutTeaser.linkHref}
-            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 font-mono text-sm underline-offset-4 transition-colors hover:underline"
+            className="focus-ring text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm font-mono text-sm underline-offset-4 transition-colors hover:underline"
           >
             {aboutTeaser.linkLabel}
             <span aria-hidden="true" className="transition-transform duration-150">

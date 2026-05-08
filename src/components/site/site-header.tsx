@@ -36,7 +36,7 @@ export function SiteHeader() {
       {/* Skip link — visually hidden until focused by keyboard */}
       <a
         href="#main-content"
-        className="bg-primary text-primary-foreground absolute top-4 left-4 z-50 -translate-y-16 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0"
+        className="focus-ring bg-primary text-primary-foreground absolute top-4 left-4 z-50 -translate-y-16 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0"
       >
         Skip to main content
       </a>
@@ -45,7 +45,7 @@ export function SiteHeader() {
         {/* Wordmark — sized up for editorial presence */}
         <Link
           href="/"
-          className="font-display text-base font-semibold tracking-tight transition-opacity hover:opacity-70"
+          className="focus-ring font-display rounded-sm text-base font-semibold tracking-tight transition-opacity hover:opacity-70"
           aria-label="Avinro — home"
         >
           Avinro
@@ -57,7 +57,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-muted-foreground hover:text-foreground text-sm transition-all duration-150 hover:-translate-y-px"
+              className="focus-ring text-muted-foreground hover:text-foreground rounded-sm text-sm transition-all duration-150 hover:-translate-y-px"
             >
               {link.label}
             </Link>

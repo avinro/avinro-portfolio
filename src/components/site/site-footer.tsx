@@ -98,14 +98,14 @@ export function SiteFooter() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-background/70 hover:text-background font-mono text-xs tracking-wider uppercase transition-colors"
+                  className="focus-ring-invert text-background/70 hover:text-background rounded-sm font-mono text-xs tracking-wider uppercase transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
               <a
                 href="mailto:hello@avinro.com"
-                className="text-background/70 hover:text-background font-mono text-xs tracking-wider uppercase transition-colors"
+                className="focus-ring-invert text-background/70 hover:text-background rounded-sm font-mono text-xs tracking-wider uppercase transition-colors"
               >
                 Email
               </a>

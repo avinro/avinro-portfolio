@@ -288,6 +288,47 @@
   --sidebar-ring: oklch(0.623 0.236 265);
 }
 
+/*
+ * Focus utilities — PRO-23 / F1-12 Accessibility.
+ *
+ * Two composable classes replace the three inconsistent focus recipes that
+ * existed before this commit (ring-3/ring-ring/50 on buttons, ring-2/ring-ring
+ * with offset on anchors, ring-white hardcoded on dark-scrim elements).
+ *
+ * focus-ring        — used on surfaces with bg-background (light or dark mode).
+ *                     Ring color: --ring (blue-600 light / blue-400 dark).
+ *                     Offset color: --background.
+ *
+ * focus-ring-invert — used on surfaces with bg-foreground (footer, dark scrims).
+ *                     Ring color: --background (near-white light / near-black dark).
+ *                     Offset color: --foreground.
+ *
+ * Both utilities:
+ *   - Are visible only on focus-visible (keyboard / programmatic focus).
+ *   - Resolve 100% opacity so the AC "visible focus rings" is unambiguous.
+ *   - Derive from existing OKLCH tokens, so dark-mode switching is automatic.
+ *   - Add rounded-sm by default; override per-element for circular elements.
+ *
+ * NOTE: Button components retain their current inner halo (ring-3 ring-ring/50)
+ * for weight. That is intentional — the inner halo + the outer offset ring work
+ * together. Do not collapse them here.
+ */
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility focus-ring-invert {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--background);
+    outline-offset: 2px;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
