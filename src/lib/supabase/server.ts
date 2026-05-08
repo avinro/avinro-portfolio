@@ -8,6 +8,14 @@ export async function createClient() {
   const { supabaseUrl, supabaseAnonKey } = getSupabaseEnv();
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      // Implicit flow keeps email magic-links and invites verifiable across
+      // browsers (no PKCE code_verifier cookie required). The /auth/confirm
+      // route handler uses verifyOtp({ token_hash, type }) which only works
+      // with implicit-flow tokens — PKCE tokens carry a "pkce_" prefix that
+      // verifyOtp rejects.
+      flowType: "implicit",
+    },
     cookies: {
       getAll() {
         return cookieStore.getAll();
