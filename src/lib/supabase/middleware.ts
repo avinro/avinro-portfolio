@@ -38,6 +38,10 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      // Must match server.ts and browser.ts — see server.ts for rationale.
+      flowType: "implicit",
+    },
     cookies: {
       getAll() {
         return request.cookies.getAll();
