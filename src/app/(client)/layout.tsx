@@ -1,15 +1,34 @@
 import type { ReactNode } from "react";
 
+import { createClient } from "@/lib/supabase/server";
+import { loadClientPortalContext } from "@/lib/client-portal/context";
+import { ClientPortalShell } from "@/components/client/client-portal-shell";
+
 /**
- * Client portal layout — intentionally minimal.
+ * Client portal layout — wraps all /(client)/* pages.
  *
- * Route protection is enforced in proxy.ts (updateSession). This layout does
- * NOT render the public site header/footer; the portal has its own navigation
- * shell which will be built in PRO-38.
+ * Loads the portal context (account + projects) server-side using existing
+ * RLS policies from PRO-36. No backend changes required.
  *
- * Only applies to routes under /(client)/ (e.g. /client, /client/projects/…).
- * It inherits the root layout (html, body, fonts, Toaster) from app/layout.tsx.
+ * Route protection is enforced upstream in proxy.ts (updateSession). By the
+ * time a request reaches this layout the user is a confirmed account member.
+ *
+ * Renders the full portal shell: header, sidebar (md+), bottom nav (<md).
+ * Falls back to bare children render if context cannot be loaded — the
+ * middleware upstream ensures this only happens if Supabase is unreachable.
  */
-export default function ClientPortalLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+export default async function ClientPortalLayout({ children }: { children: ReactNode }) {
+  const supabase = await createClient();
+  const context = await loadClientPortalContext(supabase);
+
+  if (!context) {
+    // Defensive fallback — middleware should have rejected the request before here.
+    return (
+      <main id="main-content" className="flex min-h-dvh flex-col">
+        {children}
+      </main>
+    );
+  }
+
+  return <ClientPortalShell context={context}>{children}</ClientPortalShell>;
 }
