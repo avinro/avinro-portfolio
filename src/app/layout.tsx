@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Google_Sans_Flex, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { SiteHeader } from "@/components/site/site-header";
-import { SiteFooter } from "@/components/site/site-footer";
-import { MobileCtaBar } from "@/components/site/mobile-cta-bar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { AnalyticsClickDelegator } from "@/components/analytics/click-delegator";
 import { SITE_URL, SITE_NAME, OWNER_JOB_TITLE } from "@/lib/seo/site";
@@ -79,9 +77,6 @@ export default function RootLayout({
       className={`${googleSansFlex.variable} ${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-dvh flex-col">
-        {/* SiteHeader and MobileCtaBar are global chrome shared across all pages.
-         * Placing them in the root layout means /work/[slug] and future pages
-         * inherit navigation and the persistent primary CTA without duplication. */}
         {/*
          * PostHogProvider captures App Router pageviews via usePathname +
          * useSearchParams (wrapped in Suspense to prevent layout blocking).
@@ -89,13 +84,14 @@ export default function RootLayout({
          * that translates data-cta-* and data-work-card-* attributes into
          * typed analytics events without converting server components to client.
          * Both are async — no render-blocking impact on LCP.
+         *
+         * SiteHeader, SiteFooter, and MobileCtaBar are now scoped to the
+         * (site) route group layout so that authenticated portal and outreach
+         * areas can render their own chrome without inheriting marketing nav.
          */}
         <PostHogProvider />
         <AnalyticsClickDelegator />
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">{children}</div>
-        <SiteFooter />
-        <MobileCtaBar />
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </body>
     </html>

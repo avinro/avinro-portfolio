@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircleIcon, LoaderCircleIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { submitContact } from "@/app/contact/actions";
+import { submitContact } from "@/app/(site)/contact/actions";
 import { contactSchema, type ContactFormValues, type ContactState } from "@/lib/contact/schema";
 import { contactContent } from "@/lib/content/contact";
 import { trackContactFormStart, trackContactFormSubmit } from "@/lib/analytics/events";
