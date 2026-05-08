@@ -7,3 +7,6 @@ package-lock.json
 *.tsbuildinfo
 public
 .cursor/rules/**/*.mdc
+# Prettier has no SQL parser; do not touch migrations, seeds, snippets or pgTAP files
+supabase/**/*.sql
+supabase/**/*.inc
