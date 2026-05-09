@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -7,6 +8,7 @@ import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
+import VariableProximity from "@/components/motion/variable-proximity";
 
 /*
  * CircularText is a client component driven by motion. Lazy-loaded so the
@@ -46,12 +48,13 @@ const CircularText = dynamic(
  */
 export function HomeHero() {
   const { hero } = homeContent;
+  const headlineRef = useRef<HTMLHeadingElement>(null);
 
   return (
     <Section
       as="header"
       spacing="hero"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden pt-32"
     >
       {/*
        * Ghost grid strip — same max-width + gutters as Container width="wide"
@@ -75,16 +78,26 @@ export function HomeHero() {
 
       <Container width="wide">
         <div className="flex flex-col gap-8 sm:gap-10">
-          {/* Primary headline */}
+          {/* Primary headline — VariableProximity thickens letters near cursor */}
           <h1
-            className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both font-display font-semibold text-balance duration-700"
+            ref={headlineRef}
+            className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700"
             style={{
               fontSize: "var(--text-display-lg)",
               lineHeight: 0.9,
               letterSpacing: "-0.05em",
             }}
           >
-            {hero.headline}
+            <VariableProximity
+              label={hero.headline}
+              containerRef={headlineRef}
+              fromFontVariationSettings="'wght' 500, 'opsz' 14"
+              toFontVariationSettings="'wght' 900, 'opsz' 40"
+              radius={140}
+              falloff="gaussian"
+              className="font-display font-semibold text-balance"
+              style={{ display: "block" }}
+            />
           </h1>
 
           {/* Subheadline */}
