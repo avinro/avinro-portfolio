@@ -51,9 +51,9 @@ describe("SiteFooter", () => {
     expect(html).toContain('href="/privacy"');
   });
 
-  it("renders the email mailto link", () => {
+  it("does not render an email mailto link (removed per design spec)", () => {
     const html = renderToStaticMarkup(<SiteFooter />);
-    expect(html).toContain('href="mailto:hello@avinro.com"');
+    expect(html).not.toContain('href="mailto:hello@avinro.com"');
   });
 
   it("renders a plain text Avinro home link (no CircularText)", () => {
@@ -71,15 +71,7 @@ describe("SiteFooter", () => {
     const navIdx = html.indexOf('aria-label="Footer navigation"');
     expect(navIdx).toBeGreaterThan(-1);
     const navSection = html.slice(navIdx, navIdx + 1500);
-    // Each of the 4 nav links + the mailto must carry focus-ring-invert.
+    // 4 nav links (Work, About, Contact, Privacy) must carry focus-ring-invert.
     expect(navSection.match(/focus-ring-invert/g)?.length).toBeGreaterThanOrEqual(4);
-  });
-
-  it("applies focus-ring-invert to the mailto email link", () => {
-    const html = renderToStaticMarkup(<SiteFooter />);
-    const mailtoIdx = html.indexOf('href="mailto:hello@avinro.com"');
-    expect(mailtoIdx).toBeGreaterThan(-1);
-    const mailtoSlice = html.slice(Math.max(0, mailtoIdx - 200), mailtoIdx + 100);
-    expect(mailtoSlice).toContain("focus-ring-invert");
   });
 });

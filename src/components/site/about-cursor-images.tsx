@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
@@ -115,8 +115,8 @@ const IMAGE_CONFIGS_MOBILE: ImageConfig[] = [
     xTo: -130,
     top: "8%",
     rotate: "-4deg",
-    width: "55vw",
-    height: "38vw",
+    width: "60vw",
+    height: "43vw",
     zIndex: 0,
   },
   {
@@ -125,8 +125,8 @@ const IMAGE_CONFIGS_MOBILE: ImageConfig[] = [
     xTo: 130,
     top: "58%",
     rotate: "3deg",
-    width: "48vw",
-    height: "60vw",
+    width: "53vw",
+    height: "67vw",
     zIndex: 20,
   },
   {
@@ -135,8 +135,8 @@ const IMAGE_CONFIGS_MOBILE: ImageConfig[] = [
     xTo: -130,
     top: "28%",
     rotate: "5deg",
-    width: "52vw",
-    height: "36vw",
+    width: "57vw",
+    height: "41vw",
     zIndex: 0,
   },
   {
@@ -145,8 +145,8 @@ const IMAGE_CONFIGS_MOBILE: ImageConfig[] = [
     xTo: 130,
     top: "62%",
     rotate: "-3deg",
-    width: "44vw",
-    height: "56vw",
+    width: "50vw",
+    height: "62vw",
     zIndex: 20,
   },
   {
@@ -155,8 +155,8 @@ const IMAGE_CONFIGS_MOBILE: ImageConfig[] = [
     xTo: -130,
     top: "15%",
     rotate: "6deg",
-    width: "50vw",
-    height: "40vw",
+    width: "55vw",
+    height: "45vw",
     zIndex: 0,
   },
 ];
@@ -262,10 +262,22 @@ function StaticCollage() {
 export function AboutCursorImages() {
   const { aboutTeaser } = homeContent;
   const sectionRef = useRef<HTMLElement>(null);
-  // Lazy initializers read media queries once on mount (client-only).
-  const [isMobile] = useState(
+  // Reactive breakpoint detection — updates whenever the viewport crosses 768px.
+  // Lazy initializer seeds the correct value on mount; the effect keeps it in sync.
+  const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 767.5px)").matches,
   );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767.5px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+    mq.addEventListener("change", onChange);
+    return () => {
+      mq.removeEventListener("change", onChange);
+    };
+  }, []);
   const [reducedMotion] = useState(
     () =>
       typeof window !== "undefined" &&

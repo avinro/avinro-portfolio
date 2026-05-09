@@ -3,33 +3,38 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /*
- * SiteHeader — global navigation with scroll-driven pill morph.
+ * SiteHeader — global navigation with scroll-driven pill morph + expanding mobile menu.
  *
  * Positioning:
- *   `fixed inset-x-0 top-0` — no space reserved in the layout flow. Content
- *   scrolls under the blurred header, which is the intended look for a
- *   portfolio site with a full-viewport hero.
+ *   `fixed inset-x-0 top-0` — no space reserved in the layout flow.
+ *   Raises to z-50 when the mobile menu is open to sit above MobileCtaBar (z-40).
  *
- * Morph states:
- *   At top (scrollY ≤ 40px): full-width bar, more translucent to blend with hero.
- *   Scrolled (scrollY > 40px): centered pill, max 72rem, 8px from top, more
- *   opaque to separate from content behind. No shadow; border carries definition.
+ * Morph states (mobile menu closed):
+ *   At top  (scrollY ≤ 40): full-width bar, translucent.
+ *   Scrolled (scrollY > 40): centered pill, max 72rem, 8px from top.
  *
- * Scroll handler:
- *   Stores the previous boolean in a ref to avoid calling setIsScrolled on
- *   every scroll event — only fires when the value actually changes.
+ * Mobile menu:
+ *   The glass container itself expands from h-14 → calc(100dvh − 16px) via a CSS
+ *   height transition. `overflow-hidden` clips the mobile content while closed.
+ *   No portal, no Dialog — the expanded section is always in the DOM but hidden
+ *   behind the height clip. Links use tabIndex={-1} + aria-hidden when closed.
  *
- * Accessibility:
- *   Skip link is the first focusable element; it is absolute inside the fixed
- *   header so it is always in the viewport top-left when focused.
- *   Logo link has aria-label; image has alt="" (link label carries the name).
- *   prefers-reduced-motion: transition-none collapses to instant state change.
+ * Hamburger icon:
+ *   Three absolute-positioned spans. Lines 1 & 3 translate to center and rotate
+ *   ±45° to form an X; line 2 shrinks and fades.
+ *
+ * Keyboard / accessibility:
+ *   Esc closes the menu.
+ *   Viewport reaching md breakpoint closes the menu.
+ *   Button carries aria-expanded + aria-controls; panel carries aria-hidden.
+ *   Skip link is always the first focusable element.
  */
 
 const navLinks = [
@@ -38,14 +43,25 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
-// Raise threshold so the morph fires after a deliberate scroll, not a micro-jitter.
 const SCROLL_THRESHOLD = 40;
 
 export function SiteHeader() {
   const { primaryCta } = homeContent;
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // When already on /, clicking the logo scrolls to top instead of navigating.
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isMenuOpen) setIsMenuOpen(false);
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // Scroll-driven pill morph
   useEffect(() => {
     const onScroll = () => {
       const next = window.scrollY > SCROLL_THRESHOLD;
@@ -53,8 +69,6 @@ export function SiteHeader() {
       isScrolledRef.current = next;
       setIsScrolled(next);
     };
-
-    // Sync on mount in case the page is loaded mid-scroll (e.g. browser refresh)
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
@@ -62,8 +76,40 @@ export function SiteHeader() {
     };
   }, []);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [isMenuOpen]);
+
+  // Close when viewport reaches the md breakpoint (≥768px)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onResize = () => {
+      if (mq.matches) setIsMenuOpen(false);
+    };
+    mq.addEventListener("change", onResize);
+    return () => {
+      mq.removeEventListener("change", onResize);
+    };
+  }, []);
+
+  // Lock page scroll while the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-40">
+    <header className={cn("fixed inset-x-0 top-0", isMenuOpen ? "z-50" : "z-40")}>
       {/* Skip link — visually hidden until focused by keyboard */}
       <a
         href="#main-content"
@@ -72,58 +118,169 @@ export function SiteHeader() {
         Skip to main content
       </a>
 
+      {/* Scrim — dark blurred overlay behind the expanded menu, above page content */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "bg-foreground/40 fixed inset-0 backdrop-blur-sm",
+          "transition-opacity duration-300 ease-in-out motion-reduce:transition-none md:hidden",
+          isMenuOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      />
+
+      {/* Glass container — expands to full screen on mobile when menu is open */}
       <div
         data-glass-surface
         className={cn(
-          "mx-auto flex h-14 items-center justify-between",
-          // Solid fallback; translucency + blur only when backdrop-filter is supported.
+          "flex flex-col overflow-hidden",
           "bg-background",
           "supports-[backdrop-filter]:bg-background/55",
-          "supports-[backdrop-filter]:backdrop-blur-md",
-          "supports-[backdrop-filter]:backdrop-saturate-150",
+          "supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150",
           "md:supports-[backdrop-filter]:backdrop-blur-xl",
-          // Border carries definition — no shadow.
           "border-border/50",
-          "transition-[max-width,width,margin-top,border-radius,padding,background-color] duration-500 ease-in-out motion-reduce:transition-none",
-          isScrolled
-            ? // Pill: slightly more opaque to separate from content behind.
-              "supports-[backdrop-filter]:bg-background/65 mt-2 w-[calc(100%-16px)] max-w-[72rem] rounded-full border px-5 sm:px-6"
-            : // Top: borderless and more translucent to blend with the hero.
-              "supports-[backdrop-filter]:bg-background/45 mt-0 w-full max-w-7xl rounded-none border-transparent px-4 sm:px-6 lg:px-8",
+          "transition-[height,width,max-width,margin,border-radius,padding,background-color] duration-300 ease-in-out motion-reduce:transition-none",
+          isMenuOpen
+            ? "supports-[backdrop-filter]:bg-background/92 mx-2 mt-2 h-[calc(100dvh-16px)] rounded-2xl border px-6"
+            : isScrolled
+              ? "supports-[backdrop-filter]:bg-background/65 mx-auto mt-2 h-14 w-[calc(100%-16px)] max-w-[72rem] rounded-[28px] border px-5 sm:px-6"
+              : "supports-[backdrop-filter]:bg-background/45 mx-auto mt-0 h-14 w-full max-w-7xl rounded-none border-transparent px-4 sm:px-6 lg:px-8",
         )}
       >
-        {/* Wordmark — logo.png, accessible name on the link wrapper */}
-        <Link
-          href="/"
-          className="focus-ring rounded-sm transition-opacity hover:opacity-70"
-          aria-label="Avinro — home"
+        {/* ── Top row — always visible ─────────────────────────────────── */}
+        <div className="flex h-14 shrink-0 items-center justify-between">
+          {/* Wordmark */}
+          <Link
+            href="/"
+            onClick={handleLogoClick}
+            className="focus-ring rounded-sm transition-opacity hover:opacity-70"
+            aria-label="Avinro — home"
+          >
+            <Image src="/logo.png" alt="" width={144} height={28} priority className="h-5 w-auto" />
+          </Link>
+
+          {/* Desktop nav + CTA — hidden below md */}
+          <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="focus-ring text-muted-foreground hover:text-foreground rounded-sm text-sm transition-all duration-150 hover:-translate-y-px"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Button asChild size="default">
+              <Link
+                href={primaryCta.href}
+                data-cta-label={primaryCta.label}
+                data-cta-href={primaryCta.href}
+                data-cta-position="header"
+              >
+                {primaryCta.label}
+              </Link>
+            </Button>
+          </nav>
+
+          {/* Hamburger / close button — mobile only */}
+          <button
+            type="button"
+            onClick={() => {
+              setIsMenuOpen((v) => !v);
+            }}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav-panel"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="focus-ring relative flex h-[44px] w-[44px] items-center justify-center rounded-md md:hidden"
+          >
+            {/* Three lines that morph into an X */}
+            <span className="relative block h-[14px] w-5" aria-hidden="true">
+              {/* Line 1 — top → first diagonal */}
+              <span
+                className={cn(
+                  "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
+                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                  isMenuOpen ? "top-[6px] rotate-45" : "top-0 rotate-0",
+                )}
+              />
+              {/* Line 2 — middle → disappears */}
+              <span
+                className={cn(
+                  "absolute top-[6px] left-0 h-0.5 w-full rounded-sm bg-current",
+                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                  isMenuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
+                )}
+              />
+              {/* Line 3 — bottom → second diagonal */}
+              <span
+                className={cn(
+                  "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
+                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                  isMenuOpen ? "top-[6px] -rotate-45" : "top-[12px] rotate-0",
+                )}
+              />
+            </span>
+          </button>
+        </div>
+
+        {/* ── Mobile expanded content — clipped by overflow-hidden when closed ── */}
+        <div
+          id="mobile-nav-panel"
+          className="flex flex-1 flex-col pb-4 md:hidden"
+          aria-hidden={!isMenuOpen}
         >
-          <Image src="/logo.png" alt="" width={144} height={28} priority className="h-5 w-auto" />
-        </Link>
+          {/* Nav links — centered, staggered entrance from bottom */}
+          <nav
+            aria-label="Mobile navigation"
+            className="flex flex-1 flex-col items-center justify-center gap-8 text-center"
+          >
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                tabIndex={isMenuOpen ? undefined : -1}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                }}
+                className={cn(
+                  "focus-ring font-display text-foreground rounded-md text-3xl font-semibold tracking-tight hover:opacity-60",
+                  // Animate in after container expands; opacity-0 while hidden
+                  isMenuOpen
+                    ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
+                    : "opacity-0",
+                )}
+                style={isMenuOpen ? { animationDelay: `${String(280 + i * 60)}ms` } : undefined}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
-        {/* Desktop nav + CTA — hidden below md */}
-        <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="focus-ring text-muted-foreground hover:text-foreground rounded-sm text-sm transition-all duration-150 hover:-translate-y-px"
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          <Button asChild size="default">
-            <Link
-              href={primaryCta.href}
-              data-cta-label={primaryCta.label}
-              data-cta-href={primaryCta.href}
-              data-cta-position="header"
-            >
-              {primaryCta.label}
-            </Link>
-          </Button>
-        </nav>
+          {/* Primary CTA — follows links with staggered entrance */}
+          <div
+            className={cn(
+              "mt-auto shrink-0",
+              isMenuOpen
+                ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
+                : "opacity-0",
+            )}
+            style={isMenuOpen ? { animationDelay: `${String(280 + 3 * 60)}ms` } : undefined}
+          >
+            <Button asChild size="lg" className="min-h-[44px] w-full">
+              <Link
+                href={primaryCta.href}
+                tabIndex={isMenuOpen ? undefined : -1}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                }}
+                data-cta-label={primaryCta.label}
+                data-cta-href={primaryCta.href}
+                data-cta-position="mobile_overlay"
+              >
+                {primaryCta.label}
+              </Link>
+            </Button>
+          </div>
+        </div>
       </div>
     </header>
   );

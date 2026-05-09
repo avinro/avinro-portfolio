@@ -47,7 +47,7 @@ export function SiteFooter() {
       className="border-background/10 bg-foreground text-background pointer-events-none fixed inset-x-0 bottom-0 z-0 flex h-[100dvh] flex-col border-t"
     >
       {/* Interactive inner container — restores pointer events */}
-      <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between gap-12 px-4 py-12 pb-[calc(var(--space-cta-bar)+1rem)] sm:px-6 md:pb-12 lg:px-8">
+      <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
         {/* Closing CTA */}
         <section
           aria-labelledby="footer-cta-title"
@@ -55,9 +55,8 @@ export function SiteFooter() {
         >
           <h3
             id="footer-cta-title"
-            className="font-display font-semibold text-balance"
+            className="font-display text-3xl font-semibold text-balance sm:text-4xl md:text-[length:var(--text-display-md)]"
             style={{
-              fontSize: "var(--text-display-md)",
               letterSpacing: "-0.03em",
               lineHeight: "0.9",
             }}
@@ -84,7 +83,7 @@ export function SiteFooter() {
             aria-label="Avinro — home"
             className="focus-ring-invert w-fit rounded-sm transition-opacity hover:opacity-70"
           >
-            <Image src="/logo.png" alt="" width={124} height={24} className="h-6 w-auto invert" />
+            <Image src="/logo.png" alt="" width={62} height={12} className="h-3 w-auto invert" />
           </Link>
 
           {/* Nav + copyright row */}
@@ -99,12 +98,6 @@ export function SiteFooter() {
                   {link.label}
                 </Link>
               ))}
-              <a
-                href="mailto:hello@avinro.com"
-                className="focus-ring-invert text-background/70 hover:text-background rounded-sm font-mono text-xs tracking-wider uppercase transition-colors"
-              >
-                Email
-              </a>
             </nav>
 
             <p className="text-background/70 font-mono text-xs">&copy; {year} Avinro</p>
