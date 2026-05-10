@@ -133,7 +133,7 @@ export function HomeHero() {
               containerRef={headlineRef}
               fromFontVariationSettings="'wght' 500, 'opsz' 14"
               toFontVariationSettings="'wght' 900, 'opsz' 40"
-              radius={140}
+              radius={200}
               falloff="gaussian"
               className="font-display font-semibold text-balance"
               style={{ display: "block" }}
