@@ -35,6 +35,7 @@ import { homeContent } from "@/lib/content/home";
 
 const footerLinks = [
   { label: "Work", href: "/work" },
+  { label: "Case studies", href: "/case-studies" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },

@@ -31,9 +31,10 @@ describe("SiteHeader", () => {
     expect(html).toContain("Avinro");
   });
 
-  it("renders nav links for /work, /about, /contact", () => {
+  it("renders nav links for /work, /case-studies, /about, /contact", () => {
     const html = renderToStaticMarkup(<SiteHeader />);
     expect(html).toContain('href="/work"');
+    expect(html).toContain('href="/case-studies"');
     expect(html).toContain('href="/about"');
     expect(html).toContain('href="/contact"');
   });
@@ -84,7 +85,7 @@ describe("SiteHeader", () => {
     // All three mobile links should have tabindex="-1" in the closed state
     const panelSection = html.slice(panelIdx, panelIdx + 2000);
     const tabIndexMatches = panelSection.match(/tabindex="-1"/g);
-    // At minimum the 3 nav links + CTA = 4 items
+    // At minimum 3 nav links (Work, Case studies, About) + CTA = 4 items
     expect(tabIndexMatches?.length).toBeGreaterThanOrEqual(4);
   });
 
@@ -116,7 +117,8 @@ describe("SiteHeader", () => {
     const html = renderToStaticMarkup(<SiteHeader />);
     const navIdx = html.indexOf('aria-label="Main navigation"');
     expect(navIdx).toBeGreaterThan(-1);
-    const navSection = html.slice(navIdx, navIdx + 1000);
+    // 3 nav links: Work, Case studies, About — each carries focus-ring
+    const navSection = html.slice(navIdx, navIdx + 1200);
     expect(navSection.match(/focus-ring/g)?.length).toBeGreaterThanOrEqual(3);
   });
 });

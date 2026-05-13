@@ -3,29 +3,26 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import {
-  getCaseStudyBySlug,
-  getCaseStudySlugs,
-  getPublishedCaseStudies,
-} from "@/lib/content/case-studies";
+import { getWorkBySlug, getWorkSlugs, getPublishedWorks } from "@/lib/content/works";
 import { SITE_URL, SITE_NAME } from "@/lib/seo/site";
-import { CreativeWorkJsonLd } from "@/lib/seo/json-ld";
 import { mdxOptions } from "@/lib/mdx/options";
-import { mdxComponents, Stats } from "@/components/mdx/components";
+import { workMdxComponents } from "@/components/work/work-mdx-components";
+import { WorkDetail } from "@/components/work/work-detail";
+import { WorkGalleryFigure } from "@/components/work/work-gallery-figure";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { CaseStudyScrollTracker } from "@/components/analytics/case-study-scroll-tracker";
+import { Badge } from "@/components/ui/badge";
 
 // ---------------------------------------------------------------------------
 // Static generation
 // ---------------------------------------------------------------------------
 
 export function generateStaticParams() {
-  return getCaseStudySlugs().map((slug) => ({ slug }));
+  return getWorkSlugs().map((slug) => ({ slug }));
 }
 
 // ---------------------------------------------------------------------------
-// Per-slug metadata (canonical, OG, Twitter, robots)
+// Per-slug metadata
 // ---------------------------------------------------------------------------
 
 export async function generateMetadata({
@@ -34,12 +31,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
-  if (!cs) return {};
+  const work = getWorkBySlug(slug);
+  if (!work) return {};
 
-  const { frontmatter } = cs;
+  const { frontmatter } = work;
   const title = `${frontmatter.title} | ${SITE_NAME}`;
-  const description = frontmatter.outcome;
+  const description = frontmatter.summary;
   const url = `${SITE_URL}/work/${slug}`;
 
   return {
@@ -70,70 +67,28 @@ export async function generateMetadata({
       description,
       images: [`/work/${slug}/opengraph-image`],
     },
-    // Draft pages are not indexed — they are still built for preview purposes.
     ...(frontmatter.draft ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
 // ---------------------------------------------------------------------------
-// Reading time chip
+// Meta strip — year / category / client / tools / external link
 // ---------------------------------------------------------------------------
 
-function ReadingTimeChip({ text }: { text: string }) {
-  return <span className="text-muted-foreground font-mono text-xs tabular-nums">{text}</span>;
-}
-
-// ---------------------------------------------------------------------------
-// Metadata strip (cover, client, role, year, read time)
-// ---------------------------------------------------------------------------
-
-interface CoverMetaProps {
-  title: string;
-  client: string;
-  role: string;
+interface WorkMetaStripProps {
   year: number;
-  coverage: string[];
-  coverImage: string;
-  readingTimeText: string;
+  category: string;
+  client?: string;
+  tools: string[];
+  externalLink?: string;
+  tags: string[];
 }
 
-function CoverMeta({
-  title,
-  client,
-  role,
-  year,
-  coverage,
-  coverImage,
-  readingTimeText,
-}: CoverMetaProps) {
+function WorkMetaStrip({ year, category, client, tools, externalLink, tags }: WorkMetaStripProps) {
   return (
-    <div className="flex flex-col gap-8">
-      {/* Cover image with reserved aspect ratio to prevent CLS */}
-      <div className="relative aspect-[16/7] w-full overflow-hidden rounded-xl">
-        <Image
-          src={coverImage}
-          alt={`Cover image for ${title}`}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
-          className="object-cover"
-        />
-      </div>
-
-      {/* Metadata strip */}
-      <div className="border-border/40 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-4">
-        <div className="flex flex-col gap-1">
-          <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Client
-          </span>
-          <span className="text-sm font-medium">{client}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Role
-          </span>
-          <span className="text-sm font-medium">{role}</span>
-        </div>
+    <div className="flex flex-col gap-6">
+      {/* Grid: year / category / client */}
+      <div className="border-border/40 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-3">
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
             Year
@@ -142,48 +97,80 @@ function CoverMeta({
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Read time
+            Category
           </span>
-          <ReadingTimeChip text={readingTimeText} />
+          <span className="text-sm font-medium">{category}</span>
         </div>
+        {client && (
+          <div className="flex flex-col gap-1">
+            <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
+              Client
+            </span>
+            <span className="text-sm font-medium">{client}</span>
+          </div>
+        )}
       </div>
 
-      {/* Coverage tags */}
-      <div className="flex flex-wrap gap-2">
-        {coverage.map((tag) => (
-          <span
-            key={tag}
-            className="bg-muted text-muted-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      {/* Tools */}
+      {tools.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {tools.map((tool) => (
+            <Badge key={tool} variant="outline">
+              {tool}
+            </Badge>
+          ))}
+        </div>
+      )}
+
+      {/* Tags */}
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="bg-muted text-muted-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* External link */}
+      {externalLink && (
+        <a
+          href={externalLink}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 font-mono text-xs tracking-widest uppercase transition-colors"
+        >
+          View live
+          <span aria-hidden="true">↗</span>
+        </a>
+      )}
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Next case study CTA
+// Next work CTA
 // ---------------------------------------------------------------------------
 
-interface NextCaseCTAProps {
+interface NextWorkCTAProps {
   nextTitle: string;
   nextSlug: string;
 }
 
-function NextCaseCTA({ nextTitle, nextSlug }: NextCaseCTAProps) {
+function NextWorkCTA({ nextTitle, nextSlug }: NextWorkCTAProps) {
   return (
     <div className="border-border/40 mt-16 border-t pt-12">
-      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-        Next case study
-      </p>
+      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">Next work</p>
       <Link
         href={`/work/${nextSlug}`}
-        aria-label={`Next case study: ${nextTitle}`}
+        aria-label={`Next work: ${nextTitle}`}
         data-cta-label={nextTitle}
         data-cta-href={`/work/${nextSlug}`}
-        data-cta-position="next_case"
+        data-cta-position="next_work"
         className="group focus-visible:ring-ring mt-4 flex min-h-[44px] items-center gap-3 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <span className="font-display text-2xl font-semibold tracking-tight transition-transform group-hover:translate-x-1 sm:text-3xl">
@@ -201,78 +188,134 @@ function NextCaseCTA({ nextTitle, nextSlug }: NextCaseCTAProps) {
 }
 
 // ---------------------------------------------------------------------------
+// Cover image — full-bleed, above the fold
+// ---------------------------------------------------------------------------
+
+function WorkCover({ src, alt, aspect }: { src: string; alt: string; aspect: string }) {
+  const ASPECT_RATIOS: Record<string, string> = {
+    portrait: "4/5",
+    square: "1/1",
+    landscape: "16/9",
+  };
+  const ratio = ASPECT_RATIOS[aspect] ?? "4/5";
+
+  return (
+    <div
+      className="bg-muted relative w-full overflow-hidden rounded-xl"
+      style={{ aspectRatio: ratio }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority
+        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+        className="object-cover"
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
-export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
-  if (!cs) notFound();
+  const work = getWorkBySlug(slug);
+  if (!work) notFound();
 
-  const { frontmatter, content, readingTime } = cs;
+  const { frontmatter, content } = work;
 
-  // Determine the next published case study (wraps around).
-  const published = getPublishedCaseStudies();
-  const currentIdx = published.findIndex((p) => p.frontmatter.slug === slug);
-  const nextCs =
+  // Next published work (wraps around).
+  const published = getPublishedWorks();
+  const currentIdx = published.findIndex((w) => w.frontmatter.slug === slug);
+  const nextWork =
     currentIdx !== -1 && published.length > 1
       ? published[(currentIdx + 1) % published.length]
       : null;
 
+  const hasIntro = content.trim().length > 0;
+
   return (
     <main id="main-content">
-      {/* JSON-LD structured data — only for published case studies (drafts are noindex) */}
-      {!frontmatter.draft && <CreativeWorkJsonLd cs={cs} slug={slug} />}
-      {/* Hero section — cover + metadata strip */}
+      {/* Hero: title + summary + meta strip */}
       <Section spacing="heroInternal">
         <Container>
-          {/* Page h1 — lives here, not in MDX body (heading-hierarchy rule) */}
-          <h1 className="font-display mb-8 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-            {frontmatter.title}
-          </h1>
+          <div className="flex flex-col gap-6">
+            {/* Category kicker */}
+            <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
+              {frontmatter.category}
+            </p>
 
-          <CoverMeta
-            title={frontmatter.title}
-            client={frontmatter.client}
-            role={frontmatter.role}
-            year={frontmatter.year}
-            coverage={frontmatter.coverage}
-            coverImage={frontmatter.coverImage}
-            readingTimeText={readingTime.text}
+            {/* h1 */}
+            <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              {frontmatter.title}
+            </h1>
+
+            {/* Summary — mandatory one-liner */}
+            <p className="text-muted-foreground max-w-2xl text-base leading-relaxed sm:text-lg">
+              {frontmatter.summary}
+            </p>
+
+            <WorkMetaStrip
+              year={frontmatter.year}
+              category={frontmatter.category}
+              client={frontmatter.client}
+              tools={frontmatter.tools}
+              externalLink={frontmatter.externalLink}
+              tags={frontmatter.tags}
+            />
+          </div>
+        </Container>
+      </Section>
+
+      {/* Full-bleed cover image */}
+      <Section spacing="card">
+        <Container width="wide">
+          <WorkCover
+            src={frontmatter.coverImage}
+            alt={`${frontmatter.title} cover`}
+            aspect={frontmatter.coverAspect}
           />
         </Container>
       </Section>
 
-      {/* Outcome strip — top-level KPIs from frontmatter, visible before the body */}
-      {Array.isArray(frontmatter.kpis) && frontmatter.kpis.length > 0 ? (
+      {/* Optional MDX intro — short prose, no primitives */}
+      {hasIntro && (
         <Section spacing="card">
           <Container>
-            <p className="text-muted-foreground mb-6 font-mono text-xs tracking-widest uppercase">
-              Outcome
-            </p>
-            <Stats data={frontmatter.kpis} />
+            <WorkDetail>
+              <MDXRemote source={content} components={workMdxComponents} options={mdxOptions} />
+            </WorkDetail>
           </Container>
         </Section>
-      ) : null}
+      )}
 
-      {/* MDX body — full site width (max-w-6xl) to match all other sections */}
-      <Section>
-        <Container>
-          <MDXRemote source={content} components={mdxComponents} options={mdxOptions} />
+      {/* Frontmatter gallery — primary visual content */}
+      {frontmatter.gallery.length > 0 && (
+        <Section>
+          <Container width="wide">
+            <div className="flex flex-col gap-8">
+              {frontmatter.gallery.map((item, idx) => (
+                <WorkGalleryFigure key={item.src} item={item} priority={idx === 0} />
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
 
-          {/*
-           * Scroll-depth tracker — sentinels for 25/50/75/100% milestones.
-           * Placed after MDX body so the 100% sentinel fires when the user
-           * has read the case, not just when they see the "Next case study" CTA.
-           */}
-          <CaseStudyScrollTracker slug={slug} />
-
-          {/* Next case study CTA */}
-          {nextCs && (
-            <NextCaseCTA nextTitle={nextCs.frontmatter.title} nextSlug={nextCs.frontmatter.slug} />
-          )}
-        </Container>
-      </Section>
+      {/* Next work CTA */}
+      {nextWork && (
+        <Section spacing="card">
+          <Container>
+            <NextWorkCTA
+              nextTitle={nextWork.frontmatter.title}
+              nextSlug={nextWork.frontmatter.slug}
+            />
+          </Container>
+        </Section>
+      )}
     </main>
   );
 }

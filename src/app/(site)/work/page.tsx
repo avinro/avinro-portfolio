@@ -1,39 +1,68 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import { getPublishedCaseStudies } from "@/lib/content/case-studies";
-import { WorkSnapContainer } from "@/components/work/work-snap-container";
+import { getPublishedWorks } from "@/lib/content/works";
+import { Container } from "@/components/layout/container";
+import { Section } from "@/components/layout/section";
+import { WorkGalleryGrid } from "@/components/work/work-gallery-grid";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "A selection of 0→1 products and multi-app systems, designed and shipped.",
+  description:
+    "UI explorations, visual systems, concepts, and product work from a product designer.",
   alternates: {
     canonical: "/work",
   },
 };
 
 /*
- * /work — full-page snap-scroll listing of published case studies.
+ * /work — visual explorations, concepts, and UI-led product work.
  *
- * Each case study occupies one 100dvh viewport slide: its coverImage fills
- * the background, a dark scrim sits above it, and the project name, tags,
- * summary, and a CTA link overlay the foreground.
+ * This section is intentionally different from /case-studies:
+ *   - Gallery-first (portrait cards, image-led).
+ *   - No TOC, no KPI strips, no process narrative.
+ *   - Featured items span the full row (dominant visual weight).
  *
- * The WorkSnapContainer client island applies scroll-snap-type to the root
- * scroll container on mount (cleared on unmount) so the global layout —
- * sticky SiteHeader and SiteFooter — stays unaffected on other routes.
- *
- * The sr-only h1 satisfies heading-hierarchy and gives screen readers a
- * page-level label without duplicating the visual slide titles (h2 each).
+ * A cross-link to /case-studies lets visitors who need narrative depth find it.
  */
 export default function WorkPage() {
-  const cases = getPublishedCaseStudies();
+  const works = getPublishedWorks();
 
   return (
     <main id="main-content">
-      {/* Visually-hidden page title for screen readers and heading hierarchy. */}
-      <h1 className="sr-only">Selected work</h1>
+      {/* Page header */}
+      <Section as="header" spacing="heroInternalCompact" className="border-border border-b">
+        <Container>
+          <div className="flex flex-col items-center gap-4 text-center">
+            <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
+              Visual work
+            </p>
+            <h1 className="font-display text-foreground text-4xl font-semibold tracking-tight sm:text-5xl">
+              Explorations,
+              <br className="hidden sm:block" /> concepts & UI.
+            </h1>
+            <p className="text-muted-foreground max-w-md text-base leading-relaxed sm:text-lg">
+              Visual explorations, UI systems, and product concepts.
+            </p>
 
-      <WorkSnapContainer cases={cases} />
+            {/* Cross-link to /case-studies */}
+            <p className="text-muted-foreground text-sm">
+              Looking for detailed product case studies?{" "}
+              <Link
+                href="/case-studies"
+                className="text-foreground underline underline-offset-4 transition-opacity hover:opacity-70"
+              >
+                View case studies
+              </Link>
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Gallery grid — featured cards span 2 cols, others span 1 */}
+      <Section>
+        <WorkGalleryGrid works={works} />
+      </Section>
     </main>
   );
 }

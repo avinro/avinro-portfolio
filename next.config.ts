@@ -11,6 +11,24 @@ const nextConfig: NextConfig = {
         destination: "/owner/dashboard",
         permanent: true,
       },
+      // Case studies moved from /work/[slug] to /case-studies/[slug].
+      // Per-slug redirects instead of a wildcard so the new /work/[slug]
+      // route (visual explorations) does not get caught by the redirect.
+      {
+        source: "/work/hello-dojo",
+        destination: "/case-studies/hello-dojo",
+        permanent: true,
+      },
+      {
+        source: "/work/uma",
+        destination: "/case-studies/uma",
+        permanent: true,
+      },
+      {
+        source: "/work/project-3",
+        destination: "/case-studies/project-3",
+        permanent: true,
+      },
     ];
   },
 };

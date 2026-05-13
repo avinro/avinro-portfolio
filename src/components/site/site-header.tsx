@@ -39,8 +39,8 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Work", href: "/work" },
+  { label: "Case studies", href: "/case-studies" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
 ] as const;
 
 const SCROLL_THRESHOLD = 40;
@@ -146,7 +146,7 @@ export function SiteHeader() {
               ]
             : isScrolled
               ? [
-                  "mx-auto mt-2 h-14 w-[calc(100%-16px)] max-w-[72rem] rounded-[28px] border px-5 sm:px-6",
+                  "mx-auto mt-2 h-14 w-[calc(100%-16px)] max-w-[50rem] rounded-[28px] border px-5 sm:px-6",
                   "bg-background supports-[backdrop-filter]:bg-background/65",
                   "supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150",
                   "md:supports-[backdrop-filter]:backdrop-blur-xl",

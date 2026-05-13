@@ -5,18 +5,29 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 
-import type { CaseStudy } from "@/lib/content/case-studies";
-
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
+/**
+ * Unified item shape for the home "Selected work" section.
+ * Merges featured case studies and featured works into one ordered list.
+ */
+export interface SelectedWorkItem {
+  kind: "case-study" | "work";
+  slug: string;
+  title: string;
+  coverImage: string;
+  /** Effective sort order — uses featuredOrder when available, falls back to order. */
+  order: number;
+}
+
 interface FlowingWorkMenuProps {
-  cases: CaseStudy[];
+  items: SelectedWorkItem[];
 }
 
 interface FlowingWorkItemProps {
-  cs: CaseStudy;
+  item: SelectedWorkItem;
   isFirst: boolean;
   isDesktopMotion: boolean;
 }
@@ -42,21 +53,30 @@ function findClosestEdge(
 // Static / mobile fallback row
 // ---------------------------------------------------------------------------
 
-function StaticWorkRow({ cs, isFirst }: { cs: CaseStudy; isFirst: boolean }) {
-  const { frontmatter } = cs;
+function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boolean }) {
+  const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
+  const ariaLabel =
+    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
+
   return (
     <Link
-      href={`/work/${frontmatter.slug}`}
+      href={href}
       className="focus-ring group flex flex-1 items-center justify-between gap-4 px-4 py-5 transition-opacity duration-200 hover:opacity-70 sm:px-6 lg:px-8"
       style={{ borderTop: isFirst ? "none" : "1px solid oklch(0 0 0 / 12%)" }}
-      aria-label={`View case study: ${frontmatter.title}`}
+      aria-label={ariaLabel}
     >
-      <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
-        {frontmatter.title}
-      </span>
+      <div className="flex items-center gap-3">
+        <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
+          {item.title}
+        </span>
+        {/* Kind badge — helps visitors distinguish content types */}
+        <span className="text-muted-foreground hidden font-mono text-[10px] tracking-widest uppercase sm:inline">
+          {item.kind === "work" ? "Work" : "Case study"}
+        </span>
+      </div>
       <div className="relative size-14 shrink-0 overflow-hidden rounded-md">
         <Image
-          src={frontmatter.coverImage}
+          src={item.coverImage}
           alt=""
           fill
           sizes="56px"
@@ -78,8 +98,10 @@ const ENTER_EASE = { duration: 0.6, ease: "expo.out" };
 // Desktop marquee item
 // ---------------------------------------------------------------------------
 
-function FlowingWorkItem({ cs, isFirst, isDesktopMotion }: FlowingWorkItemProps) {
-  const { frontmatter } = cs;
+function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProps) {
+  const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
+  const ariaLabel =
+    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
 
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -190,17 +212,24 @@ function FlowingWorkItem({ cs, isFirst, isDesktopMotion }: FlowingWorkItemProps)
     >
       {/* Primary interactive link — the accessible content */}
       <Link
-        href={`/work/${frontmatter.slug}`}
+        href={href}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="focus-ring relative flex h-full cursor-pointer items-center justify-center uppercase"
-        aria-label={`View case study: ${frontmatter.title}`}
+        className="focus-ring relative flex h-full cursor-pointer items-center justify-center gap-3 uppercase"
+        aria-label={ariaLabel}
       >
         <span
           className="font-display text-foreground leading-none font-semibold"
           style={{ fontSize: "clamp(1.75rem, 4vh, 3.5rem)" }}
         >
-          {frontmatter.title}
+          {item.title}
+        </span>
+        {/* Kind badge — tiny label so visitors can tell formats apart at a glance */}
+        <span
+          className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase"
+          aria-hidden="true"
+        >
+          {item.kind === "work" ? "Work" : "Case study"}
         </span>
       </Link>
 
@@ -225,12 +254,12 @@ function FlowingWorkItem({ cs, isFirst, isDesktopMotion }: FlowingWorkItemProps)
                   whiteSpace: "nowrap",
                 }}
               >
-                {frontmatter.title}
+                {item.title}
               </span>
               {/* Thumbnail pill inside the marquee */}
               <div className="relative mx-[2vw] h-[7vh] w-[200px] shrink-0 overflow-hidden rounded-[50px]">
                 <Image
-                  src={frontmatter.coverImage}
+                  src={item.coverImage}
                   alt=""
                   fill
                   sizes="200px"
@@ -251,7 +280,7 @@ function FlowingWorkItem({ cs, isFirst, isDesktopMotion }: FlowingWorkItemProps)
 // FlowingWorkMenu — exported section
 // ---------------------------------------------------------------------------
 
-export function FlowingWorkMenu({ cases }: FlowingWorkMenuProps) {
+export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
   // Lazy initializer reads media queries once on mount (client-only).
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
 
@@ -278,21 +307,21 @@ export function FlowingWorkMenu({ cases }: FlowingWorkMenuProps) {
       aria-label="Selected work"
       className="bg-background text-foreground relative"
       style={{
-        height: `calc(${String(cases.length)} * 25vh)`,
+        height: `calc(${String(items.length)} * 25vh)`,
         minHeight: "60vh",
       }}
     >
       <nav className="flex h-full flex-col" aria-label="Selected work">
-        {cases.map((cs, i) =>
+        {items.map((item, i) =>
           isDesktopMotion ? (
             <FlowingWorkItem
-              key={cs.frontmatter.slug}
-              cs={cs}
+              key={`${item.kind}-${item.slug}`}
+              item={item}
               isFirst={i === 0}
               isDesktopMotion={isDesktopMotion}
             />
           ) : (
-            <StaticWorkRow key={cs.frontmatter.slug} cs={cs} isFirst={i === 0} />
+            <StaticWorkRow key={`${item.kind}-${item.slug}`} item={item} isFirst={i === 0} />
           ),
         )}
       </nav>
