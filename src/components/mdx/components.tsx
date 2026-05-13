@@ -27,6 +27,18 @@ import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { cn } from "@/lib/utils";
 import { MermaidDiagram } from "./mermaid-diagram";
+import {
+  FlowChain,
+  FlowItem,
+  FlowSplit,
+  FlowColumn,
+  StateGrid,
+  StateItem,
+  PrincipleGrid,
+  PrincipleItem,
+  BranchTree,
+  Branch,
+} from "./flow-primitives";
 
 // ---------------------------------------------------------------------------
 // Heading components
@@ -36,7 +48,8 @@ function H2({ className, ...props }: ComponentPropsWithoutRef<"h2">) {
   return (
     <h2
       className={cn(
-        "font-display mt-12 mb-4 text-2xl font-semibold tracking-tight sm:text-3xl",
+        // scroll-mt-24 offsets the sticky nav so anchor links land in view.
+        "font-display mt-12 mb-4 scroll-mt-24 text-2xl font-semibold tracking-tight sm:text-3xl",
         className,
       )}
       {...props}
@@ -48,7 +61,8 @@ function H3({ className, ...props }: ComponentPropsWithoutRef<"h3">) {
   return (
     <h3
       className={cn(
-        "font-display mt-8 mb-3 text-xl font-semibold tracking-tight sm:text-2xl",
+        // scroll-mt-24 offsets the sticky nav so anchor links land in view.
+        "font-display mt-8 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight sm:text-2xl",
         className,
       )}
       {...props}
@@ -585,6 +599,20 @@ export const mdxComponents: MDXComponents = {
   Stats,
   BeforeAfter,
   Bar,
+  // Flow diagram primitives — visual replacements for narrative diagrams.
+  // See src/components/mdx/flow-primitives.tsx for full API and tone system.
+  // Wrapper components:
+  FlowChain,
+  FlowSplit,
+  StateGrid,
+  PrincipleGrid,
+  BranchTree,
+  // Leaf / child components (nested inside wrappers in MDX):
+  FlowItem,
+  FlowColumn,
+  StateItem,
+  PrincipleItem,
+  Branch,
   // Injected by remark-mermaid plugin — resolved here so next-mdx-remote
   // can find the component without a runtime import inside the MDX body.
   MermaidDiagram,

@@ -34,6 +34,7 @@ export interface AboutImage {
 
 export interface HomeContent {
   hero: {
+    badgeText: string;
     headline: string;
     subheadline: string;
     /**
@@ -42,9 +43,12 @@ export interface HomeContent {
      * circle looks full. Keep under ~24 chars per phrase to fit the circle.
      */
     circularText: string;
-    /** Secondary in-page CTA — outline button, NOT the persistent primary */
-    secondaryCta: string;
-    secondaryCtaHref: string;
+    /** Text shown inside CircularText on hover — signals the element is a link to /contact. */
+    circularTextHover: string;
+    primaryCta: string;
+    primaryCtaHref: string;
+    downloadCta: string;
+    downloadCtaHref: string;
   };
   /**
    * Copy for the CurvedLoop chapter break between hero and selected work.
@@ -92,12 +96,16 @@ export interface HomeContent {
 
 export const homeContent: HomeContent = {
   hero: {
-    headline: "I turn product vision into shipped experiences.",
+    badgeText: "Open to Work",
+    headline: "Product Design Engineer shipping vision into reality",
     subheadline:
-      "Most projects fail in the gap between idea and execution. I help teams close it — from early concept to a product they can actually ship.",
+      "I've shipped SaaS products for B2B and B2C teams — from 0→1 discovery to launch. Most projects fail between idea and execution; I help close that gap.",
     circularText: "Strategy & execution · Product design · ",
-    secondaryCta: "See the work",
-    secondaryCtaHref: "/work",
+    circularTextHover: "Let's talk · Send me a message · ",
+    primaryCta: "Explore my work",
+    primaryCtaHref: "/work",
+    downloadCta: "Download CV",
+    downloadCtaHref: "/AryVincench_CV_2026.pdf",
   },
   workDivider: {
     text: "SELECTED WORK \u2022 ",

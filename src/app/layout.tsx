@@ -7,23 +7,10 @@ import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { AnalyticsClickDelegator } from "@/components/analytics/click-delegator";
 import { SITE_URL, SITE_NAME, OWNER_JOB_TITLE } from "@/lib/seo/site";
 
-/*
- * Google Sans Flex — variable display/heading font (OFL).
- * Expose the ROND (roundness) axis in addition to weight so headings
- * can leverage optical roundness in Phase 1 if needed.
- *
- * display: 'optional' — PRO-21 CLS fix.
- * Next.js cannot auto-calculate size-adjust fallback metrics for Google Sans
- * Flex (build warning: "Failed to find font override values"). Without a
- * metrics-aligned fallback, font-display:swap causes layout shift on load.
- * 'optional' avoids the shift: if the font file is not ready within the block
- * period the browser keeps the system font rather than swapping. On Vercel the
- * font is served from /_next/static/media/ with preload, so it loads fast on
- * warm connections. Cold first-visit shows system sans-serif with no CLS.
- */
+/* Display/headings font */
 const googleSansFlex = Google_Sans_Flex({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-google-sans-flex",
   axes: ["ROND", "opsz"],
   display: "optional",
   adjustFontFallback: false,
@@ -32,7 +19,7 @@ const googleSansFlex = Google_Sans_Flex({
 /*
  * Manrope — variable humanist sans for body/UI copy (OFL).
  * Loaded as a variable weight so a single file covers 200–800.
- * display: 'optional' consistent with Google Sans Flex strategy — avoids any
+ * display: 'optional' keeps the same loading strategy as display headings — avoids any
  * CLS from font swap on body copy. Next.js auto-generates size-adjust metrics
  * for Manrope so fallback fidelity is high, but 'optional' is cleaner for CLS.
  */

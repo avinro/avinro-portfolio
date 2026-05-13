@@ -52,6 +52,10 @@ const CaseStudyFrontmatterSchema = z.object({
   tags: z.array(z.string()).min(1),
   gradient: z.string().min(1),
   draft: z.boolean().optional().default(false),
+  featured: z.boolean().optional().default(false),
+  // Work grid card badge fields
+  sector: z.string().min(1),
+  softwareType: z.string().min(1),
   // Optional outcome KPIs — rendered as a top-of-page stat strip and
   // available to MDX body via the <Stats /> primitive.
   kpis: z.array(KpiSchema).max(6).optional(),

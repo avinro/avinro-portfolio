@@ -43,9 +43,10 @@ describe("SiteFooter", () => {
     expect(html).toContain('aria-label="Footer navigation"');
   });
 
-  it("renders nav links for /work, /about, /contact, /privacy", () => {
+  it("renders nav links for /work, /case-studies, /about, /contact, /privacy", () => {
     const html = renderToStaticMarkup(<SiteFooter />);
     expect(html).toContain('href="/work"');
+    expect(html).toContain('href="/case-studies"');
     expect(html).toContain('href="/about"');
     expect(html).toContain('href="/contact"');
     expect(html).toContain('href="/privacy"');
@@ -71,7 +72,7 @@ describe("SiteFooter", () => {
     const navIdx = html.indexOf('aria-label="Footer navigation"');
     expect(navIdx).toBeGreaterThan(-1);
     const navSection = html.slice(navIdx, navIdx + 1500);
-    // 4 nav links (Work, About, Contact, Privacy) must carry focus-ring-invert.
-    expect(navSection.match(/focus-ring-invert/g)?.length).toBeGreaterThanOrEqual(4);
+    // 5 nav links (Work, Case studies, About, Contact, Privacy) must carry focus-ring-invert.
+    expect(navSection.match(/focus-ring-invert/g)?.length).toBeGreaterThanOrEqual(5);
   });
 });

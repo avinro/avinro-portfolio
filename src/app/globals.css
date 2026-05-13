@@ -22,11 +22,7 @@
  */
 
 @theme inline {
-  /* ── Fonts ──────────────────────────────────────────────────────────
-   * Literal names are required here: Tailwind v4 @theme inline resolves
-   * at CSS parse time, not runtime, so var(--font-*) from next/font won't
-   * work. The literal names match what next/font downloads via <link>.
-   */
+  /* ── Fonts ────────────────────────────────────────────────────────── */
   --font-display: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Google Sans Flex", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -387,5 +383,18 @@ html.lenis-smooth {
   }
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
+  }
+
+  .pulse-ring {
+    animation: pulse-ring 2s infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgb(102 255 153 / 0.7);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgb(102 255 153 / 0);
+    }
   }
 }

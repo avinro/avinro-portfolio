@@ -1,15 +1,12 @@
 import { ImageResponse } from "next/og";
-import { getCaseStudyBySlug, getCaseStudySlugs } from "@/lib/content/case-studies";
+import { getWorkBySlug, getWorkSlugs } from "@/lib/content/works";
 
 /*
- * Per-slug Open Graph image for case study pages.
+ * Per-slug Open Graph image for work (visual exploration) pages.
  *
- * Renders title, client, year, and an accent rule following the same visual
- * language as the global opengraph-image.tsx handler so all OG images feel
- * like a coherent system.
- *
- * runtime = "nodejs" uses Fluid Compute (recommended over Edge per Vercel
- * platform guidance). System fonts only to match the existing global handler.
+ * Renders title, category, year — visually similar to the case study OG image
+ * but with "Work" instead of "Case Study" in the kicker so social previews
+ * distinguish the two content types.
  */
 
 export const runtime = "nodejs";
@@ -17,16 +14,16 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export function generateStaticParams() {
-  return getCaseStudySlugs().map((slug) => ({ slug }));
+  return getWorkSlugs().map((slug) => ({ slug }));
 }
 
-export default async function CaseStudyOGImage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function WorkOGImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
+  const work = getWorkBySlug(slug);
 
-  const title = cs?.frontmatter.title ?? "Case Study";
-  const client = cs?.frontmatter.client ?? "";
-  const year = cs?.frontmatter.year != null ? String(cs.frontmatter.year) : "";
+  const title = work?.frontmatter.title ?? "Work";
+  const category = work?.frontmatter.category ?? "";
+  const year = work?.frontmatter.year != null ? String(work.frontmatter.year) : "";
 
   return new ImageResponse(
     <div
@@ -38,7 +35,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
         width: "100%",
         height: "100%",
         padding: "80px",
-        background: "#09090B", // zinc-950
+        background: "#09090B",
         fontFamily: "system-ui, sans-serif",
       }}
     >
@@ -48,15 +45,15 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
           fontSize: 16,
           fontWeight: 500,
           letterSpacing: "0.1em",
-          color: "#71717A", // zinc-500
+          color: "#71717A",
           textTransform: "uppercase",
           marginBottom: 40,
         }}
       >
-        avinro.com · Case Study
+        avinro.com · Work
       </span>
 
-      {/* Case study title */}
+      {/* Title */}
       <span
         style={{
           fontSize: 80,
@@ -71,8 +68,8 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
         {title}
       </span>
 
-      {/* Client · Year */}
-      {(client || year) && (
+      {/* Category · Year */}
+      {(category || year) && (
         <span
           style={{
             fontSize: 24,
@@ -80,7 +77,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
             color: "#71717A",
           }}
         >
-          {[client, year].filter(Boolean).join(" · ")}
+          {[category, year].filter(Boolean).join(" · ")}
         </span>
       )}
 
@@ -92,7 +89,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
           left: 80,
           width: 48,
           height: 4,
-          background: "#2563EB", // blue-600 accent
+          background: "#2563EB",
           borderRadius: 2,
         }}
       />

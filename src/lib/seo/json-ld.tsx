@@ -76,7 +76,7 @@ interface CreativeWorkJsonLdProps {
  */
 export function CreativeWorkJsonLd({ cs, slug }: CreativeWorkJsonLdProps) {
   const { frontmatter } = cs;
-  const pageUrl = absoluteUrl(`/work/${slug}`);
+  const pageUrl = absoluteUrl(`/case-studies/${slug}`);
   const imageUrl = absoluteUrl(frontmatter.coverImage);
 
   const schema = {
