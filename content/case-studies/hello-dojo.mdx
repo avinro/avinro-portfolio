@@ -1,5 +1,5 @@
 ---
-title: helloDojo
+title: Hello Dojo
 slug: hello-dojo
 client: helloDojo
 role: Product Design Engineer & Product Manager
@@ -94,7 +94,7 @@ My entry point was to make that vision concrete. The market opportunity was clea
   <StateItem icon="ticket" label="Nightlife & events" hint="VIP lists, door staff, who-you-know" tone="negative" />
 </StateGrid>
 
-## The problem
+## Problem statement
 
 ### User problem
 
@@ -217,7 +217,7 @@ This meant rejecting traditional SaaS patterns:
 | **Rideshare-first, then expansion** | Validates the core value proposition before expanding scope. Rideshare is the easiest to operationalize and has the clearest value for users. | Means dining, yachts, events launch later and with less market research. Creates pressure to ship everything simultaneously (which happened anyway due to CEO pressure). |
 | **Single offer-creation system for all venue types** | CTO wanted one unified backend for offers (restaurants, venues, yachts, nightclubs). One system, one API. | Loses service-specific logic. A restaurant's Happy Hour offer is not the same as a nightclub's VIP table pricing. The system became a lowest-common-denominator model that required workarounds. |
 
-## Exploration
+## Process
 
 ### Option A: Uber-style map interface with AI booking layer
 
@@ -305,6 +305,11 @@ Important states:
 - **Error/Fallback (Voice Mode):** Voice failed or unclear; system prompts user to repeat, tap options, or switch to Chat/UI Flow
 - **Empty state (no results):** No available drivers/venues; Dojo suggests alternatives or queuing
 - **Compliance:** Fleet manager viewing document expiration and renewal status
+
+<Figure
+  placeholderLabel="UX architecture — four user types, three interaction modes"
+  caption="Four distinct user types with overlapping journeys. Voice, Chat, and UI Flow all share the same booking engine and converge on the same confirmation flow."
+/>
 
 <BranchTree icon="bot" label="Dojo" hint="One agent, four sides of the platform">
   <Branch title="Customer" tone="accent">
@@ -534,7 +539,7 @@ The project involved close coordination between myself, the CTO, and the two fou
   <StateItem icon="shield-check" label="QA" hint="Voice edge cases, mode switches, real-time map" />
 </StateGrid>
 
-## Outcome
+## Results and impact
 
 The project is in TestFlight (private beta) with all systems functional and production-ready. However, the product has not launched publicly, and therefore mature usage metrics are not available.
 
