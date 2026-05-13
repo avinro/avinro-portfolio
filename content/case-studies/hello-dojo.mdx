@@ -63,10 +63,30 @@ Transformed a vague "Uber with AI" concept into a production-ready, multi-sided 
 - **Status:** TestFlight (private beta)
 
 <StateGrid columns={4}>
-  <StateItem icon="smartphone" label="Customer App" hint="iOS — book a ride, table, yacht or VIP" tone="accent" />
-  <StateItem icon="car" label="Driver App" hint="iOS — accept requests, navigate, complete" tone="accent" />
-  <StateItem icon="map" label="Fleet Portal" hint="Web — vehicles, drivers, compliance" tone="accent" />
-  <StateItem icon="store" label="Vendor Portal" hint="Web — availability, bookings, demand" tone="accent" />
+  <StateItem
+    icon="smartphone"
+    label="Customer App"
+    hint="iOS — book a ride, table, yacht or VIP"
+    tone="accent"
+  />
+  <StateItem
+    icon="car"
+    label="Driver App"
+    hint="iOS — accept requests, navigate, complete"
+    tone="accent"
+  />
+  <StateItem
+    icon="map"
+    label="Fleet Portal"
+    hint="Web — vehicles, drivers, compliance"
+    tone="accent"
+  />
+  <StateItem
+    icon="store"
+    label="Vendor Portal"
+    hint="Web — availability, bookings, demand"
+    tone="accent"
+  />
 </StateGrid>
 
 ## Executive summary
@@ -74,9 +94,21 @@ Transformed a vague "Uber with AI" concept into a production-ready, multi-sided 
 helloDojo is a multi-sided platform that solves a real operational problem in Ibiza: the fragmented, relationship-dependent booking ecosystem where taxis, restaurants, yachts, and experiences require separate calls, WhatsApp connections, and insider knowledge. My role was to transform a loose product vision ("Uber with AI") into a cohesive, production-ready system. I owned product discovery, UX architecture, design system leadership, frontend implementation, and brand positioning. The core insight—making an AI concierge named Dojo the primary interface rather than replicating Uber's transactional design—became the foundation for the entire experience. Critically, I designed three distinct interaction modes (Voice Mode, Chat Mode, and UI Flow) that let users choose how to interact with Dojo based on their context and preference, all while keeping the agentic experience central. In 6 months, I shipped a fully integrated platform across iOS and web with reusable component systems, production-ready code, and clear operational logic, despite significant scope pressures.
 
 <PrincipleGrid>
-  <PrincipleItem icon="mic" title="Voice Mode" body="Hold-to-talk, premium hands-free. Dojo speaks back and shows option cards beneath the avatar — same conversation continues whether you tap or speak." />
-  <PrincipleItem icon="message-square" title="Chat Mode" body="Same flow as voice, written. For loud clubs, hearing accessibility, or just preference. Option cards drop in below each Dojo reply." />
-  <PrincipleItem icon="layout-grid" title="UI Flow" body="For users who want to browse all 50 restaurants before deciding. Stepped, filterable, elevated visual treatment — still routes through the same booking engine." />
+  <PrincipleItem
+    icon="mic"
+    title="Voice Mode"
+    body="Hold-to-talk, premium hands-free. Dojo speaks back and shows option cards beneath the avatar — same conversation continues whether you tap or speak."
+  />
+  <PrincipleItem
+    icon="message-square"
+    title="Chat Mode"
+    body="Same flow as voice, written. For loud clubs, hearing accessibility, or just preference. Option cards drop in below each Dojo reply."
+  />
+  <PrincipleItem
+    icon="layout-grid"
+    title="UI Flow"
+    body="For users who want to browse all 50 restaurants before deciding. Stepped, filterable, elevated visual treatment — still routes through the same booking engine."
+  />
 </PrincipleGrid>
 
 ## Context
@@ -88,10 +120,25 @@ The CEO had validated demand for rideshare specifically and saw the opportunity 
 My entry point was to make that vision concrete. The market opportunity was clear. The product shape was not.
 
 <StateGrid columns={4}>
-  <StateItem icon="car" label="Rideshare" hint="Apps, taxi ranks, WhatsApp groups" tone="negative" />
+  <StateItem
+    icon="car"
+    label="Rideshare"
+    hint="Apps, taxi ranks, WhatsApp groups"
+    tone="negative"
+  />
   <StateItem icon="wine" label="Dining" hint="Resy, calls, concierge favours" tone="negative" />
-  <StateItem icon="sailboat" label="Yachts" hint="Brokers, deposits, side-channel WhatsApp" tone="negative" />
-  <StateItem icon="ticket" label="Nightlife & events" hint="VIP lists, door staff, who-you-know" tone="negative" />
+  <StateItem
+    icon="sailboat"
+    label="Yachts"
+    hint="Brokers, deposits, side-channel WhatsApp"
+    tone="negative"
+  />
+  <StateItem
+    icon="ticket"
+    label="Nightlife & events"
+    hint="VIP lists, door staff, who-you-know"
+    tone="negative"
+  />
 </StateGrid>
 
 ## Problem statement
@@ -99,6 +146,7 @@ My entry point was to make that vision concrete. The market opportunity was clea
 ### User problem
 
 Users in Ibiza—tourists, groups, VIP guests, nightlife customers—face repeated friction:
+
 - Waiting 30+ minutes for a taxi because the system is informal and unpredictable
 - Making multiple calls or messages to different venues to book experiences
 - No unified way to discover or reserve rides, dining, yachts, events, or premium tables
@@ -112,6 +160,7 @@ Venues (restaurants, yachts, nightclubs, beachclubs) need a structured way to re
 ### Business problem
 
 The CEO's thesis was that Ibiza's hospitality market was ripe for consolidation. The business needed to:
+
 - Establish a single point of entry for premium experiences (defensible position in a fragmented market)
 - Capture transaction volume across rideshare, dining, accommodations, and events (multiple revenue streams)
 - Build operational infrastructure that venues and drivers would adopt (network effects)
@@ -128,9 +177,24 @@ The secondary problem: How do you design for an environment where voice interact
 The third problem: How do you build operational UX for drivers (mobile, on the road, safety-critical) and vendors (desktop, async management) that feels connected to the consumer experience rather than bolted-on?
 
 <PrincipleGrid>
-  <PrincipleItem icon="users" title="User problem" body="Tourists and locals need rides, dinners, yachts, tables — but the system runs on insider connections, scattered apps, and language-blind concierges." tone="warning" />
-  <PrincipleItem icon="building-2" title="Business problem" body="Capture transaction volume across rideshare, dining and events before competitors land. Half-baked or fragmented = failure in an image-conscious market." tone="warning" />
-  <PrincipleItem icon="puzzle" title="Product problem" body="Unify radically different service categories (instant rides, advance bookings, payments, logistics) under one experience — without overwhelming or fragmenting." tone="warning" />
+  <PrincipleItem
+    icon="users"
+    title="User problem"
+    body="Tourists and locals need rides, dinners, yachts, tables — but the system runs on insider connections, scattered apps, and language-blind concierges."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="building-2"
+    title="Business problem"
+    body="Capture transaction volume across rideshare, dining and events before competitors land. Half-baked or fragmented = failure in an image-conscious market."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="puzzle"
+    title="Product problem"
+    body="Unify radically different service categories (instant rides, advance bookings, payments, logistics) under one experience — without overwhelming or fragmenting."
+    tone="warning"
+  />
 </PrincipleGrid>
 
 ## My role
@@ -163,12 +227,32 @@ The project operated under real-world pressures that shaped every decision:
 
 <StateGrid columns={4}>
   <StateItem icon="clock" label="6-month runway" hint="Multi-sided platform, no room for pivots" />
-  <StateItem icon="flask-conical" label="No prior validation" hint="Only rideshare demand was confirmed" />
-  <StateItem icon="network" label="Parallel system complexity" hint="Decisions in one product rippled into all 4" />
-  <StateItem icon="layers" label="Three modes at once" hint="Voice + Chat + UI Flow, all coherent" />
+  <StateItem
+    icon="flask-conical"
+    label="No prior validation"
+    hint="Only rideshare demand was confirmed"
+  />
+  <StateItem
+    icon="network"
+    label="Parallel system complexity"
+    hint="Decisions in one product rippled into all 4"
+  />
+  <StateItem
+    icon="layers"
+    label="Three modes at once"
+    hint="Voice + Chat + UI Flow, all coherent"
+  />
   <StateItem icon="bot" label="Novel AI-driven UX" hint="Latency, recognition, fallback all open" />
-  <StateItem icon="shield-check" label="Safety-critical ops" hint="Driver app + fleet portal on the road" />
-  <StateItem icon="palette" label="One DS, many contexts" hint="Apps + web, consumer + operational" />
+  <StateItem
+    icon="shield-check"
+    label="Safety-critical ops"
+    hint="Driver app + fleet portal on the road"
+  />
+  <StateItem
+    icon="palette"
+    label="One DS, many contexts"
+    hint="Apps + web, consumer + operational"
+  />
   <StateItem icon="user-cog" label="Leadership change" hint="CTO left mid-execution" />
 </StateGrid>
 
@@ -195,27 +279,51 @@ This meant rejecting traditional SaaS patterns:
 6. **Scope discipline through feature prioritization.** Launch rideshare first, stabilize, gather feedback, then expand to dining and experiences. The CEO wanted everything at once. The strategy was to push back and build a defensible, validated core before expanding.
 
 <PrincipleGrid>
-  <PrincipleItem icon="bot" title="Agentic by default, UI as support" body="Voice and Chat are the primary path. Users feel they are talking to a capable concierge. UI cards support the conversation — they never replace it." />
-  <PrincipleItem icon="route" title="Voice-first DNA, even in UI Flow" body="The structured browse path still feels premium and agentic — same Dojo voice, same booking logic — just a different visual treatment." />
-  <PrincipleItem icon="cog" title="Unified service taxonomy" body="Rideshare, dining, yachts and events are not separate products. They are service categories accessed through one interface, one mental model." />
-  <PrincipleItem icon="radio" title="Real-time operational transparency" body="Drivers see demand. Fleet managers see deployment. Venues see availability. Transparency reduces friction across all four sides of the platform." />
-  <PrincipleItem icon="link" title="User continuity and reduced friction" body="Book a restaurant, then need a ride — the system remembers you, pre-fills, opens the right account. Switching costs measured in seconds." />
-  <PrincipleItem icon="flag" title="Scope discipline through prioritization" body="Rideshare first, then expansion. Push back on big-bang launches; build a validated core before stretching across categories." />
+  <PrincipleItem
+    icon="bot"
+    title="Agentic by default, UI as support"
+    body="Voice and Chat are the primary path. Users feel they are talking to a capable concierge. UI cards support the conversation — they never replace it."
+  />
+  <PrincipleItem
+    icon="route"
+    title="Voice-first DNA, even in UI Flow"
+    body="The structured browse path still feels premium and agentic — same Dojo voice, same booking logic — just a different visual treatment."
+  />
+  <PrincipleItem
+    icon="cog"
+    title="Unified service taxonomy"
+    body="Rideshare, dining, yachts and events are not separate products. They are service categories accessed through one interface, one mental model."
+  />
+  <PrincipleItem
+    icon="radio"
+    title="Real-time operational transparency"
+    body="Drivers see demand. Fleet managers see deployment. Venues see availability. Transparency reduces friction across all four sides of the platform."
+  />
+  <PrincipleItem
+    icon="link"
+    title="User continuity and reduced friction"
+    body="Book a restaurant, then need a ride — the system remembers you, pre-fills, opens the right account. Switching costs measured in seconds."
+  />
+  <PrincipleItem
+    icon="flag"
+    title="Scope discipline through prioritization"
+    body="Rideshare first, then expansion. Push back on big-bang launches; build a validated core before stretching across categories."
+  />
 </PrincipleGrid>
 
 ## Key decisions
 
-| Decision | Why it mattered | Trade-off |
-|---|---|---|
-| **Three interaction modes (Voice, Chat, UI Flow), not voice-only** | Users in loud clubs can't use voice. Users with hearing loss need alternatives. Users who want to browse all options need UI. Supporting all three modes makes the product usable across contexts while keeping Dojo central. | Increased complexity: three distinct UX flows, three state machines, three visual treatments, but same underlying booking logic. More edge cases to handle. |
-| **Voice Mode and Chat Mode show UI elements (cards, buttons, selectors), not pure conversation** | Pure conversation without visual options creates ambiguity. Showing options (restaurants, pricing, availability) as UI cards while maintaining conversational flow gives users clarity and control. | Risk of splitting user attention between voice/text and UI. Required careful information hierarchy and visual clarity. |
-| **UI Flow has elevated background and distinct visual treatment** | Users in nightlife need to identify interaction modes quickly. Dark background for Voice/Chat, lighter elevation for UI Flow signals a shift from agentic to structured browsing. Cognitive clarity reduces friction. | Breaks visual cohesion if not carefully designed. Required thought about when users transition and how to make the shift feel natural, not jarring. |
-| **Keep users in Voice/Chat mode; don't funnel to UI Flow** | The differentiator is agentic booking. Once a user starts talking to Dojo, keep them talking. Don't transition them to traditional UI halfway through. | Loses some flexibility. Users who want to browse all 50 restaurants upfront can't easily do that in Voice/Chat Mode; they have to switch to UI Flow. |
-| **Dojo as primary interface, not Uber-style map** | Users in Ibiza's environment prefer voice/chat. Agentic interaction feels premium and differentiates from commodity ride-hailing. Dojo becomes the brand and the UX. | Lost immediate clarity of map-based navigation. Requires robust fallback UI and clear affordances for users unfamiliar with voice-first apps. |
-| **Unified booking flow for restaurants, yachts, beachclubs, nightclubs** | Reduces component duplication, simplifies mental model for users, makes the system maintainable. Party size, date, time are universal. Build once, apply everywhere. | Loses service-specific nuance. A yacht booking is not the same as a nightclub VIP table, but forcing them into one pattern obscures those differences. Required careful naming and context. |
-| **User sharing and account continuity** | Reduces friction for repeat users. System detects existing account and opens it automatically. Builds habit and engagement. | Required backend coordination and careful privacy/security handling. Risk of confusing users if the system auto-opens wrong account. |
-| **Rideshare-first, then expansion** | Validates the core value proposition before expanding scope. Rideshare is the easiest to operationalize and has the clearest value for users. | Means dining, yachts, events launch later and with less market research. Creates pressure to ship everything simultaneously (which happened anyway due to CEO pressure). |
-| **Single offer-creation system for all venue types** | CTO wanted one unified backend for offers (restaurants, venues, yachts, nightclubs). One system, one API. | Loses service-specific logic. A restaurant's Happy Hour offer is not the same as a nightclub's VIP table pricing. The system became a lowest-common-denominator model that required workarounds. |
+| Decision                                                                                         | Why it mattered                                                                                                                                                                                                               | Trade-off                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Three interaction modes (Voice, Chat, UI Flow), not voice-only**                               | Users in loud clubs can't use voice. Users with hearing loss need alternatives. Users who want to browse all options need UI. Supporting all three modes makes the product usable across contexts while keeping Dojo central. | Increased complexity: three distinct UX flows, three state machines, three visual treatments, but same underlying booking logic. More edge cases to handle.                                      |
+| **Voice Mode and Chat Mode show UI elements (cards, buttons, selectors), not pure conversation** | Pure conversation without visual options creates ambiguity. Showing options (restaurants, pricing, availability) as UI cards while maintaining conversational flow gives users clarity and control.                           | Risk of splitting user attention between voice/text and UI. Required careful information hierarchy and visual clarity.                                                                           |
+| **UI Flow has elevated background and distinct visual treatment**                                | Users in nightlife need to identify interaction modes quickly. Dark background for Voice/Chat, lighter elevation for UI Flow signals a shift from agentic to structured browsing. Cognitive clarity reduces friction.         | Breaks visual cohesion if not carefully designed. Required thought about when users transition and how to make the shift feel natural, not jarring.                                              |
+| **Keep users in Voice/Chat mode; don't funnel to UI Flow**                                       | The differentiator is agentic booking. Once a user starts talking to Dojo, keep them talking. Don't transition them to traditional UI halfway through.                                                                        | Loses some flexibility. Users who want to browse all 50 restaurants upfront can't easily do that in Voice/Chat Mode; they have to switch to UI Flow.                                             |
+| **Dojo as primary interface, not Uber-style map**                                                | Users in Ibiza's environment prefer voice/chat. Agentic interaction feels premium and differentiates from commodity ride-hailing. Dojo becomes the brand and the UX.                                                          | Lost immediate clarity of map-based navigation. Requires robust fallback UI and clear affordances for users unfamiliar with voice-first apps.                                                    |
+| **Unified booking flow for restaurants, yachts, beachclubs, nightclubs**                         | Reduces component duplication, simplifies mental model for users, makes the system maintainable. Party size, date, time are universal. Build once, apply everywhere.                                                          | Loses service-specific nuance. A yacht booking is not the same as a nightclub VIP table, but forcing them into one pattern obscures those differences. Required careful naming and context.      |
+| **User sharing and account continuity**                                                          | Reduces friction for repeat users. System detects existing account and opens it automatically. Builds habit and engagement.                                                                                                   | Required backend coordination and careful privacy/security handling. Risk of confusing users if the system auto-opens wrong account.                                                             |
+| **Rideshare-first, then expansion**                                                              | Validates the core value proposition before expanding scope. Rideshare is the easiest to operationalize and has the clearest value for users.                                                                                 | Means dining, yachts, events launch later and with less market research. Creates pressure to ship everything simultaneously (which happened anyway due to CEO pressure).                         |
+| **Single offer-creation system for all venue types**                                             | CTO wanted one unified backend for offers (restaurants, venues, yachts, nightclubs). One system, one API.                                                                                                                     | Loses service-specific logic. A restaurant's Happy Hour offer is not the same as a nightclub's VIP table pricing. The system became a lowest-common-denominator model that required workarounds. |
 
 ## Process
 
@@ -250,22 +358,49 @@ Dojo is primary interface across three modes. **Voice Mode:** Users speak to Doj
 The design challenge: How to make three distinct modes feel like one product? Answer: Architecture and visual hierarchy. Voice/Chat share dark background and Dojo-centric layout (signals "conversation"). UI Flow uses elevated visual treatment (signals "browse and select"). All three share components, tokens, and booking logic, so the product feels coherent.
 
 <FlowSplit>
-  <FlowColumn title="Option A — Uber clone" subtitle="Map-first, tap-to-request, AI layered on top" tone="negative" badgeLabel="Discarded">
+  <FlowColumn
+    title="Option A — Uber clone"
+    subtitle="Map-first, tap-to-request, AI layered on top"
+    tone="negative"
+    badgeLabel="Discarded"
+  >
     <FlowItem icon="map" label="Map remains primary" />
     <FlowItem icon="smartphone" label="Tap to request" />
     <FlowItem icon="bot" label="AI assists via NLP" />
-    <FlowItem icon="alert-triangle" label="Zero differentiation" hint="Ignores Ibiza's environment" />
+    <FlowItem
+      icon="alert-triangle"
+      label="Zero differentiation"
+      hint="Ignores Ibiza's environment"
+    />
   </FlowColumn>
-  <FlowColumn title="Option B — SaaS portal" subtitle="Forms + menus, AI assistant on the side" tone="negative" badgeLabel="Discarded">
+  <FlowColumn
+    title="Option B — SaaS portal"
+    subtitle="Forms + menus, AI assistant on the side"
+    tone="negative"
+    badgeLabel="Discarded"
+  >
     <FlowItem icon="clipboard-list" label="Browse and form-fill" />
     <FlowItem icon="message-square" label="AI as helpful chat layer" />
-    <FlowItem icon="alert-triangle" label="Defeats concierge positioning" hint="Just another Resy clone" />
+    <FlowItem
+      icon="alert-triangle"
+      label="Defeats concierge positioning"
+      hint="Just another Resy clone"
+    />
   </FlowColumn>
-  <FlowColumn title="Option C — Agentic, three modes" subtitle="Dojo as primary across Voice / Chat / UI" tone="positive" badgeLabel="Chosen">
+  <FlowColumn
+    title="Option C — Agentic, three modes"
+    subtitle="Dojo as primary across Voice / Chat / UI"
+    tone="positive"
+    badgeLabel="Chosen"
+  >
     <FlowItem icon="mic" label="Voice — premium hands-free" />
     <FlowItem icon="message-square" label="Chat — accessible fallback" />
     <FlowItem icon="layout-grid" label="UI Flow — structured browse" />
-    <FlowItem icon="check-circle-2" label="One Dojo, one booking engine" hint="Three doors, same room" />
+    <FlowItem
+      icon="check-circle-2"
+      label="One Dojo, one booking engine"
+      hint="Three doors, same room"
+    />
   </FlowColumn>
 </FlowSplit>
 
@@ -387,6 +522,7 @@ The Customer App opens to a full-screen Dojo avatar in the center, with a "Hold 
 **Via Chat:** Tap the chat input box and type "I need a taxi to Pacha." Dojo responds in text, confirms details, and shows a "Confirm" button. User taps to confirm. Transitions to same real-time map as voice mode. User can type follow-up questions or wait.
 
 **Why it works:**
+
 - **Matches environment:** Voice-first in a loud setting. Chat as fallback.
 - **Clear primary action:** Dojo is unmissable; the hold-to-talk button is large and near the thumb.
 - **Reduces friction:** No map selection, no typing a destination unless necessary. Natural language is faster than tapping.
@@ -407,6 +543,7 @@ All three modes handle this, but with different approaches:
 **Via UI Flow:** Select "Reserve Restaurant" from home. Enter party size, date, time. See ALL available restaurants (not curated by Dojo) with advanced filters (cuisine, price range, distance, rating, dietary restrictions). Scroll through results. Tap a restaurant to see full details. Confirm booking.
 
 **Why it works:**
+
 - **Voice/Chat:** Conversational discovery, reduced decision fatigue (Dojo curates), premium concierge feel.
 - **UI Flow:** Transparent browsing, full control, familiar mental model for users who like comparing options.
 - **Consistency:** Party-size → date → time → confirm flow repeats across all experience types (restaurants, yachts, beachclubs, nightclubs), so users learn the pattern once.
@@ -423,6 +560,7 @@ The Driver App is notification-first. New ride requests appear as full-screen ca
 Real-time map shows passenger's exact location on pickup, enabling drivers to confirm "I see you at the corner" without guessing.
 
 **Why it works:**
+
 - **Low cognitive load:** Requests are the main thing; everything else is secondary.
 - **Safety-first:** Large buttons (≥48px), minimal text, clear navigation reduce driver distraction.
 - **Real-time status:** Passenger and driver are always aligned (pickup confirmed, in-transit, arriving).
@@ -438,6 +576,7 @@ The Fleet Manager Portal opens to a map view showing all fleet vehicles in real 
 A separate Compliance page shows all drivers and vehicles with document expiration dates: driver licenses, vehicle registration, insurance. The manager gets notifications when documents are expiring (30 days before, 7 days before). This addresses a gap in Uber's model: Uber doesn't manage compliance; helloDojo does because the Ibiza market requires it.
 
 **Why it works:**
+
 - **Operational clarity:** One view of the entire fleet state.
 - **Demand-driven deployment:** Heatmap data helps managers place vehicles where users actually need them.
 - **Compliance automation:** Reducing manual document tracking reduces legal and operational risk.
@@ -512,7 +651,12 @@ The frontend was built in React + Tailwind using an AI-assisted workflow. This w
   <FlowItem icon="palette" label="Design in Figma" hint="Components, tokens, all states" />
   <FlowItem icon="plug" label="Figma MCP" hint="Spec read directly into prompts" />
   <FlowItem icon="code-2" label="Cursor generates React" hint="Opus plans, Sonnet/Codex builds" />
-  <FlowItem icon="eye" label="Review" hint="Loop until edge cases and a11y are clean" tone="warning" />
+  <FlowItem
+    icon="eye"
+    label="Review"
+    hint="Loop until edge cases and a11y are clean"
+    tone="warning"
+  />
   <FlowItem icon="database" label="Wire APIs" hint="Mapbox, Stripe, Web Speech, backend" />
   <FlowItem icon="smartphone" label="Test across 4 products" />
   <FlowItem icon="rocket" label="Ship to TestFlight" />
@@ -534,8 +678,16 @@ The project involved close coordination between myself, the CTO, and the two fou
 
 <StateGrid columns={4}>
   <StateItem icon="cpu" label="CTO" hint="APIs, speech-to-text, unified booking endpoints" />
-  <StateItem icon="briefcase" label="CEO" hint="Rideshare validation, scope pressure, business calls" />
-  <StateItem icon="palette" label="DS lead (subcontract)" hint="Token automation, AI-readable Figma docs" />
+  <StateItem
+    icon="briefcase"
+    label="CEO"
+    hint="Rideshare validation, scope pressure, business calls"
+  />
+  <StateItem
+    icon="palette"
+    label="DS lead (subcontract)"
+    hint="Token automation, AI-readable Figma docs"
+  />
   <StateItem icon="shield-check" label="QA" hint="Voice edge cases, mode switches, real-time map" />
 </StateGrid>
 
@@ -584,9 +736,21 @@ The strongest evidence of impact is the breadth of the system shipped, the sophi
   <StateItem icon="route" label="Mode switching" hint="Test easier Voice/Chat → UI transitions" />
   <StateItem icon="cog" label="Offer system redesign" hint="Service-specific role types" />
   <StateItem icon="globe" label="Mobile web parity" hint="Reduce iOS-only fragility" />
-  <StateItem icon="shield-check" label="Compliance automation" hint="Renewal reminders, DB integrations" />
-  <StateItem icon="bar-chart-2" label="Demand prediction" hint="ML on historical request patterns" />
-  <StateItem icon="sparkles" label="Dojo personality depth" hint="Voice, humour, regional references" />
+  <StateItem
+    icon="shield-check"
+    label="Compliance automation"
+    hint="Renewal reminders, DB integrations"
+  />
+  <StateItem
+    icon="bar-chart-2"
+    label="Demand prediction"
+    hint="ML on historical request patterns"
+  />
+  <StateItem
+    icon="sparkles"
+    label="Dojo personality depth"
+    hint="Voice, humour, regional references"
+  />
 </StateGrid>
 
 ## Final reflection

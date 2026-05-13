@@ -83,13 +83,23 @@ The opportunity was clear: automate the most painful part of expense management 
 The company was attempting to establish a new category in the expense-management space. Unlike general accounting software (which required extensive setup and were designed for accountants, not operators), UMA was built specifically for the restaurant vertical, with a focus on speed and accessibility.
 
 <FlowSplit>
-  <FlowColumn title="Before UMA" subtitle="Manual, monthly, scattered" tone="negative" badgeLabel="Status quo">
+  <FlowColumn
+    title="Before UMA"
+    subtitle="Manual, monthly, scattered"
+    tone="negative"
+    badgeLabel="Status quo"
+  >
     <FlowItem icon="receipt" label="Paper receipts" />
     <FlowItem icon="archive" label="Drawer / shoebox" />
     <FlowItem icon="pencil" label="Manual entry, once a month" />
     <FlowItem icon="file-spreadsheet" label="Spreadsheet to accountant" />
   </FlowColumn>
-  <FlowColumn title="With UMA" subtitle="Capture in seconds, see it the same day" tone="positive" badgeLabel="Automated">
+  <FlowColumn
+    title="With UMA"
+    subtitle="Capture in seconds, see it the same day"
+    tone="positive"
+    badgeLabel="Automated"
+  >
     <FlowItem icon="camera" label="Photograph receipt" />
     <FlowItem icon="message-circle" label="Send via WhatsApp" />
     <FlowItem icon="sparkles" label="AI extraction" hint="5–10 seconds" />
@@ -166,10 +176,26 @@ Real constraints shaped every decision:
 <StateGrid columns={3}>
   <StateItem icon="users" label="Team of three" hint="Design + frontend + ops on one person" />
   <StateItem icon="clock" label="1 month to MVP" hint="Then 2 months to launch-ready" />
-  <StateItem icon="flask-conical" label="No research infra" hint="Validated through founder + peer chats" />
-  <StateItem icon="brain" label="AI-assisted dev, first time" hint="Cursor + Claude, learned on the job" />
-  <StateItem icon="hourglass" label="5–10s extraction latency" hint="Had to design for asynchronous feedback" />
-  <StateItem icon="coins" label="Funding uncertain" hint="Built toward a launch that never closed" />
+  <StateItem
+    icon="flask-conical"
+    label="No research infra"
+    hint="Validated through founder + peer chats"
+  />
+  <StateItem
+    icon="brain"
+    label="AI-assisted dev, first time"
+    hint="Cursor + Claude, learned on the job"
+  />
+  <StateItem
+    icon="hourglass"
+    label="5–10s extraction latency"
+    hint="Had to design for asynchronous feedback"
+  />
+  <StateItem
+    icon="coins"
+    label="Funding uncertain"
+    hint="Built toward a launch that never closed"
+  />
 </StateGrid>
 
 ## Product strategy
@@ -180,24 +206,36 @@ The strategy was guided by three core principles:
 
 2. **Depth on demand.** WhatsApp handles routine uploads and quick questions. The web app is where owners go when they want to dig into data, understand trends, and export for advisors. Two interfaces, one product.
 
-3. **Build what restaurants actually need.** Reject document-management views, processing queues, and approval workflows. Restaurants care about one thing: *Am I making money?* Show that clearly and let them drill down.
+3. **Build what restaurants actually need.** Reject document-management views, processing queues, and approval workflows. Restaurants care about one thing: _Am I making money?_ Show that clearly and let them drill down.
 
 <PrincipleGrid>
-  <PrincipleItem icon="accessibility" title="Accessibility over comprehensiveness" body="Remove every barrier to adoption. A restaurant owner should not learn a new app or change their behaviour — meet them where they already are: WhatsApp." />
-  <PrincipleItem icon="layers" title="Depth on demand" body="WhatsApp handles the daily upload and quick questions. The web app is where owners go to dig into data, understand trends, and export for advisors. Two interfaces, one product." />
-  <PrincipleItem icon="target" title="Build what restaurants actually need" body="Reject document-management views, processing queues, and approval workflows. Restaurants care about one thing — am I making money? — so show that first and let everything else drill from it." />
+  <PrincipleItem
+    icon="accessibility"
+    title="Accessibility over comprehensiveness"
+    body="Remove every barrier to adoption. A restaurant owner should not learn a new app or change their behaviour — meet them where they already are: WhatsApp."
+  />
+  <PrincipleItem
+    icon="layers"
+    title="Depth on demand"
+    body="WhatsApp handles the daily upload and quick questions. The web app is where owners go to dig into data, understand trends, and export for advisors. Two interfaces, one product."
+  />
+  <PrincipleItem
+    icon="target"
+    title="Build what restaurants actually need"
+    body="Reject document-management views, processing queues, and approval workflows. Restaurants care about one thing — am I making money? — so show that first and let everything else drill from it."
+  />
 </PrincipleGrid>
 
 ## Key decisions
 
-| Decision | Why it mattered | Trade-off |
-|---|---|---|
-| **WhatsApp + Web, not mobile app** | Restaurants have phones, not custom apps. WhatsApp is already open. Accessibility = distribution. | Web on mobile is less native, but eliminates app store friction. |
-| **Mobile-first responsive design** | Restaurant owners use phones in the kitchen, on the floor. Desktop access is secondary. | More complexity in design system (breakpoints, responsive tables). |
-| **KPI-focused dashboard, not document management** | Owner behavior: check if business is profitable. Not: manage document queues. | Hides important metadata (approval status, document count). Only validated through conversations, not research. |
-| **User-controlled categorization** | Restaurants have unique expense structures. Forcing predefined categories breaks adoption. AI suggests, users refine and train. | More UI complexity (edit, delete, create flows). Requires clear labeling and defaults. |
-| **Conversational chat interface** | Owners ask natural-language questions ("What were my expenses last month?"). AI can answer directly. | Not a must-have. Added delight but not core value. |
-| **Export to external formats** | Accountants and financial advisors need clean data files to file taxes. This was a major unlock for B2B expansion. | Required additional data parsing and formatting logic. |
+| Decision                                           | Why it mattered                                                                                                                 | Trade-off                                                                                                       |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **WhatsApp + Web, not mobile app**                 | Restaurants have phones, not custom apps. WhatsApp is already open. Accessibility = distribution.                               | Web on mobile is less native, but eliminates app store friction.                                                |
+| **Mobile-first responsive design**                 | Restaurant owners use phones in the kitchen, on the floor. Desktop access is secondary.                                         | More complexity in design system (breakpoints, responsive tables).                                              |
+| **KPI-focused dashboard, not document management** | Owner behavior: check if business is profitable. Not: manage document queues.                                                   | Hides important metadata (approval status, document count). Only validated through conversations, not research. |
+| **User-controlled categorization**                 | Restaurants have unique expense structures. Forcing predefined categories breaks adoption. AI suggests, users refine and train. | More UI complexity (edit, delete, create flows). Requires clear labeling and defaults.                          |
+| **Conversational chat interface**                  | Owners ask natural-language questions ("What were my expenses last month?"). AI can answer directly.                            | Not a must-have. Added delight but not core value.                                                              |
+| **Export to external formats**                     | Accountants and financial advisors need clean data files to file taxes. This was a major unlock for B2B expansion.              | Required additional data parsing and formatting logic.                                                          |
 
 ## Process
 
@@ -285,7 +323,11 @@ The product was structured around two complementary journeys:
 - **Empty state:** New user, no expenses uploaded yet. Onboarding prompt in web app.
 - **Loading:** Dashboard is fetching data from Supabase. Skeleton screens for KPI cards and charts.
 
-<BranchTree icon="user" label="Restaurant owner" hint="One user, three cadences, one Supabase truth">
+<BranchTree
+  icon="user"
+  label="Restaurant owner"
+  hint="One user, three cadences, one Supabase truth"
+>
   <Branch title="Daily — WhatsApp" tone="accent">
     <FlowItem icon="camera" label="Photograph receipt" />
     <FlowItem icon="message-circle" label="Send to UMA" />
@@ -327,7 +369,7 @@ The product was structured around two complementary journeys:
 
 ### Flow 2: Dashboard + KPI Overview
 
-**Problem:** Owners need a quick answer: *Is my business making money?* They need this daily. But they also need to understand *where* money is being spent.
+**Problem:** Owners need a quick answer: _Is my business making money?_ They need this daily. But they also need to understand _where_ money is being spent.
 
 **Solution:** The dashboard shows four KPI cards (Total Revenue, Total Expenses, Net Profit, Profitability) at the top. Below, an Expenses Breakdown visualizes the top five cost categories with color-coded bars. A Spending Trends chart shows expense trajectory over the last six months.
 
@@ -363,10 +405,25 @@ The product was structured around two complementary journeys:
 />
 
 <StateGrid columns={4}>
-  <StateItem icon="upload" label="Uploaded" hint="Waiting for the extraction worker" tone="neutral" />
+  <StateItem
+    icon="upload"
+    label="Uploaded"
+    hint="Waiting for the extraction worker"
+    tone="neutral"
+  />
   <StateItem icon="loader" label="Processing" hint="AI is reading the receipt" tone="warning" />
-  <StateItem icon="alert-triangle" label="Needs review" hint="Low confidence — user verifies" tone="warning" />
-  <StateItem icon="check-circle-2" label="Processed" hint="Extracted and categorized" tone="accent" />
+  <StateItem
+    icon="alert-triangle"
+    label="Needs review"
+    hint="Low confidence — user verifies"
+    tone="warning"
+  />
+  <StateItem
+    icon="check-circle-2"
+    label="Processed"
+    hint="Extracted and categorized"
+    tone="accent"
+  />
   <StateItem icon="clock" label="Pending" hint="Due date in the future" tone="neutral" />
   <StateItem icon="check" label="Paid" hint="Marked as settled" tone="positive" />
   <StateItem icon="alert-octagon" label="Overdue" hint="Past due, still unpaid" tone="negative" />
@@ -442,7 +499,11 @@ The design system was built ground-up to support production scale:
   caption="KPI cards, charts, invoice tables, status badges, modals, forms, empty states, loading skeletons — all mobile-first with responsive variants and full interactive state coverage."
 />
 
-<Bar value={100} label="Design tokens shared between Figma and Tailwind config" caption="Single source of truth: Figma variables exported to JSON, fed directly into Tailwind config. Zero manual colour or spacing values in component files." />
+<Bar
+  value={100}
+  label="Design tokens shared between Figma and Tailwind config"
+  caption="Single source of truth: Figma variables exported to JSON, fed directly into Tailwind config. Zero manual colour or spacing values in component files."
+/>
 
 ## Frontend / implementation layer
 
