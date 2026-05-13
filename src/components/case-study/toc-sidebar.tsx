@@ -23,7 +23,10 @@ interface TocSidebarProps {
 
 export function TocSidebar({ headings }: TocSidebarProps) {
   const [activeId, setActiveId] = useState<string>("");
+  const [isMobileStuck, setIsMobileStuck] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const mobileDetailsRef = useRef<HTMLDetailsElement | null>(null);
+  const mobileWrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -79,6 +82,24 @@ export function TocSidebar({ headings }: TocSidebarProps) {
     };
   }, [headings]);
 
+  useEffect(() => {
+    const updateStickyState = () => {
+      if (!mobileWrapperRef.current) return;
+      const rect = mobileWrapperRef.current.getBoundingClientRect();
+      // Keep threshold aligned with top-[72px] used by the sticky container.
+      setIsMobileStuck(rect.top <= 72);
+    };
+
+    updateStickyState();
+    window.addEventListener("scroll", updateStickyState, { passive: true });
+    window.addEventListener("resize", updateStickyState);
+
+    return () => {
+      window.removeEventListener("scroll", updateStickyState);
+      window.removeEventListener("resize", updateStickyState);
+    };
+  }, []);
+
   const activeHeading = headings.find((h) => h.id === activeId);
 
   // -------------------------------------------------------------------------
@@ -104,6 +125,9 @@ export function TocSidebar({ headings }: TocSidebarProps) {
                 aria-current={isActive ? "location" : undefined}
                 onClick={() => {
                   setActiveId(id);
+                  // Mobile UX: close the disclosure after selecting a heading,
+                  // then let the native anchor navigation scroll to the section.
+                  mobileDetailsRef.current?.removeAttribute("open");
                 }}
               >
                 {text}
@@ -120,34 +144,44 @@ export function TocSidebar({ headings }: TocSidebarProps) {
   // -------------------------------------------------------------------------
 
   const mobileDisclosure = (
-    <details className="border-border/40 mb-8 rounded-lg border lg:hidden">
-      <summary className="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium select-none">
-        <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-          On this page
-          {activeHeading ? (
-            <span className="text-foreground ml-2 font-sans tracking-normal normal-case">
-              · {activeHeading.text}
-            </span>
-          ) : null}
-        </span>
-        {/* Chevron indicator */}
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-muted-foreground shrink-0 transition-transform [[open]_&]:rotate-180"
-          aria-hidden="true"
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
-      </summary>
-      <div className="border-border/40 border-t px-4 py-3">{navList}</div>
-    </details>
+    <div ref={mobileWrapperRef} className="sticky top-[72px] z-20 mb-8 lg:hidden">
+      <p
+        className={cn(
+          "text-muted-foreground font-mono text-xs tracking-widest uppercase transition-all",
+          isMobileStuck
+            ? "pointer-events-none mb-0 h-0 overflow-hidden opacity-0"
+            : "mb-2 opacity-100",
+        )}
+      >
+        On this page
+      </p>
+      <details
+        ref={mobileDetailsRef}
+        className="border-border/40 bg-background/95 rounded-lg border backdrop-blur-sm"
+      >
+        <summary className="flex cursor-pointer items-center justify-between px-4 py-3 select-none">
+          <span className="text-foreground text-base leading-relaxed">
+            {activeHeading ? activeHeading.text : "Select a section"}
+          </span>
+          {/* Chevron indicator */}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-muted-foreground shrink-0 transition-transform [[open]_&]:rotate-180"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </summary>
+        <div className="border-border/40 border-t px-4 py-3">{navList}</div>
+      </details>
+    </div>
   );
 
   // -------------------------------------------------------------------------
