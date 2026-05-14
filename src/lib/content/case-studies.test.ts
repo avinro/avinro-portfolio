@@ -50,7 +50,7 @@ describe("case-studies content layer", () => {
   it("getCaseStudyBySlug resolves 'uma'", () => {
     const cs = getCaseStudyBySlug("uma");
     expect(cs).toBeDefined();
-    expect(cs?.frontmatter.title).toBe("UMA");
+    expect(cs?.frontmatter.title).toBe("UMA Agent");
   });
 
   it("getCaseStudyBySlug resolves 'hello-dojo'", () => {
