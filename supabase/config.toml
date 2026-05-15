@@ -243,16 +243,15 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
-# PRO-37: PKCE confirm URL for magic-link and invite flows.
-# token_hash is exchanged server-side in /auth/confirm so the session cookie
-# is set on the server, not in the browser fragment (PKCE flow).
-[auth.email.template.magic_link]
-subject = "Your sign-in link"
-content_path = "./supabase/templates/magic_link.html"
-
-[auth.email.template.invite]
-subject = "You've been invited"
-content_path = "./supabase/templates/invite.html"
+# Custom HTML for magic_link / invite emails: add files under ./supabase/templates/
+# and uncomment blocks here. Omitting these keys uses GoTrue built-in templates
+# (required for `supabase start` when template files are not present).
+# [auth.email.template.magic_link]
+# subject = "Your sign-in link"
+# content_path = "./supabase/templates/magic_link.html"
+# [auth.email.template.invite]
+# subject = "You've been invited"
+# content_path = "./supabase/templates/invite.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
