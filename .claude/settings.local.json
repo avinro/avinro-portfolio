@@ -1,5 +1,5 @@
 {
   "permissions": {
-    "allow": ["Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")", "Bash(npx tsc *)"]
+    "allow": ["Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")", "Bash(npx tsc *)", "Bash(npm run *)"]
   }
 }
