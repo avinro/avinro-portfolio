@@ -18,13 +18,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky",
-    "lighthouse:preview": "lighthouse --preset=perf --form-factor=mobile --throttling-method=simulate --output=html --output-path=./lighthouse-report.html --chrome-flags=\"--headless --no-sandbox\"",
-    "db:start": "supabase start",
-    "db:stop": "supabase stop",
-    "db:reset": "supabase db reset",
-    "db:diff": "supabase db diff -f",
-    "gen:types": "supabase gen types typescript --local --schema public > src/types/database.generated.ts",
-    "test:db": "supabase test db"
+    "lighthouse:preview": "lighthouse --preset=perf --form-factor=mobile --throttling-method=simulate --output=html --output-path=./lighthouse-report.html --chrome-flags=\"--headless --no-sandbox\""
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs,cjs}": [
