@@ -165,6 +165,10 @@ interface InlineFigureProps {
   caption?: string;
   /** Aspect ratio of the image container. Defaults to landscape (16/9). */
   aspect?: "portrait" | "square" | "landscape" | "wide";
+  /** Intrinsic width for non-standard aspect ratios (e.g. tall flowcharts). Use with height. */
+  width?: number;
+  /** Intrinsic height for non-standard aspect ratios. Use with width. */
+  height?: number;
   className?: string;
   priority?: boolean;
 }
@@ -181,9 +185,70 @@ function InlineFigure({
   alt,
   caption,
   aspect = "landscape",
+  width,
+  height,
   className,
   priority = false,
 }: InlineFigureProps) {
+  // SVG diagrams: render natively so the viewBox controls proportions.
+  // Never use Next.js Image or image-oriented containers (no aspect-ratio,
+  // no overflow:hidden, no object-fit) — the browser scales SVG by width alone.
+  if (src.toLowerCase().endsWith(".svg")) {
+    return (
+      <figure className={cn("my-8 w-full min-w-0", className)} data-slot="work-svg-diagram">
+        {/* Inline padding so gutters are never dropped (Tailwind resets / flex min-width). Safe-area aware on notched phones. */}
+        <div
+          className="box-border w-full min-w-0"
+          style={{
+            paddingLeft: "max(40px, env(safe-area-inset-left, 0px))",
+            paddingRight: "max(40px, env(safe-area-inset-right, 0px))",
+          }}
+        >
+          <div className="flex w-full justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt={alt}
+              width={width}
+              height={height}
+              className="mx-auto block h-auto w-full max-w-full lg:max-w-[85%]"
+              loading={priority ? "eager" : "lazy"}
+            />
+          </div>
+        </div>
+        {caption && (
+          <figcaption className="text-muted-foreground mt-3 text-sm leading-relaxed">
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
+
+  if (width !== undefined && height !== undefined) {
+    return (
+      <figure className={cn("my-8 w-full", className)}>
+        <div className="bg-muted overflow-hidden rounded-xl">
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            priority={priority}
+            loading={priority ? undefined : "lazy"}
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 800px"
+            className="h-auto w-full"
+          />
+        </div>
+        {caption && (
+          <figcaption className="text-muted-foreground mt-3 text-sm leading-relaxed">
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
+
   return (
     <figure className={cn("my-8 w-full", className)}>
       <div

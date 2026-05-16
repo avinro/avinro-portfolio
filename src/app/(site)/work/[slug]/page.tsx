@@ -276,6 +276,38 @@ function WorkCover({ src, alt, aspect }: { src: string; alt: string; aspect: str
 }
 
 // ---------------------------------------------------------------------------
+// MDX body — ensure result payoff image appears in ## Result when absent
+// ---------------------------------------------------------------------------
+
+/**
+ * When `resultImage` is set but the MDX body never references that URL, inject
+ * a <Figure> right after "## Result" so the detail page matches the /work card
+ * hover payoff without duplicating frontmatter in every file.
+ */
+function buildWorkMdxSource(
+  content: string,
+  resultImage: string | undefined,
+  title: string,
+): string {
+  if (!resultImage?.trim()) return content;
+  if (content.includes(resultImage)) return content;
+  if (!/^## Result\s/m.test(content)) return content;
+
+  const figureBlock = `<Figure
+  src=${JSON.stringify(resultImage)}
+  alt=${JSON.stringify(`${title} — prototype payoff`)}
+  caption=${JSON.stringify(
+    "High-fidelity prototype — key screens aligned with the listing card hover state.",
+  )}
+  aspect="landscape"
+/>
+
+`;
+
+  return content.replace(/^## Result\s*\n+/m, `## Result\n\n${figureBlock}`);
+}
+
+// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
@@ -288,7 +320,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
 
   const { prev: prevWork, next: nextWork } = getPublishedWorkNeighbors(slug);
 
-  const hasIntro = content.trim().length > 0;
+  const mdxSource = buildWorkMdxSource(content, frontmatter.resultImage, frontmatter.title);
+  const hasIntro = mdxSource.trim().length > 0;
 
   return (
     <main id="main-content">
@@ -336,7 +369,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       {hasIntro && (
         <Section spacing="card">
           <Container width="wide">
-            <MDXRemote source={content} components={workMdxComponents} options={mdxOptions} />
+            <MDXRemote source={mdxSource} components={workMdxComponents} options={mdxOptions} />
           </Container>
         </Section>
       )}
