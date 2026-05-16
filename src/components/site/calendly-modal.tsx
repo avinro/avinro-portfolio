@@ -16,18 +16,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { track } from "@/lib/analytics/events";
 import { loadCalendlyScript } from "@/lib/calendly/load";
 
-/** Public booking page (no embed styling params). */
-const CALENDLY_PAGE_URL = "https://calendly.com/avinroart";
+/** Specific 30-min event for inline embed (Calendly requires event type, not profile URL). */
+const CALENDLY_PAGE_URL = "https://calendly.com/avinroart/30min";
 
 /**
- * Inline embed URL with Calendly appearance params (hex without #).
- * Keeps the iframe interior aligned with the light sheet + bg-card chrome.
+ * Inline embed URL with appearance + UX params (hex without #).
+ * Hides event type dropdown and GDPR banner for cleaner inline experience.
  */
 function calendlyInlineEmbedUrl(): string {
   const q = new URLSearchParams({
     background_color: "ffffff",
     text_color: "18181b",
     primary_color: "2563eb",
+    hide_event_type_details: "1",
+    hide_gdpr_banner: "1",
   });
   return `${CALENDLY_PAGE_URL}?${q}`;
 }
@@ -65,7 +67,6 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
     if (!open) return;
 
     let cancelled = false;
-    const host = containerRef.current;
 
     const hintTimer = setTimeout(() => {
       if (!cancelled) setShowHint(true);
@@ -76,14 +77,23 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
         if (cancelled) return;
         clearTimeout(hintTimer);
 
-        const el = host;
-        if (el && window.Calendly) {
-          window.Calendly.initInlineWidget({
-            url: calendlyInlineEmbedUrl(),
-            parentElement: el,
-          });
-          setStatus("loaded");
-        }
+        // Wait 350ms for the sheet's open animation (duration-300) to finish
+        // and for the container to receive its final computed layout before
+        // Calendly measures it. Re-read containerRef after the delay (safer than
+        // capturing at effect start).
+        setTimeout(() => {
+          if (cancelled) return;
+          const el = containerRef.current;
+          if (el && window.Calendly) {
+            window.Calendly.initInlineWidget({
+              url: calendlyInlineEmbedUrl(),
+              parentElement: el,
+            });
+            setStatus("loaded");
+          } else if (el) {
+            setStatus("failed");
+          }
+        }, 350);
       })
       .catch(() => {
         if (!cancelled) {
@@ -98,6 +108,7 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
       // Clear the Calendly iframe so the next open starts with a clean container.
       // Radix unmounts SheetContent after close animation, but clearing here is
       // defensive in case forceMount is ever added.
+      const host = containerRef.current;
       if (host) host.innerHTML = "";
     };
   }, [open]);
@@ -131,10 +142,12 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
 
         {/* ── Calendly region ────────────────────────────────────────── */}
         <div className="border-border bg-card relative mx-4 min-h-0 flex-1 overflow-hidden rounded-xl border">
-          {/* Container that Calendly injects its iframe into */}
+          {/* Container that Calendly injects its iframe into.
+              Calendly requires explicit height and min-width per their embed spec. */}
           <div
             ref={containerRef}
-            className="bg-card h-full w-full"
+            className="bg-card w-full"
+            style={{ minWidth: 320, height: 700 }}
             aria-label="Calendly scheduler"
             aria-hidden={status !== "loaded"}
           />
