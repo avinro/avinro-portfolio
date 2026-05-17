@@ -227,8 +227,8 @@ function InlineFigure({
 
   if (width !== undefined && height !== undefined) {
     return (
-      <figure className={cn("my-8 w-full", className)}>
-        <div className="bg-muted overflow-hidden rounded-xl">
+      <figure className={cn("my-8 w-full min-w-0", className)}>
+        <div className="bg-muted w-full min-w-0 overflow-hidden rounded-xl">
           <Image
             src={src}
             alt={alt}
@@ -237,7 +237,8 @@ function InlineFigure({
             priority={priority}
             loading={priority ? undefined : "lazy"}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 800px"
-            className="h-auto w-full"
+            className="h-auto w-full max-w-full"
+            style={{ width: "100%", height: "auto" }}
           />
         </div>
         {caption && (
