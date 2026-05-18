@@ -43,7 +43,6 @@ During the crypto boom of 2021–2023, ENS domain marketplaces were growing fast
 <Figure
   src="/works/domain-plug/gallery-problem.jpg"
   alt="Problem comparison — one-by-one vs bulk registration"
-  caption="Old flow: 5 manual steps repeated per domain. New flow: search, filter, select, and buy up to 20 in one transaction."
   aspect="landscape"
 />
 
@@ -54,9 +53,8 @@ During the crypto boom of 2021–2023, ENS domain marketplaces were growing fast
 The interface was built on top of **Taiga UI** and customized with the client's purple visual palette. This let the design process stay focused on the UX problem — making bulk ENS registration easy to understand, easy to compare, and easy to complete — rather than building component infrastructure from scratch.
 
 <Figure
-  src="/works/domain-plug/gallery-design-system.svg"
+  src="/works/domain-plug/gallery-design-system.jpg"
   alt="Design system — colors, typography, and components"
-  caption="Purple #6334D0 · Magenta #DA62F7 · Manrope. Custom palette applied to Taiga UI components."
   aspect="landscape"
 />
 
@@ -67,25 +65,32 @@ The interface was built on top of **Taiga UI** and customized with the client's 
 The product was structured around three main paths from the landing page: Marketplace Browse for discovery, Search & Buy for targeted lookups, and Bulk Registration as the core differentiator — all converging at a shared checkout.
 
 <Figure
-  src="/works/domain-plug/gallery-flows.svg"
-  alt="User flow — three paths from landing to purchase"
-  caption="Marketplace Browse · Search & Buy · Bulk Registration. Three distinct entry points, one shared checkout."
-  aspect="landscape"
+  src="/works/domain-plug/gallery-flows-diagram.svg"
+  alt="User flow — DomainPlug end-to-end registration flow from landing to on-chain confirmation"
+  width={860}
+  height={1310}
 />
 
 ---
 
 ## Key Screens
 
+<Figure
+  src="/works/domain-plug/gallery-landing-2.jpg"
+  alt="DomainPlug landing page — featured domains strip and continuation of the discovery surface"
+  width={3846}
+  height={2160}
+/>
+
 ### Landing Page
 
 The discovery hub introduced the bulk registration concept, included a domain search bar, and displayed featured domains to guide users toward the marketplace.
 
 <Figure
-  src="/works/domain-plug/gallery-landing.svg"
-  alt="Landing page — hero, search bar, and featured domains"
-  caption="Discovery hub: bulk registration value proposition above the fold, supported by search and featured domain grid."
-  aspect="landscape"
+  src="/works/domain-plug/gallery-landing-1.jpg"
+  alt="DomainPlug landing page — hero with bulk registration value proposition, search bar, and primary actions"
+  width={3846}
+  height={2160}
 />
 
 ### Marketplace
@@ -93,30 +98,21 @@ The discovery hub introduced the bulk registration concept, included a domain se
 Available domains in a responsive grid with pricing, category filters, and purchase actions — single-column on mobile, multi-column on desktop for faster scanning.
 
 <Figure
-  src="/works/domain-plug/gallery-marketplace.svg"
-  alt="Marketplace — domain grid, filters, and pricing cards"
-  caption="Single-column on mobile for focused browsing. Multi-column grid on desktop for faster scanning and comparison."
-  aspect="landscape"
+  src="/works/domain-plug/marketplace.jpg"
+  alt="DomainPlug marketplace — domain grid, filters, pricing, and purchase actions"
+  width={3846}
+  height={2160}
 />
 
 ### Bulk Generator
 
 The core differentiator. Users enter multiple domain names, check availability, review prices, select domains, and complete one transaction for up to 20 registrations — turning a repetitive one-by-one process into a natural bulk workflow.
 
-<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-  <Figure
-    src="/works/domain-plug/gallery-bulk-input.svg"
-    alt="Bulk Generator — multi-domain input and availability check"
-    caption="Step 1: enter multiple domain names and check availability."
-    aspect="portrait"
-  />
-  <Figure
-    src="/works/domain-plug/gallery-bulk-review.svg"
-    alt="Bulk Generator — filter, price review, and domain selection"
-    caption="Step 2: compare prices, select domains, and confirm up to 20 in one transaction."
-    aspect="portrait"
-  />
-</div>
+<Figure
+  src="/works/domain-plug/gallery-flows.jpg"
+  alt="User flow — three paths from landing to purchase"
+  aspect="landscape"
+/>
 
 ---
 
@@ -125,11 +121,28 @@ The core differentiator. Users enter multiple domain names, check availability, 
 The project delivered a complete high-fidelity responsive prototype. It remained a prototype after the client pivoted, but it validated bulk registration as a viable product direction for crypto-native users and domain collectors.
 
 <Figure
-  src="/works/domain-plug/gallery-responsive.svg"
-  alt="Responsive showcase — mobile, tablet, and desktop"
-  caption="Designed for phones first, then expanded for tablet and desktop without layout compromises."
-  aspect="landscape"
+  src="/works/domain-plug/result.jpg"
+  alt="DomainPlug prototype — marketplace and bulk registration key screens"
+  width={1923}
+  height={1080}
 />
+
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+  <Figure
+    src="/works/domain-plug/result-3.jpg"
+    alt="DomainPlug prototype — mobile sheet for digit-length filters (3D and 4D categories)"
+    width={1732}
+    height={2060}
+    className="my-0"
+  />
+  <Figure
+    src="/works/domain-plug/result-2.jpg"
+    alt="DomainPlug prototype — mobile landing feature cards and footer with brand lockup"
+    width={1732}
+    height={2060}
+    className="my-0"
+  />
+</div>
 
 ### What This Project Demonstrates
 

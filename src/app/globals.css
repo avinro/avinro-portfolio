@@ -452,15 +452,22 @@ html.lenis-smooth {
 .btn-shiny-text-wrap {
   position: relative;
   z-index: 1;
-  display: inline-grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-areas: "stack";
+  display: inline-block;
 }
 
-.btn-shiny-text-wrap > .btn-shiny-text,
-.btn-shiny-text-wrap > .btn-shiny-text-solid {
-  grid-area: stack;
+.btn-shiny-text-measure {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.btn-shiny-text-wrap > .btn-shiny-text-solid,
+.btn-shiny-text-wrap > .btn-shiny-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .btn-shiny-text-solid {
@@ -475,7 +482,6 @@ html.lenis-smooth {
 }
 
 .btn-shiny-text {
-  display: inline-block;
   color: var(--btn-shiny-text-highlight);
   background-image: linear-gradient(
     120deg,
@@ -517,6 +523,15 @@ html.lenis-smooth {
 
   .btn-shiny-text-solid {
     display: none;
+  }
+
+  .btn-shiny-text-measure {
+    display: none;
+  }
+
+  .btn-shiny-text-wrap > .btn-shiny-text {
+    position: static;
+    display: inline-block;
   }
 
   /* Idle reduced-motion: no animation, text already solid at center position. */

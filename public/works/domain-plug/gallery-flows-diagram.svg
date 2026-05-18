@@ -1,0 +1,246 @@
+<svg viewBox="0 0 860 1310" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <style>
+    .e      { fill: none; stroke: #c8c5bc; stroke-width: 1.5; }
+    .e-yes  { fill: none; stroke: #3b6d11; stroke-width: 1.5; }
+    .e-no   { fill: none; stroke: #a32d2d; stroke-width: 1.5; }
+    .e-loop { fill: none; stroke: #534ab7; stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .n-screen   rect { fill: #f1efe8; stroke: #c8c5bc; }
+    .n-screen   text { fill: #444441; }
+    .n-hub      rect { fill: #eeedfe; stroke: #534ab7; }
+    .n-hub      text { fill: #3c3489; }
+    .n-decision polygon { fill: #faece7; stroke: #993c1d; stroke-width: 1; }
+    .n-decision text    { fill: #712b13; }
+    .n-state    rect { fill: #e1f5ee; stroke: #0f6e56; }
+    .n-state    text { fill: #085041; }
+    .n-cta      rect { fill: #eaf3de; stroke: #3b6d11; }
+    .n-cta      text { fill: #27500a; }
+    .n-action   rect { fill: #e6f1fb; stroke: #185fa5; }
+    .n-action   text { fill: #0c447c; }
+    .n-checkout rect { fill: #eeedfe; stroke: #7f77dd; }
+    .n-checkout text { fill: #3c3489; }
+    .n-success  rect { fill: #eaf3de; stroke: #639922; }
+    .n-success  text { fill: #27500a; }
+    .n-error    rect { fill: #fcebeb; stroke: #a32d2d; }
+    .n-error    text { fill: #791f1f; }
+    .nt  { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 600; }
+    .ns  { font-family: 'Manrope', sans-serif; font-size: 9.5px; font-weight: 400; opacity: 0.72; }
+    .el  { font-family: 'Manrope', sans-serif; font-size: 10px; letter-spacing: 0.06em; }
+    .el-yes  { fill: #3b6d11; }
+    .el-no   { fill: #a32d2d; }
+    .el-mid  { fill: #5f5e5a; }
+    .el-loop { fill: #534ab7; }
+    .sec { font-family: 'Manrope', sans-serif; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; fill: #c8c5bc; }
+    .hr  { stroke: #e8e6de; stroke-width: 1; stroke-dasharray: 3 6; }
+    .lbl-halo { fill: #f7f6f2; opacity: 0.92; }
+  </style>
+  <marker id="a"    viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#c8c5bc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="a-y"  viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#3b6d11" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="a-n"  viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#a32d2d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="a-lp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="#534ab7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<text class="sec" x="40" y="36">01 · entry</text>
+<line class="hr" x1="40" y1="42" x2="820" y2="42"/>
+<text class="sec" x="40" y="146">02 · auth check</text>
+<line class="hr" x1="40" y1="152" x2="820" y2="152"/>
+<text class="sec" x="40" y="272">03 · main screen</text>
+<line class="hr" x1="40" y1="278" x2="820" y2="278"/>
+<text class="sec" x="40" y="372">04 · user intent</text>
+<line class="hr" x1="40" y1="378" x2="820" y2="378"/>
+<text class="sec" x="40" y="492">05 · ens status</text>
+<line class="hr" x1="40" y1="498" x2="820" y2="498"/>
+<text class="sec" x="40" y="722">06 · cart feedback</text>
+<line class="hr" x1="40" y1="728" x2="820" y2="728"/>
+<text class="sec" x="40" y="822">07 · checkout decision</text>
+<line class="hr" x1="40" y1="828" x2="820" y2="828"/>
+<text class="sec" x="40" y="944">08 · checkout</text>
+<line class="hr" x1="40" y1="950" x2="820" y2="950"/>
+<text class="sec" x="40" y="1048">09 · on-chain</text>
+<line class="hr" x1="40" y1="1054" x2="820" y2="1054"/>
+<text class="sec" x="40" y="1190">10 · terminal states</text>
+<line class="hr" x1="40" y1="1196" x2="820" y2="1196"/>
+
+<!-- CONNECTORS: aligned with ens_flow_diagram.html + closed merge buses -->
+<line class="e" x1="430" y1="108" x2="430" y2="152" marker-end="url(#a)"/>
+<line class="e-no" x1="350" y1="192" x2="200" y2="192" marker-end="url(#a-n)"/>
+<line class="e-yes" x1="510" y1="192" x2="660" y2="192" marker-end="url(#a-y)"/>
+
+<path class="e" d="M 120 218 L 120 250 L 300 250"/>
+<path class="e" d="M 740 218 L 740 250 L 560 250"/>
+<path class="e" d="M 300 250 H 560"/>
+<path class="e" d="M 430 250 V 282" marker-end="url(#a)"/>
+
+<line class="e" x1="430" y1="334" x2="430" y2="380" marker-end="url(#a)"/>
+
+<line class="e" x1="350" y1="420" x2="200" y2="420" marker-end="url(#a)"/>
+<line class="e" x1="510" y1="420" x2="660" y2="420" marker-end="url(#a)"/>
+
+<path class="e" d="M 120 446 L 120 490 L 300 490"/>
+<path class="e" d="M 740 446 L 740 490 L 560 490"/>
+<path class="e" d="M 300 490 H 560"/>
+<path class="e" d="M 430 490 V 500" marker-end="url(#a)"/>
+
+<line class="e-yes" x1="350" y1="540" x2="200" y2="540" marker-end="url(#a-y)"/>
+<line class="e" x1="430" y1="580" x2="430" y2="618" marker-end="url(#a)"/>
+<line class="e-yes" x1="510" y1="540" x2="660" y2="540" marker-end="url(#a-y)"/>
+
+<path class="e" d="M 120 566 L 120 710 L 190 710"/>
+<path class="e" d="M 430 670 L 430 710"/>
+<path class="e" d="M 740 566 L 740 710 L 670 710"/>
+<path class="e" d="M 190 710 H 670"/>
+<path class="e" d="M 430 710 V 730" marker-end="url(#a)"/>
+
+<line class="e" x1="430" y1="782" x2="430" y2="830" marker-end="url(#a)"/>
+
+<line class="e-yes" x1="430" y1="910" x2="430" y2="952" marker-end="url(#a-y)"/>
+
+<!-- Loop: softened outer rail away from CTAs; arrows at sharp corners omitted (single marker at hub entry) -->
+<path class="e-loop" d="M 350 870 L 22 870 Q 14 870 14 862 L 14 310 Q 14 302 24 302 L 300 302" marker-end="url(#a-lp)"/>
+
+<line class="e" x1="430" y1="1004" x2="430" y2="1056" marker-end="url(#a)"/>
+
+<path class="e-yes" d="M 430 1108 L 430 1140 L 200 1140 L 200 1198" marker-end="url(#a-y)"/>
+<path class="e-no" d="M 430 1108 L 430 1140 L 660 1140 L 660 1198" marker-end="url(#a-n)"/>
+
+<!-- Merge junction knobs (purple main flow · blue cart) -->
+<circle cx="430" cy="250" r="4" fill="#534ab7" stroke="#f7f6f2" stroke-width="1.5"/>
+<circle cx="430" cy="490" r="4" fill="#534ab7" stroke="#f7f6f2" stroke-width="1.5"/>
+<circle cx="430" cy="710" r="4" fill="#185fa5" stroke="#f7f6f2" stroke-width="1.5"/>
+
+<g class="n-screen">
+  <rect x="300" y="56" width="260" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="77" text-anchor="middle" dominant-baseline="central">Landing page</text>
+  <text class="ns" x="430" y="95" text-anchor="middle" dominant-baseline="central">entry point</text>
+</g>
+<g class="n-decision">
+  <polygon points="430,152 510,192 430,232 350,192"/>
+  <text class="nt" x="430" y="186" text-anchor="middle" dominant-baseline="central">wallet</text>
+  <text class="ns" x="430" y="202" text-anchor="middle" dominant-baseline="central">connected?</text>
+</g>
+<g class="n-action">
+  <rect x="40" y="166" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="120" y="187" text-anchor="middle" dominant-baseline="central">Connect</text>
+  <text class="ns" x="120" y="205" text-anchor="middle" dominant-baseline="central">wallet modal</text>
+</g>
+<g class="n-state">
+  <rect x="660" y="166" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="740" y="187" text-anchor="middle" dominant-baseline="central">Skip auth</text>
+  <text class="ns" x="740" y="205" text-anchor="middle" dominant-baseline="central">already authenticated</text>
+</g>
+<g class="n-hub">
+  <rect x="300" y="282" width="260" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="303" text-anchor="middle" dominant-baseline="central">Bulk buyer screen</text>
+  <text class="ns" x="430" y="321" text-anchor="middle" dominant-baseline="central">hub · search + cart</text>
+</g>
+<g class="n-decision">
+  <polygon points="430,380 510,420 430,460 350,420"/>
+  <text class="nt" x="430" y="414" text-anchor="middle" dominant-baseline="central">action?</text>
+  <text class="ns" x="430" y="430" text-anchor="middle" dominant-baseline="central">user intent</text>
+</g>
+<g class="n-state">
+  <rect x="40" y="394" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="120" y="415" text-anchor="middle" dominant-baseline="central">Text input</text>
+  <text class="ns" x="120" y="433" text-anchor="middle" dominant-baseline="central">validates on type</text>
+</g>
+<g class="n-state">
+  <rect x="660" y="394" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="740" y="415" text-anchor="middle" dominant-baseline="central">Marketplace</text>
+  <text class="ns" x="740" y="433" text-anchor="middle" dominant-baseline="central">domain grid</text>
+</g>
+<g class="n-decision">
+  <polygon points="430,500 510,540 430,580 350,540"/>
+  <text class="nt" x="430" y="534" text-anchor="middle" dominant-baseline="central">ENS status</text>
+  <text class="ns" x="430" y="550" text-anchor="middle" dominant-baseline="central">of domain?</text>
+</g>
+<g class="n-cta">
+  <rect x="40" y="514" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="120" y="535" text-anchor="middle" dominant-baseline="central">Buy</text>
+  <text class="ns" x="120" y="553" text-anchor="middle" dominant-baseline="central">fixed price</text>
+</g>
+<g class="n-cta">
+  <rect x="300" y="618" width="260" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="639" text-anchor="middle" dominant-baseline="central">Make offer</text>
+  <text class="ns" x="430" y="657" text-anchor="middle" dominant-baseline="central">amount + expiry</text>
+</g>
+<g class="n-cta">
+  <rect x="660" y="514" width="160" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="740" y="535" text-anchor="middle" dominant-baseline="central">Register</text>
+  <text class="ns" x="740" y="553" text-anchor="middle" dominant-baseline="central">by characters</text>
+</g>
+<g class="n-action">
+  <rect x="190" y="730" width="480" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="751" text-anchor="middle" dominant-baseline="central">Item added to cart</text>
+  <text class="ns" x="430" y="769" text-anchor="middle" dominant-baseline="central">toast · continue shopping</text>
+</g>
+<g class="n-decision">
+  <polygon points="430,830 510,870 430,910 350,870"/>
+  <text class="nt" x="430" y="864" text-anchor="middle" dominant-baseline="central">buy</text>
+  <text class="ns" x="430" y="880" text-anchor="middle" dominant-baseline="central">or continue?</text>
+</g>
+<g class="n-checkout">
+  <rect x="150" y="952" width="560" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="973" text-anchor="middle" dominant-baseline="central">Side sheet · cart summary</text>
+  <text class="ns" x="430" y="991" text-anchor="middle" dominant-baseline="central">domain list + total + confirm</text>
+</g>
+<g class="n-checkout">
+  <rect x="150" y="1056" width="560" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="430" y="1077" text-anchor="middle" dominant-baseline="central">Sign transactions · wallet</text>
+  <text class="ns" x="430" y="1095" text-anchor="middle" dominant-baseline="central">sequential registrations · progress</text>
+</g>
+<g class="n-success">
+  <rect x="60" y="1198" width="280" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="200" y="1219" text-anchor="middle" dominant-baseline="central">✓ Domains registered</text>
+  <text class="ns" x="200" y="1237" text-anchor="middle" dominant-baseline="central">tx hash · explorer link</text>
+</g>
+<g class="n-error">
+  <rect x="520" y="1198" width="280" height="52" rx="4" stroke-width="1"/>
+  <text class="nt" x="660" y="1219" text-anchor="middle" dominant-baseline="central">✗ Tx rejected / error</text>
+  <text class="ns" x="660" y="1237" text-anchor="middle" dominant-baseline="central">retry or cancel</text>
+</g>
+
+<!-- Edge labels rendered last so they sit above fills and strokes -->
+<text class="el el-no"   x="234" y="176">No</text>
+<text class="el el-yes"  x="554" y="176">Yes</text>
+
+<g class="edge-lbl-buscar">
+  <rect class="lbl-halo" x="186" y="396" width="64" height="15" rx="3"/>
+  <text class="el el-mid" x="218" y="408" text-anchor="middle">Search</text>
+</g>
+<g class="edge-lbl-explorar">
+  <rect class="lbl-halo" x="522" y="396" width="64" height="15" rx="3"/>
+  <text class="el el-mid" x="554" y="408" text-anchor="middle">Browse</text>
+</g>
+
+<g class="edge-lbl-disp">
+  <rect class="lbl-halo" x="104" y="518" width="36" height="15" rx="3"/>
+  <text class="el el-yes" x="120" y="530" text-anchor="middle">Avail.</text>
+</g>
+
+<g class="edge-lbl-nodisp">
+  <rect class="lbl-halo" x="446" y="588" width="56" height="15" rx="3"/>
+  <text class="el el-mid" x="472" y="600" text-anchor="middle">N/A</text>
+</g>
+
+<text class="el el-yes" x="554" y="526">Unreg.</text>
+
+<g class="edge-lbl-loop">
+  <rect class="lbl-halo" x="2" y="568" width="118" height="18" rx="3"/>
+  <text class="el el-loop" x="8" y="581">← continue shopping</text>
+</g>
+
+<g class="edge-lbl-comprar">
+  <rect class="lbl-halo" x="422" y="898" width="68" height="15" rx="3"/>
+  <text class="el el-yes" x="456" y="910" text-anchor="middle">Buy</text>
+</g>
+
+<g class="edge-lbl-exito">
+  <rect class="lbl-halo" x="292" y="1124" width="48" height="15" rx="3"/>
+  <text class="el el-yes" x="314" y="1136" text-anchor="middle">Success</text>
+</g>
+<g class="edge-lbl-error">
+  <rect class="lbl-halo" x="558" y="1124" width="44" height="15" rx="3"/>
+  <text class="el el-no" x="582" y="1136" text-anchor="middle">Error</text>
+</g>
+
+</svg>

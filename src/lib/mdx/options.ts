@@ -91,4 +91,11 @@ const compileMdxOptions: CompileOptions = {
 
 export const mdxOptions = {
   mdxOptions: compileMdxOptions,
+  /**
+   * Preserve JSX attribute expressions in MDX (e.g. `width={1920}` on <Figure>).
+   * next-mdx-remote defaults to `blockJS: true`, which runs `removeJavaScriptExpressions`
+   * and strips those attributes — figures then lose intrinsic dimensions and fall back
+   * to fill + default 16/9 aspect. Content is trusted (repo-owned MDX only).
+   */
+  blockJS: false,
 };

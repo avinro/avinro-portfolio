@@ -46,6 +46,10 @@ const ShineSpan = () => <span aria-hidden="true" className="btn-shine" />;
 
 const ShinyText = ({ children }: { children: React.ReactNode }) => (
   <span className="btn-shiny-text-wrap">
+    {/* In-flow copy reserves size; absolute layers cross-fade without inline layout doubling. */}
+    <span aria-hidden="true" className="btn-shiny-text-measure">
+      {children}
+    </span>
     <span aria-hidden="true" className="btn-shiny-text-solid">
       {children}
     </span>
