@@ -12,6 +12,7 @@
  * blockquotes, dividers, links, inline code, simple images, the
  * <Figure> component for contextual screen placement, and
  * <WorkMetadataGrid> / <WorkMetadataCard> for overview metadata rows.
+ * BlockBind: <BlockbindUserFlowsGallery />. DomainPlug: <DomainPlugFlowsDiagramGallery />.
  * The frontmatter gallery is still available for works that prefer a
  * visual-only format with no inline images.
  */
@@ -22,6 +23,7 @@ import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { cn } from "@/lib/utils";
 import { WorkMetadataCard, WorkMetadataGrid } from "@/components/work/work-metadata";
+import { BlockbindUserFlowsGallery } from "@/components/work/blockbind/blockbind-user-flows-gallery";
 
 function H2({ className, ...props }: ComponentPropsWithoutRef<"h2">) {
   return (
@@ -324,4 +326,5 @@ export const workMdxComponents: MDXComponents = {
   // Project metadata grid — <WorkMetadataGrid><WorkMetadataCard kind="type">…</WorkMetadataCard></WorkMetadataGrid>
   WorkMetadataGrid,
   WorkMetadataCard,
+  BlockbindUserFlowsGallery,
 };

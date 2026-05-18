@@ -5,7 +5,7 @@ year: 2024
 category: Visual system
 summary: A mobile crypto wallet designed to make digital asset management accessible and intuitive through a cohesive visual system and simplified interface.
 coverImage: /works/blockbind/cover.jpg
-resultImage: /works/blockbind/result.jpg
+resultImage: /works/blockbind/results.jpg
 coverAspect: landscape
 featured: true
 featuredOrder: 3
@@ -19,35 +19,7 @@ tags:
   - Mobile UI
   - Design system
 order: 3
-gallery:
-  - src: /works/blockbind/gallery-problem.svg
-    alt: BlockBind design challenge — before and after comparison of crypto wallet friction
-    caption: From technical overload to clear hierarchy. Simplified language, visible charts, and safer transaction flows.
-    aspect: landscape
-  - src: /works/blockbind/gallery-system.svg
-    alt: BlockBind design system — color palette, typography, spacing grid, and components
-    caption: Dark neutral base with functional color accents. Kanit headings, Roboto body, 4px spacing grid, and a full component library.
-    aspect: landscape
-  - src: /works/blockbind/gallery-home.svg
-    alt: BlockBind home screen — total balance, portfolio performance, and quick actions
-    caption: The central dashboard. Total balance, portfolio gains and losses, quick-action bar, and scrollable token holdings at a glance.
-    aspect: landscape
-  - src: /works/blockbind/gallery-swap.svg
-    alt: BlockBind swap flow — three-step token exchange with swipe confirmation
-    caption: Three-step swap — select tokens, review rate and fees, swipe to confirm. Intentional friction before committing.
-    aspect: landscape
-  - src: /works/blockbind/gallery-send.svg
-    alt: BlockBind send flow — address input, fee review, and swipe-to-confirm
-    caption: Enter recipient, amount, and network. All details confirmed before the final swipe prevents accidental transfers.
-    aspect: landscape
-  - src: /works/blockbind/gallery-onboarding.svg
-    alt: BlockBind onboarding — five screens introducing the wallet value proposition
-    caption: A friendly illustrated onboarding sequence that leads with benefits, not technical requirements.
-    aspect: landscape
-  - src: /works/blockbind/gallery-final.svg
-    alt: BlockBind final product gallery — key screens showing the complete UI system
-    caption: 30+ screens. One visual system. Every interaction consistent across the full product scope.
-    aspect: landscape
+gallery: []
 ---
 
 <WorkMetadataGrid>
@@ -68,10 +40,10 @@ The challenge was to design a crypto wallet that felt simple and approachable wi
 Many existing wallets either overwhelm users with technical jargon or hide important information — price charts, transaction history, and fees — behind unclear interfaces. The experience needed to balance beginner accessibility with the depth experienced users demand.
 
 <Figure
-  src="/works/blockbind/gallery-problem.svg"
+  src="/works/blockbind/design-challenge.jpg"
   alt="BlockBind design challenge — friction points and product solutions"
-  caption="Left: technical complexity, hidden data, and confusing flows. Right: clear hierarchy, visible charts, simplified actions, and swipe confirmation."
-  aspect="landscape"
+  width={2880}
+  height={2700}
 />
 
 ---
@@ -84,17 +56,17 @@ The interface was built around a minimal, functional color system, consistent sp
 
 **Consistent 4px spacing system.** Every margin, padding, and alignment follows a 4px grid — creating a predictable layout that scaled across 30+ screens.
 
-**Kanit + Roboto typography pairing.** Kanit headings give the interface a distinctive, modern feel. Roboto body text improves readability and scanning on mobile.
+**Open Sans typography system.** The direction sheet standardizes on Open Sans for headings and body, with a fixed scale at 14px, 16px, 32px, 40px, and 56px — one family, clear hierarchy, and predictable scanning on mobile.
 
 **Component-first approach.** Reusable buttons, cards, inputs, bottom sheets, modals, toasts, and a custom swipe confirmation were defined early to maintain consistency throughout.
 
 **Swipe-to-confirm for critical actions.** Sending or swapping crypto uses a swipe gesture instead of a standard button, adding intentional friction and reducing accidental submissions.
 
 <Figure
-  src="/works/blockbind/gallery-system.svg"
-  alt="BlockBind design system — color palette, typography, spacing grid, and component library"
-  caption="Dark neutral base with functional accents. Kanit headings, Roboto body, 4px spacing grid, and a full component library spanning buttons, cards, inputs, sheets, modals, toasts, and the custom swipe button."
-  aspect="landscape"
+  src="/works/blockbind/design-direction.jpg"
+  alt="BlockBind design direction — color, typography, spacing, and component foundations"
+  width={3840}
+  height={2688}
 />
 
 ---
@@ -103,22 +75,7 @@ The interface was built around a minimal, functional color system, consistent sp
 
 The experience was structured around quick wealth management at a glance, with deeper interactions available one tap away. Most common actions are visible from the home screen: check balance, review holdings, send, receive, and buy.
 
-Key sections:
-
-- **Home / Wallet Dashboard** — total balance, portfolio performance, quick actions, token holdings
-- **Asset Detail** — price charts, transaction history, and per-asset actions
-- **Swap Token Flow** — three-step exchange: select, review, swipe to confirm
-- **Send Crypto Flow** — address, amount, network, fees, and swipe confirmation
-- **Collectibles / NFTs** — browsing and managing NFT holdings
-- **Activity** — complete transaction timeline with filtering and search
-- **Settings** — multi-wallet management, security preferences, and connected apps
-
-<Figure
-  src="/works/blockbind/gallery-flow.svg"
-  alt="BlockBind UX sitemap — main sections and key navigation flows"
-  caption="Main sections and their connections. Open app → view balance → review token → send crypto — the primary journey in four taps."
-  aspect="landscape"
-/>
+<BlockbindUserFlowsGallery />
 
 ---
 
@@ -134,8 +91,29 @@ The final design delivered a cohesive and scalable mobile wallet UI system acros
 - **Attention to detail:** Maintaining spacing, typography, and component consistency across a large product scope.
 
 <Figure
-  src="/works/blockbind/result.jpg"
-  alt="BlockBind final product gallery — key screens showing the complete mobile wallet UI system"
-  caption="30+ screens. One visual system. Every interaction consistent across the full product scope."
-  aspect="landscape"
+  src="/works/blockbind/results.jpg"
+  alt="BlockBind — results overview of the mobile wallet UI system"
+  width={1920}
+  height={1080}
+/>
+
+<Figure
+  src="/works/blockbind/result-2.jpg"
+  alt="BlockBind — additional product screens from the wallet exploration"
+  width={2880}
+  height={2232}
+/>
+
+<Figure
+  src="/works/blockbind/result-3.jpg"
+  alt="BlockBind — product screens showing flows and hierarchy"
+  width={2880}
+  height={1620}
+/>
+
+<Figure
+  src="/works/blockbind/result-4.jpg"
+  alt="BlockBind — product screens and interaction patterns"
+  width={2880}
+  height={2124}
 />
