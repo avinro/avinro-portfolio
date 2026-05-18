@@ -157,4 +157,14 @@ describe("works content layer", () => {
       expect(Array.isArray(w.frontmatter.gallery)).toBe(true);
     });
   });
+
+  it("published work MDX bodies do not contain legacy metadata grids", () => {
+    const published = getPublishedWorks();
+    published.forEach((w) => {
+      expect(
+        w.content,
+        `${w.frontmatter.slug}: metadata cards belong in frontmatter meta, not MDX body`,
+      ).not.toMatch(/<WorkMetadataGrid/);
+    });
+  });
 });

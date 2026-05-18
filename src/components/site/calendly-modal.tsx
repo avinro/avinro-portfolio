@@ -14,8 +14,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useLenis } from "@/components/site/lenis-provider";
 import { track } from "@/lib/analytics/events";
 import { loadCalendlyScript } from "@/lib/calendly/load";
+import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 
 /** Specific 30-min event for inline embed (Calendly requires event type, not profile URL). */
 const CALENDLY_PAGE_URL = "https://calendly.com/avinroart/30min";
@@ -70,6 +72,7 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
   const [status, setStatus] = useState<Status>("idle");
   const [showHint, setShowHint] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   const handleOpenChange = (next: boolean) => {
     if (next) {
@@ -79,9 +82,23 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
     } else {
       setStatus("idle");
       setShowHint(false);
+      // Radix DismissableLayer can briefly leave body pointer-events disabled if
+      // overlay/content unmount order races the exit animation.
+      document.body.style.removeProperty("pointer-events");
     }
     setOpen(next);
   };
+
+  // Pause Lenis while the sheet is open so background smooth scroll does not fight
+  // Radix RemoveScroll; remeasure when the sheet closes.
+  useEffect(() => {
+    if (!open || !lenis) return;
+    lenis.stop();
+    return () => {
+      lenis.start();
+      scheduleRefreshLenisBounds(lenis);
+    };
+  }, [open, lenis]);
 
   // Kick off Calendly init whenever the sheet opens.
   // Detection strategy (in order of priority):

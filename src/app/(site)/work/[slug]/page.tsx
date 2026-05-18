@@ -8,6 +8,8 @@ import { SITE_URL, SITE_NAME } from "@/lib/seo/site";
 import { mdxOptions } from "@/lib/mdx/options";
 import { workMdxComponents } from "@/components/work/work-mdx-components";
 import { WorkGalleryFigure } from "@/components/work/work-gallery-figure";
+import { WorkHeaderMeta, WorkHeaderTags } from "@/components/work/work-metadata";
+import { buildWorkHeaderMetadata, buildWorkHeaderTags } from "@/lib/content/work-header-metadata";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 // ---------------------------------------------------------------------------
@@ -66,86 +68,6 @@ export async function generateMetadata({
     },
     ...(frontmatter.draft ? { robots: { index: false, follow: false } } : {}),
   };
-}
-
-// ---------------------------------------------------------------------------
-// Meta strip — year / category / client / tools / external link
-// ---------------------------------------------------------------------------
-
-interface WorkMetaStripProps {
-  year: number;
-  category: string;
-  client?: string;
-  tools: string[];
-  externalLink?: string;
-  tags: string[];
-}
-
-function WorkMetaStrip({ year, category, client, tools, externalLink, tags }: WorkMetaStripProps) {
-  return (
-    <div className="flex flex-col gap-6">
-      {/* Grid: year / category / client — 4-col on sm+ matching case study pattern */}
-      <div className="border-border/40 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-4">
-        <div className="flex flex-col gap-1">
-          <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Year
-          </span>
-          <span className="text-sm font-medium tabular-nums">{year}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Category
-          </span>
-          <span className="text-sm font-medium">{category}</span>
-        </div>
-        {client ? (
-          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Client
-            </span>
-            <span className="text-sm font-medium">{client}</span>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Type
-            </span>
-            <span className="text-sm font-medium">Personal concept</span>
-          </div>
-        )}
-        {externalLink && (
-          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Live
-            </span>
-            <a
-              href={externalLink}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="text-accent hover:text-accent/80 inline-flex items-center gap-1 text-sm font-medium transition-colors"
-            >
-              View live
-              <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-        )}
-      </div>
-
-      {/* Tags + tools — unified pill row: tags first, tools appended */}
-      {(tags.length > 0 || tools.length > 0) && (
-        <div className="flex flex-wrap gap-2">
-          {[...tags, ...tools].map((label) => (
-            <span
-              key={label}
-              className="bg-muted text-muted-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase"
-            >
-              {label}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  );
 }
 
 // ---------------------------------------------------------------------------
@@ -322,6 +244,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
 
   const mdxSource = buildWorkMdxSource(content, frontmatter.resultImage, frontmatter.title);
   const hasIntro = mdxSource.trim().length > 0;
+  const headerMetadata = buildWorkHeaderMetadata(frontmatter);
+  const headerTags = buildWorkHeaderTags(frontmatter.tags, frontmatter.tools);
 
   return (
     <main id="main-content">
@@ -329,18 +253,16 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
       <Section spacing="heroInternal">
         <Container>
           <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
-            {/* Category kicker */}
-            <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              {frontmatter.category}
-            </p>
-
-            {/* h1 + Summary: stack on mobile, side-by-side on desktop */}
+            {/* Title + tags | summary */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start lg:gap-8">
-              <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                {frontmatter.title}
-              </h1>
+              <div className="flex min-w-0 flex-col gap-2 sm:gap-1">
+                <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                  {frontmatter.title}
+                </h1>
+                <WorkHeaderTags labels={headerTags} />
+              </div>
 
-              <p className="text-muted-foreground text-base leading-relaxed sm:text-lg">
+              <p className="text-muted-foreground text-base leading-relaxed sm:text-lg lg:pt-1">
                 {frontmatter.summary}
               </p>
             </div>
@@ -352,15 +274,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               aspect={frontmatter.coverAspect}
             />
 
-            {/* Metadata strip — below cover, same as case study pattern */}
-            <WorkMetaStrip
-              year={frontmatter.year}
-              category={frontmatter.category}
-              client={frontmatter.client}
-              tools={frontmatter.tools}
-              externalLink={frontmatter.externalLink}
-              tags={frontmatter.tags}
-            />
+            {/* Metadata strip — expanded from frontmatter, below cover */}
+            <WorkHeaderMeta items={headerMetadata} />
           </div>
         </Container>
       </Section>

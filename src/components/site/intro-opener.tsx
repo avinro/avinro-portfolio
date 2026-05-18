@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { homeContent } from "@/lib/content/home";
 import { TextType } from "@/components/motion/text-type";
 import { useLenis } from "@/components/site/lenis-provider";
+import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 
 /** Tailwind `md` — must match phrase1 desktop vs mobile split. */
 const INTRO_MD_MIN_WIDTH_PX = 768;
@@ -66,6 +67,7 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
     return () => {
       if (lenis) {
         lenis.start();
+        scheduleRefreshLenisBounds(lenis);
       } else {
         document.body.style.overflow = "";
       }

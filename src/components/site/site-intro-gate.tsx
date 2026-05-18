@@ -1,9 +1,11 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 import { IntroOpener } from "@/components/site/intro-opener";
+import { useLenis } from "@/components/site/lenis-provider";
+import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 
 // ---------------------------------------------------------------------------
 // SiteIntroGate
@@ -36,6 +38,7 @@ interface SiteIntroGateProps {
 
 export function SiteIntroGate({ children }: SiteIntroGateProps) {
   const [state, setState] = useState<GateState>("ready");
+  const lenis = useLenis();
 
   useLayoutEffect(() => {
     const seen = sessionStorage.getItem(SESSION_KEY);
@@ -45,6 +48,12 @@ export function SiteIntroGate({ children }: SiteIntroGateProps) {
       setState("intro");
     }
   }, []);
+
+  // Lenis may initialize while only the intro is mounted; remeasure once the site tree mounts.
+  useEffect(() => {
+    if (state !== "ready" || !lenis) return;
+    scheduleRefreshLenisBounds(lenis);
+  }, [state, lenis]);
 
   const handleIntroComplete = () => {
     sessionStorage.setItem(SESSION_KEY, "1");
