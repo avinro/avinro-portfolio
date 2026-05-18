@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
 import { CalendlyModal } from "@/components/site/calendly-modal";
+import { useLenis } from "@/components/site/lenis-provider";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { isNavSectionActive } from "@/lib/navigation/nav-active";
 
@@ -56,6 +57,7 @@ export function SiteHeader() {
   const isScrolledRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const glassRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   // Collapse the mobile menu without the 500ms height transition — used when opening
   // Calendly so the sheet and menu never animate height at the same time (that race
@@ -78,24 +80,35 @@ export function SiteHeader() {
     if (isMenuOpen) setIsMenuOpen(false);
     if (pathname === "/") {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (lenis) {
+        lenis.scrollTo(0, { programmatic: true });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
   };
 
-  // Scroll-driven pill morph
+  // Scroll-driven pill morph — use Lenis scroll position when smooth scroll is active.
   useEffect(() => {
     const onScroll = () => {
-      const next = window.scrollY > SCROLL_THRESHOLD;
+      const scrollY = lenis ? lenis.scroll : window.scrollY;
+      const next = scrollY > SCROLL_THRESHOLD;
       if (next === isScrolledRef.current) return;
       isScrolledRef.current = next;
       setIsScrolled(next);
     };
     onScroll();
+    if (lenis) {
+      lenis.on("scroll", onScroll);
+      return () => {
+        lenis.off("scroll", onScroll);
+      };
+    }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [lenis]);
 
   // Close on Escape key
   useEffect(() => {

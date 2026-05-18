@@ -2,9 +2,8 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import { useLenis } from "@/components/site/lenis-provider";
+import { refreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 
 /**
  * Resets the document scroll position on internal route changes.
@@ -27,12 +26,10 @@ export function RouteScrollRestore() {
 
       if (lenis) {
         lenis.scrollTo(0, { immediate: true, programmatic: true });
-        lenis.resize();
+        refreshLenisBounds(lenis);
       } else {
         window.scrollTo(0, 0);
       }
-
-      ScrollTrigger.refresh();
     });
 
     return () => {

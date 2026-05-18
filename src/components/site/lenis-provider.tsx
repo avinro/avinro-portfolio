@@ -6,7 +6,11 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { refreshLenisBounds, scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
+
 gsap.registerPlugin(ScrollTrigger);
+
+const LENIS_RESIZE_DEBOUNCE_MS = 100;
 
 // ---------------------------------------------------------------------------
 // Context — exposes the Lenis instance for programmatic scrollTo calls
@@ -83,16 +87,27 @@ export function LenisProvider({ children }: LenisProviderProps) {
     // Without this, Lenis may read a shorter scrollHeight on pages with large
     // deferred sections (e.g. home 300dvh AboutCursorImages + lazy thumbnails),
     // causing it to stop scrolling before the curtain footer fully reveals.
-    const refreshBounds = () => {
-      lenis.resize();
-      ScrollTrigger.refresh();
+    scheduleRefreshLenisBounds(lenis);
+    const onLoad = () => {
+      refreshLenisBounds(lenis);
     };
-    const refreshTimerId = window.setTimeout(refreshBounds, 300);
-    window.addEventListener("load", refreshBounds, { once: true });
+    window.addEventListener("load", onLoad, { once: true });
+
+    // SiteIntroGate mounts the full site tree after the intro — observe height changes
+    // so Lenis limits stay in sync (intro-only mount would otherwise cap scroll early).
+    let resizeDebounceId: ReturnType<typeof setTimeout> | undefined;
+    const resizeObserver = new ResizeObserver(() => {
+      if (resizeDebounceId) clearTimeout(resizeDebounceId);
+      resizeDebounceId = setTimeout(() => {
+        refreshLenisBounds(lenis);
+      }, LENIS_RESIZE_DEBOUNCE_MS);
+    });
+    resizeObserver.observe(document.documentElement);
 
     return () => {
-      window.clearTimeout(refreshTimerId);
-      window.removeEventListener("load", refreshBounds);
+      if (resizeDebounceId) clearTimeout(resizeDebounceId);
+      resizeObserver.disconnect();
+      window.removeEventListener("load", onLoad);
       lenis.off("scroll", onScroll);
       gsap.ticker.remove(tickerFn);
       lenis.destroy();
