@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { cn } from "@/lib/utils";
 
 /*
  * AboutPortraitCard — TiltedCard-style 3D tilt effect wrapping the portrait
@@ -10,8 +11,8 @@ import { motion, useMotionValue, useSpring } from "motion/react";
  * with no external CSS file.
  *
  * Behavior by device:
- *   Desktop (pointer: fine) → full 3D tilt + floating caption tooltip.
- *   Mobile / coarse pointer → static card, no tilt, no tooltip.
+ *   Desktop (pointer: fine) → full 3D tilt + floating caption tooltip; badges on hover.
+ *   Mobile / coarse pointer → static card; badges and caption always visible.
  *   prefers-reduced-motion  → tilt disabled; motion values stay at 0.
  *
  * 3D CSS properties that Tailwind does not expose as utilities are applied via
@@ -32,6 +33,24 @@ const SPRING = { damping: 30, stiffness: 100, mass: 2 } as const;
 const CAPTION_SPRING = { stiffness: 350, damping: 30, mass: 1 } as const;
 
 const BADGES = ["anime lover", "bad bunny fan", "video games", "crypto enthusiast"] as const;
+
+function InterestBadges({ className }: { className?: string }) {
+  return (
+    <>
+      {BADGES.map((badge) => (
+        <span
+          key={badge}
+          className={cn(
+            "bg-background/80 text-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase shadow-sm backdrop-blur-sm",
+            className,
+          )}
+        >
+          {badge}
+        </span>
+      ))}
+    </>
+  );
+}
 
 export interface AboutPortraitCardProps {
   /** Public URL path to the portrait image (e.g. /images/about.jpg). */
@@ -129,28 +148,33 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
           />
         </div>
 
+        {/* Mobile — badges always visible (no hover on touch) */}
+        <div
+          aria-label="Interests"
+          className="absolute bottom-4 left-0 z-10 flex w-full flex-wrap justify-start gap-2 px-4 md:hidden"
+        >
+          <InterestBadges />
+        </div>
+
         {/*
-         * Badges overlay — translateZ(40px) lifts them in front of the card.
-         * Left-aligned, fades in/out with the same opacity spring as the tooltip
-         * so they appear only on hover (desktop) and stay visible on mobile.
+         * Desktop — badges float in 3D and fade in on hover.
+         * translateZ(40px) lifts them in front of the card during tilt.
          */}
         <motion.div
-          aria-label="Interests"
-          className="absolute bottom-4 left-0 z-10 flex w-full flex-wrap justify-start gap-2 px-4"
+          aria-hidden="true"
+          className="absolute bottom-4 left-0 z-10 hidden w-full flex-wrap justify-start gap-2 px-4 md:flex"
           style={{ transform: "translateZ(40px)", opacity }}
         >
-          {BADGES.map((badge) => (
-            <span
-              key={badge}
-              className="bg-background/80 text-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase shadow-sm backdrop-blur-sm"
-            >
-              {badge}
-            </span>
-          ))}
+          <InterestBadges />
         </motion.div>
       </motion.div>
 
-      {/* Floating cursor tooltip — desktop only */}
+      {/* Mobile — static caption (no cursor to follow on touch) */}
+      <figcaption className="absolute top-4 right-4 z-10 rounded bg-white px-2.5 py-1 font-mono text-[10px] text-[#2d2d2d] shadow-sm md:hidden">
+        Hi! What&apos;s up?
+      </figcaption>
+
+      {/* Desktop — floating cursor tooltip */}
       <motion.figcaption
         aria-hidden="true"
         className="pointer-events-none absolute top-0 left-0 z-10 hidden rounded bg-white px-2.5 py-1 font-mono text-[10px] text-[#2d2d2d] md:block"

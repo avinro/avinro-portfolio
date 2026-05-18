@@ -191,7 +191,8 @@ export default function AboutPage() {
             </div>
 
             {/*
-             * Portrait card — 3D tilt effect on desktop, static on mobile.
+             * Portrait card — 3D tilt + hover badges on desktop; badges and
+             * caption always visible on mobile (no hover on touch).
              * Loaded client-side only (ssr: false) so Motion hooks don't run
              * during server-side rendering or static markup tests.
              */}

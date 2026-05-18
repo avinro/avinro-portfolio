@@ -10,8 +10,10 @@
  *
  * What is allowed: prose typography including structured headings (h2–h4),
  * blockquotes, dividers, links, inline code, simple images, the
- * <Figure> component for contextual screen placement, and
- * <WorkMetadataGrid> / <WorkMetadataCard> for overview metadata rows.
+ * <Figure> component for contextual screen placement.
+ * Legacy <WorkMetadataGrid> / <WorkMetadataCard> remain registered for backwards
+ * compatibility but project metadata now lives in frontmatter (`meta`) and renders
+ * in the page header via {@link WorkHeaderMeta}.
  * BlockBind: <BlockbindUserFlowsGallery />. DomainPlug: <DomainPlugFlowsDiagramGallery />.
  * The frontmatter gallery is still available for works that prefer a
  * visual-only format with no inline images.

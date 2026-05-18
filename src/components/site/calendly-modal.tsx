@@ -79,6 +79,9 @@ export function CalendlyModal({ children, ctaPosition = "unknown" }: CalendlyMod
     } else {
       setStatus("idle");
       setShowHint(false);
+      // Radix DismissableLayer can briefly leave body pointer-events disabled if
+      // overlay/content unmount order races the exit animation.
+      document.body.style.removeProperty("pointer-events");
     }
     setOpen(next);
   };

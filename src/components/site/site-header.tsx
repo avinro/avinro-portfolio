@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -26,9 +26,9 @@ import { cn } from "@/lib/utils";
  *
  * Mobile menu:
  *   The glass container itself expands from h-14 → calc(100dvh − 16px) via a CSS
- *   height transition. `overflow-hidden` clips the mobile content while closed.
- *   No portal, no Dialog — the expanded section is always in the DOM but hidden
- *   behind the height clip. Links use tabIndex={-1} + aria-hidden when closed.
+ *   height transition. When closed, the panel uses h-0 (not flex-1) so it cannot
+ *   expand the bar past h-14 via flex min-height:auto. Links use tabIndex={-1}
+ *   + aria-hidden when closed.
  *
  * Hamburger icon:
  *   Three absolute-positioned spans. Lines 1 & 3 translate to center and rotate
@@ -55,6 +55,23 @@ export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+
+  // Collapse the mobile menu without the 500ms height transition — used when opening
+  // Calendly so the sheet and menu never animate height at the same time (that race
+  // leaves tw-animate transforms on the top row after the sheet closes).
+  const closeMenuInstantly = useCallback(() => {
+    const glass = glassRef.current;
+    if (glass) {
+      glass.style.transition = "none";
+    }
+    setIsMenuOpen(false);
+    requestAnimationFrame(() => {
+      if (glass) {
+        glass.style.transition = "";
+      }
+    });
+  }, []);
 
   // When already on /, clicking the logo scrolls to top instead of navigating.
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -137,9 +154,10 @@ export function SiteHeader() {
           prefers-reduced-transparency rule in globals.css does not override the
           transparent at-rest state. */}
       <div
+        ref={glassRef}
         data-glass-surface={isScrolled || isMenuOpen ? "" : undefined}
         className={cn(
-          "flex flex-col overflow-hidden",
+          "flex min-h-0 flex-col overflow-hidden",
           "border-border/50",
           "transition-[height,width,max-width,margin,border-radius,padding,background-color] duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] motion-reduce:transition-none",
           isMenuOpen
@@ -150,12 +168,12 @@ export function SiteHeader() {
               ]
             : isScrolled
               ? [
-                  "mx-auto mt-2 h-14 w-[calc(100%-16px)] max-w-[50rem] rounded-[28px] border px-5 sm:px-6",
+                  "mx-auto mt-2 h-14 max-h-14 min-h-0 w-[calc(100%-16px)] max-w-[50rem] rounded-[28px] border px-5 sm:px-6",
                   "bg-background supports-[backdrop-filter]:bg-background/65",
                   "supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150",
                   "md:supports-[backdrop-filter]:backdrop-blur-xl",
                 ]
-              : "mx-auto mt-0 h-14 w-full max-w-7xl rounded-none border-transparent bg-transparent px-4 sm:px-6 lg:px-8",
+              : "mx-auto mt-0 h-14 max-h-14 min-h-0 w-full max-w-7xl rounded-none border-transparent bg-transparent px-4 sm:px-6 lg:px-8",
         )}
       >
         {/* ── Top row — always visible ─────────────────────────────────── */}
@@ -238,13 +256,19 @@ export function SiteHeader() {
         {/* ── Mobile expanded content — clipped by overflow-hidden when closed ── */}
         <div
           id="mobile-nav-panel"
-          className="flex flex-1 flex-col pb-4 md:hidden"
+          className={cn(
+            "flex min-h-0 flex-col md:hidden",
+            isMenuOpen ? "flex-1 pb-4" : "pointer-events-none h-0 flex-none overflow-hidden",
+          )}
           aria-hidden={!isMenuOpen}
         >
           {/* Nav links — centered, staggered entrance from bottom */}
           <nav
             aria-label="Mobile navigation"
-            className="flex flex-1 flex-col items-center justify-center gap-8 text-center"
+            className={cn(
+              "flex flex-col items-center justify-center gap-8 text-center",
+              isMenuOpen ? "flex-1" : "hidden",
+            )}
           >
             {navLinks.map((link, i) => {
               const active = isNavSectionActive(pathname, link.href);
@@ -262,7 +286,7 @@ export function SiteHeader() {
                     // Animate in after container expands; opacity-0 while hidden
                     isMenuOpen
                       ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
-                      : "pointer-events-none opacity-0",
+                      : "pointer-events-none [transform:none] [animation:none] opacity-0",
                   )}
                   style={isMenuOpen ? { animationDelay: `${String(280 + i * 60)}ms` } : undefined}
                 >
@@ -278,7 +302,7 @@ export function SiteHeader() {
               "mt-auto shrink-0",
               isMenuOpen
                 ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
-                : "opacity-0",
+                : "pointer-events-none [transform:none] [animation:none] opacity-0",
             )}
             style={isMenuOpen ? { animationDelay: `${String(280 + 3 * 60)}ms` } : undefined}
           >
@@ -288,7 +312,7 @@ export function SiteHeader() {
                 className="min-h-[44px] w-full"
                 tabIndex={isMenuOpen ? undefined : -1}
                 onClick={() => {
-                  setIsMenuOpen(false);
+                  closeMenuInstantly();
                 }}
                 data-cta-label={primaryCta.label}
                 data-cta-href={primaryCta.href}

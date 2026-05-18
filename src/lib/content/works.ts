@@ -58,6 +58,21 @@ const GalleryItemSchema = z
 
 export type GalleryItem = z.infer<typeof GalleryItemSchema>;
 
+/** Optional project metadata surfaced in the work detail header (migrated from MDX cards). */
+const WorkProjectMetaSchema = z
+  .object({
+    type: z.string().min(1).optional(),
+    industry: z.string().min(1).optional(),
+    platform: z.string().min(1).optional(),
+    status: z.string().min(1).optional(),
+    role: z.string().min(1).optional(),
+    /** Overrides numeric `year` when the project spans multiple years (e.g. "2022–2023"). */
+    yearLabel: z.string().min(1).optional(),
+  })
+  .default({});
+
+export type WorkProjectMeta = z.infer<typeof WorkProjectMetaSchema>;
+
 const WorkFrontmatterSchema = z.object({
   title: z.string().min(1),
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -83,6 +98,8 @@ const WorkFrontmatterSchema = z.object({
   gallery: z.array(GalleryItemSchema).max(20).default([]),
   tools: z.array(z.string()).max(8).default([]),
   client: z.string().optional(),
+  /** Structured metadata for the detail page header — replaces inline MDX metadata cards. */
+  meta: WorkProjectMetaSchema,
   externalLink: z.url().optional(),
   tags: z.array(z.string()).max(6).default([]),
   /** Sort order within the /work listing page. */

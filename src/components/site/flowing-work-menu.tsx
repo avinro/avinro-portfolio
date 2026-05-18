@@ -18,6 +18,8 @@ export interface SelectedWorkItem {
   slug: string;
   title: string;
   coverImage: string;
+  /** Payoff shot — shown on mobile static rows when set; falls back to coverImage. */
+  resultImage?: string;
   /** Effective sort order — uses featuredOrder when available, falls back to order. */
   order: number;
 }
@@ -61,11 +63,11 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
   return (
     <Link
       href={href}
-      className="focus-ring group flex flex-1 items-center justify-between gap-4 px-4 py-5 transition-opacity duration-200 hover:opacity-70 sm:px-6 lg:px-8"
+      className="focus-ring group flex flex-1 items-center justify-between gap-8 px-4 py-5 transition-opacity duration-200 hover:opacity-70 sm:gap-4 sm:px-6 lg:px-8"
       style={{ borderTop: isFirst ? "none" : "1px solid oklch(0 0 0 / 12%)" }}
       aria-label={ariaLabel}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 items-center gap-6">
         <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
           {item.title}
         </span>
@@ -74,12 +76,12 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
           {item.kind === "work" ? "Work" : "Case study"}
         </span>
       </div>
-      <div className="relative size-14 shrink-0 overflow-hidden rounded-md">
+      <div className="relative ml-auto h-14 max-w-36 min-w-0 flex-1 overflow-hidden rounded-full sm:ml-0 sm:size-14 sm:max-w-none sm:flex-none sm:shrink-0 sm:rounded-md">
         <Image
-          src={item.coverImage}
+          src={item.resultImage ?? item.coverImage}
           alt=""
           fill
-          sizes="56px"
+          sizes="(max-width: 768px) 50vw, 56px"
           className="object-cover"
           loading="lazy"
           aria-hidden="true"
@@ -305,11 +307,8 @@ export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
     <section
       data-slot="flowing-work-menu"
       aria-label="Selected work"
-      className="bg-background text-foreground relative"
-      style={{
-        height: `calc(${String(items.length)} * 25vh)`,
-        minHeight: "60vh",
-      }}
+      className="bg-background text-foreground relative h-[calc(var(--item-count)*20vh)] min-h-[60vh] md:h-[calc(var(--item-count)*25vh)]"
+      style={{ "--item-count": items.length } as React.CSSProperties}
     >
       <nav className="flex h-full flex-col" aria-label="Selected work">
         {items.map((item, i) =>

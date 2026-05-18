@@ -87,6 +87,7 @@ export default function Home() {
         slug: w.frontmatter.slug,
         title: w.frontmatter.title,
         coverImage: w.frontmatter.coverImage,
+        resultImage: w.frontmatter.resultImage,
         order: w.frontmatter.featuredOrder ?? w.frontmatter.order,
       })),
   ].sort((a, b) => a.order - b.order);
