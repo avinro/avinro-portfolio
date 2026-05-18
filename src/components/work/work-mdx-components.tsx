@@ -159,6 +159,15 @@ function Em({ className, ...props }: ComponentPropsWithoutRef<"em">) {
   return <em className={cn("italic", className)} {...props} />;
 }
 
+function parseFigureDimension(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+}
+
 interface InlineFigureProps {
   src: string;
   alt: string;
@@ -166,9 +175,9 @@ interface InlineFigureProps {
   /** Aspect ratio of the image container. Defaults to landscape (16/9). */
   aspect?: "portrait" | "square" | "landscape" | "wide";
   /** Intrinsic width for non-standard aspect ratios (e.g. tall flowcharts). Use with height. */
-  width?: number;
+  width?: number | string;
   /** Intrinsic height for non-standard aspect ratios. Use with width. */
-  height?: number;
+  height?: number | string;
   className?: string;
   priority?: boolean;
 }
@@ -190,6 +199,9 @@ function InlineFigure({
   className,
   priority = false,
 }: InlineFigureProps) {
+  const intrinsicWidth = parseFigureDimension(width);
+  const intrinsicHeight = parseFigureDimension(height);
+
   // SVG diagrams: render natively so the viewBox controls proportions.
   // Never use Next.js Image or image-oriented containers (no aspect-ratio,
   // no overflow:hidden, no object-fit) — the browser scales SVG by width alone.
@@ -209,8 +221,8 @@ function InlineFigure({
             <img
               src={src}
               alt={alt}
-              width={width}
-              height={height}
+              width={intrinsicWidth}
+              height={intrinsicHeight}
               className="mx-auto block h-auto w-full max-w-full lg:max-w-[85%]"
               loading={priority ? "eager" : "lazy"}
             />
@@ -225,15 +237,15 @@ function InlineFigure({
     );
   }
 
-  if (width !== undefined && height !== undefined) {
+  if (intrinsicWidth !== undefined && intrinsicHeight !== undefined) {
     return (
       <figure className={cn("my-8 w-full min-w-0", className)}>
         <div className="bg-muted w-full min-w-0 overflow-hidden rounded-xl">
           <Image
             src={src}
             alt={alt}
-            width={width}
-            height={height}
+            width={intrinsicWidth}
+            height={intrinsicHeight}
             priority={priority}
             loading={priority ? undefined : "lazy"}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 800px"
