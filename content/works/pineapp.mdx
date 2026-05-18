@@ -39,25 +39,37 @@ Before this feature existed, Baptist Health patients had to complete pre-registr
 
 User research pointed consistently toward older adults — many of them retired, using a smartphone mainly for calls and texts. This shaped four core design principles:
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+<div className="my-8 grid grid-cols-1 gap-6 md:grid-cols-2">
   <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
     <h3 className="mb-3 text-lg font-semibold">Progressive Disclosure</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Instead of recreating a paper form inside the app, the experience reveals information step by step. Users first see what needs attention, then drill into each item only when needed.</p>
+    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      Instead of recreating a paper form inside the app, the experience reveals information step by
+      step. Users first see what needs attention, then drill into each item only when needed.
+    </p>
   </div>
-  
-  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <h3 className="mb-3 text-lg font-semibold">Status Visibility</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Every checklist item carries a clear state: Not Started, Needs Review, or Completed. Progress is visible at a glance without relying on instructions.</p>
-  </div>
-  
-  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <h3 className="mb-3 text-lg font-semibold">Irreversible by Design</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Once submitted, the data could not be changed by the patient inside the flow. The UI makes this explicit before the final step — reducing confusion and accidental submissions.</p>
-  </div>
-  
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <h3 className="mb-3 text-lg font-semibold">Status Visibility</h3>
+  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    Every checklist item carries a clear state: Not Started, Needs Review, or Completed. Progress is
+    visible at a glance without relying on instructions.
+  </p>
+</div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <h3 className="mb-3 text-lg font-semibold">Irreversible by Design</h3>
+  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    Once submitted, the data could not be changed by the patient inside the flow. The UI makes this
+    explicit before the final step — reducing confusion and accidental submissions.
+  </p>
+</div>
+
   <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
     <h3 className="mb-3 text-lg font-semibold">Multi-Appointment Clarity</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">When users had multiple appointments on the same day, the accordion pattern showed exactly which visits the forms applied to, removing ambiguity from a stressful scenario.</p>
+    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      When users had multiple appointments on the same day, the accordion pattern showed exactly
+      which visits the forms applied to, removing ambiguity from a stressful scenario.
+    </p>
   </div>
 </div>
 
@@ -73,29 +85,37 @@ User research pointed consistently toward older adults — many of them retired,
 
 The flow was built around one goal: arrive at the hospital with everything already completed. The design system ensured consistency across four key steps — from entry point through completion — using functional color (Baptist Health green for actions, amber for attention states), high-contrast typography optimized for older adults, and thumb-friendly mobile layout throughout.
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+<div className="my-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
   <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <div className="mb-4 text-5xl font-bold text-primary">1</div>
+    <div className="text-primary mb-4 text-5xl font-bold">1</div>
     <h3 className="mb-2 text-lg font-semibold">Entry Point</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">CTA on appointment card with contextual hint to guide users</p>
+    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      CTA on appointment card with contextual hint to guide users
+    </p>
   </div>
-  
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <div className="text-primary mb-4 text-5xl font-bold">2</div>
+  <h3 className="mb-2 text-lg font-semibold">Multi-Appointment</h3>
+  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    Dedicated screen for multiple appointments on the same day
+  </p>
+</div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <div className="text-primary mb-4 text-5xl font-bold">3</div>
+  <h3 className="mb-2 text-lg font-semibold">Pre-Registration</h3>
+  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    Core checklist where users submit required documents in any order with sticky CTA
+  </p>
+</div>
+
   <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <div className="mb-4 text-5xl font-bold text-primary">2</div>
-    <h3 className="mb-2 text-lg font-semibold">Multi-Appointment</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Dedicated screen for multiple appointments on the same day</p>
-  </div>
-  
-  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <div className="mb-4 text-5xl font-bold text-primary">3</div>
-    <h3 className="mb-2 text-lg font-semibold">Pre-Registration</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Core checklist where users submit required documents in any order with sticky CTA</p>
-  </div>
-  
-  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
-    <div className="mb-4 text-5xl font-bold text-primary">4</div>
+    <div className="text-primary mb-4 text-5xl font-bold">4</div>
     <h3 className="mb-2 text-lg font-semibold">Success State</h3>
-    <p className="text-sm text-neutral-600 dark:text-neutral-400">Success screen with arrival instructions and push notifications</p>
+    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      Success screen with arrival instructions and push notifications
+    </p>
   </div>
 </div>
 
