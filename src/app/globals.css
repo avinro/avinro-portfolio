@@ -570,3 +570,93 @@ html.lenis-smooth {
     opacity: 1;
   }
 }
+
+/* ────────────────────────────────────────────────────────────────────
+ * AI Chat — Vivi “thinking” indicator (three sequential dots)
+ * ────────────────────────────────────────────────────────────────────
+ */
+
+@keyframes vivi-thinking-dot {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+
+  35% {
+    transform: translateY(-3px);
+    opacity: 0.9;
+  }
+}
+
+.vivi-thinking-dot {
+  animation: vivi-thinking-dot 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Dots follow the visually hidden status label (1st child). */
+.vivi-thinking-dot:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.vivi-thinking-dot:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vivi-thinking-dot {
+    animation: none;
+    transform: none;
+    opacity: 0.65;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────
+ * AI Chat — response HTML rendering
+ * ────────────────────────────────────────────────────────────────────
+ * The API returns semantic HTML: <h3>, <p>, <ul>, <li>, <strong>, <a>.
+ * These styles ensure proper hierarchy and visual integration into the
+ * chat sheet's minimal, editorial aesthetic.
+ */
+
+.prose-chat h3 {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0.75rem 0 0.2rem;
+}
+
+.prose-chat p {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--foreground);
+  margin: 0.3rem 0;
+}
+
+.prose-chat ul {
+  list-style: disc;
+  padding-left: 1.2rem;
+  margin: 0.3rem 0;
+}
+
+.prose-chat li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0.1rem 0;
+}
+
+.prose-chat strong {
+  font-weight: 600;
+}
+
+.prose-chat a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 150ms;
+}
+
+.prose-chat a:hover {
+  opacity: 0.8;
+}
