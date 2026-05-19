@@ -325,6 +325,12 @@ export function AiChat() {
         }
       }
 
+      if (!accumulated.trim()) {
+        throw new Error(
+          "Received an empty reply. If this persists, verify Gemini API credentials for production deployments.",
+        );
+      }
+
       const assistant: ChatMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
@@ -434,7 +440,7 @@ export function AiChat() {
         <button
           ref={fabRef}
           className={cn(
-            "fixed z-40",
+            "fixed z-[45]",
             "right-4 bottom-8",
             "md:right-6",
             "bg-primary text-primary-foreground",
