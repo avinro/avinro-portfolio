@@ -27,6 +27,7 @@ import type { MDXComponents } from "mdx/types";
 import { cn } from "@/lib/utils";
 import { MdxInternalBodyLink } from "./mdx-internal-body-link";
 import { MermaidDiagram } from "./mermaid-diagram";
+import { WorkMetadataCard, WorkMetadataGrid } from "@/components/work/work-metadata";
 import {
   FlowChain,
   FlowItem,
@@ -608,4 +609,7 @@ export const mdxComponents: MDXComponents = {
   // Injected by remark-mermaid plugin — resolved here so next-mdx-remote
   // can find the component without a runtime import inside the MDX body.
   MermaidDiagram,
+  // Project snapshot metadata — icon + label + value cards for case study intros.
+  WorkMetadataGrid,
+  WorkMetadataCard,
 };

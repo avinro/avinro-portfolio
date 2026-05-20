@@ -10,7 +10,7 @@ coverage:
   - design system
   - frontend
 outcome: Built a production-ready expense automation platform that turned restaurant paper receipts into structured financial data, eliminating manual tracking friction and creating daily visibility into costs.
-coverImage: /case-studies/uma.svg
+coverImage: /case-studies/uma/cover.jpg
 order: 2
 featured: true
 sector: Restaurant Tech
@@ -49,19 +49,28 @@ kpis:
 Built a production-ready expense automation platform that turned restaurant paper receipts into structured financial data, eliminating manual tracking friction and creating daily visibility into costs.
 
 <Figure
-  placeholderLabel="UMA — product overview"
+  src="/case-studies/uma/images/one-line-impact.jpg"
+  alt="UMA — product overview: WhatsApp capture and web dashboard"
+  width={2880}
+  height={1620}
   caption="WhatsApp-first capture, web dashboard for analysis. One product, two interfaces, purpose-built for the restaurant vertical."
 />
 
 ## Snapshot
 
-- **Role:** Founding Product Design Engineer
-- **Timeline:** 3 months (discovery, MVP, product refinement)
-- **Company / Client:** UMA (startup)
-- **Platform:** Web (mobile-first) + WhatsApp
-- **Team:** CEO/COO, CTO/CPO, Product Design Engineer (me)
-- **Scope:** Product strategy, UX architecture, design system, production frontend implementation
-- **Status:** Production-ready, unfunded (not launched)
+<WorkMetadataGrid>
+  <WorkMetadataCard kind="role">Founding Product Design Engineer</WorkMetadataCard>
+  <WorkMetadataCard kind="timeline">
+    3 months (discovery, MVP, product refinement)
+  </WorkMetadataCard>
+  <WorkMetadataCard kind="client">UMA (startup)</WorkMetadataCard>
+  <WorkMetadataCard kind="platform">Web (mobile-first) + WhatsApp</WorkMetadataCard>
+  <WorkMetadataCard kind="team">CEO/COO, CTO/CPO, Product Design Engineer (me)</WorkMetadataCard>
+  <WorkMetadataCard kind="scope">
+    Product strategy, UX architecture, design system, production frontend implementation
+  </WorkMetadataCard>
+  <WorkMetadataCard kind="status">Production-ready, unfunded (not launched)</WorkMetadataCard>
+</WorkMetadataGrid>
 
 ## Executive summary
 
@@ -70,7 +79,10 @@ UMA was a SaaS platform designed to help restaurant and bar owners automate expe
 My role was founding product design engineer. I owned product definition and UX strategy alongside the CTO, designed the complete design system, and wrote production-ready frontend code using React, Tailwind, and AI-assisted workflows. The product shipped with end-to-end functionality across both interfaces, but the company could not secure funding to launch.
 
 <Figure
-  placeholderLabel="Dual-interface concept"
+  src="/case-studies/uma/images/executive-summary.jpg"
+  alt="UMA dual-interface concept — WhatsApp capture and web dashboard"
+  width={2880}
+  height={1620}
   caption="WhatsApp = frictionless daily upload. Web dashboard = real-time visibility and exportable data for advisors. Two surfaces, one data layer."
 />
 
@@ -145,7 +157,10 @@ The core product challenge was not simply automating receipt capture. It was tra
 - Provided data clean enough for external stakeholders (accountants, advisors) to use directly
 
 <Figure
-  placeholderLabel="Problem space — three intertwined challenges"
+  src="/case-studies/uma/images/product-problem.jpg"
+  alt="UMA product problem — capture, extraction, insights, and export-grade data"
+  width={2880}
+  height={1620}
   caption="Frictionless capture, reliable AI extraction, meaningful insights, and export-grade data quality — all had to be solved simultaneously."
 />
 
@@ -164,14 +179,7 @@ Responsibilities:
 
 ## Constraints
 
-Real constraints shaped every decision:
-
-- **Team size:** Three people across product, engineering, and operations. I handled design, frontend, and partial branding work. No dedicated QA, no design reviews from peers.
-- **Timeline pressure:** 1 month to discovery + MVP, 2 additional months to launch-ready product. This meant ruthless prioritization — what shipped, what was cut.
-- **No user research infrastructure:** We validated metrics through conversations with the CEO (a restaurant owner himself) and his peers, but no formal user testing or surveys.
-- **Technology learning curve:** This was my first time using AI-assisted code generation (Cursor + Claude Opus/Sonnet). The workflow was productive but required iterative refinement.
-- **Processing latency:** AI extraction took 5–10 seconds per image. This had to be designed for — users needed clear feedback that their upload was being processed.
-- **Funding uncertainty:** The product was built toward a launch that never materialized due to inability to secure angel investment.
+UMA was built by a **three-person team** across product, engineering, and operations, with responsibilities overlapping heavily. I handled **product design**, **frontend implementation**, and parts of the **branding system** without dedicated QA or peer design reviews. The product moved under intense **timeline pressure**, with one month for discovery and MVP definition, followed by two months toward a launch-ready platform. We also operated without formal user research infrastructure, validating decisions through direct conversations with restaurant owners, while simultaneously adapting to a new workflow built around **AI-assisted development**. Additional constraints like **AI processing latency** and eventual **funding uncertainty** shaped many of the product and prioritization decisions throughout development.
 
 <StateGrid columns={3}>
   <StateItem icon="users" label="Team of three" hint="Design + frontend + ops on one person" />
@@ -200,13 +208,7 @@ Real constraints shaped every decision:
 
 ## Product strategy
 
-The strategy was guided by three core principles:
-
-1. **Accessibility over comprehensiveness.** Remove barriers to adoption. A restaurant owner should not need to learn a new app or change their behavior. Meet them on WhatsApp.
-
-2. **Depth on demand.** WhatsApp handles routine uploads and quick questions. The web app is where owners go when they want to dig into data, understand trends, and export for advisors. Two interfaces, one product.
-
-3. **Build what restaurants actually need.** Reject document-management views, processing queues, and approval workflows. Restaurants care about one thing: _Am I making money?_ Show that clearly and let them drill down.
+The product strategy was shaped around three principles: **accessibility over complexity**, **depth on demand**, and **solving real restaurant problems**. Instead of forcing users to learn new workflows, UMA met them where they already were — **WhatsApp** — while the web platform provided deeper access to **financial insights**, **trend analysis**, and **exportable reporting**. We intentionally avoided unnecessary management layers and focused the experience around the one question restaurant owners actually care about: **"Am I making money?"**
 
 <PrincipleGrid>
   <PrincipleItem
@@ -239,61 +241,11 @@ The strategy was guided by three core principles:
 
 ## Process
 
-Before finalizing the product direction, we considered several approaches:
-
-### Option A: Mobile app (iOS + Android)
-
-**Pros:**
-
-- Native experience, faster performance
-- Push notifications for processing updates
-- Offline capability
-
-**Cons:**
-
-- App store friction (approval, versioning, updates)
-- Split codebase (iOS/Android/Web)
-- Restaurant owners don't download apps for niche tools
-- Higher build and maintenance cost
-
-### Option B: Web-only, no WhatsApp
-
-**Pros:**
-
-- Single codebase, simpler to maintain
-- Full control over UI and data flow
-- Easier to build complex features
-
-**Cons:**
-
-- High friction for daily uploads (open browser, navigate, upload)
-- Restaurant owners already on WhatsApp; requires behavior change
-- Loses the accessibility advantage
-
-### Option C: WhatsApp-only, no web interface
-
-**Pros:**
-
-- Maximum accessibility and distribution
-- Simpler product scope
-- No need to build complex dashboards
-
-**Cons:**
-
-- Limits depth of analysis and data exploration
-- Financial advisors need structured, exportable data
-- Can't show trends, comparisons, or custom reports
-- Becomes a data collection tool, not a platform
+Before defining the final direction, we explored three approaches: a **native mobile app**, a **web-only platform**, and a **WhatsApp-only experience**. Each option solved a different problem but introduced major tradeoffs between **accessibility**, **development complexity**, and **financial visibility**. This process ultimately led to a **hybrid approach** that combined **WhatsApp for frictionless receipt uploads** with a **web platform for dashboards, reporting, and operational insights**.
 
 ### Final direction
 
-We chose **WhatsApp + Web** because it solved the asymmetric problem:
-
-- **Upload is frictionless** (WhatsApp, where they already are)
-- **Analysis is rich** (Web dashboard, when they have time to think about it)
-- **Data is exportable** (For advisors, for compliance, for growth)
-
-This combination gave us the accessibility of WhatsApp with the power of a real platform. No other expense platform in the restaurant space offered this in mid-2025.
+We chose a **WhatsApp + Web hybrid approach** because it balanced **frictionless uploads** with **powerful financial analysis**. WhatsApp made receipt collection simple and accessible, while the web dashboard enabled **reporting**, **data exports**, and **operational insights**. This combination delivered the accessibility of messaging with the capabilities of a real financial platform.
 
 <Figure
   placeholderLabel="Option comparison — A / B / C vs final direction"
@@ -302,50 +254,76 @@ This combination gave us the accessibility of WhatsApp with the power of a real 
 
 ## UX architecture
 
-The product was structured around two complementary journeys:
-
-**Core user journeys:**
-
-1. **Daily upload via WhatsApp:** Owner photographs receipt → sends to UMA → AI extracts data → owner gets summary + link to invoice table. Async, no friction.
-
-2. **Weekly/monthly review via Web:** Owner opens dashboard → sees KPIs (revenue, expenses, net profit, profitability) → drills into breakdown by category → reviews individual invoices → edits/corrects categorization → asks questions via chat.
-
-3. **Month-end analysis:** Owner reviews spending trends over time → identifies cost spikes → exports data to share with accountant or financial advisor.
-
-4. **Categorization training:** When AI misclassifies an expense, owner corrects it in the invoice table. This trains the model for future uploads.
-
-**Important states:**
-
-- **Processing:** Receipt uploaded, AI is extracting data. User sees "we're processing your receipt" message in WhatsApp.
-- **Processed:** Data extracted and categorized. User sees summary in WhatsApp + link to table.
-- **Needs review:** AI confidence was low, or categorization seems off. Invoice is flagged for user attention.
-- **Paid / Pending / Overdue:** Payment status of each invoice (from due date logic).
-- **Empty state:** New user, no expenses uploaded yet. Onboarding prompt in web app.
-- **Loading:** Dashboard is fetching data from Supabase. Skeleton screens for KPI cards and charts.
+The product was structured around complementary journeys across WhatsApp and web:
 
 <BranchTree
   icon="user"
   label="Restaurant owner"
-  hint="One user, three cadences, one Supabase truth"
+  hint="One user, four cadences, one Supabase truth"
 >
-  <Branch title="Daily — WhatsApp" tone="accent">
+  <Branch title="Daily — WhatsApp upload" tone="accent">
     <FlowItem icon="camera" label="Photograph receipt" />
-    <FlowItem icon="message-circle" label="Send to UMA" />
-    <FlowItem icon="sparkles" label="AI extracts and categorizes" />
-    <FlowItem icon="bell" label="Summary + link returned" />
+    <FlowItem icon="message-circle" label="Send to UMA via WhatsApp" />
+    <FlowItem icon="sparkles" label="AI extracts data" hint="Async — no friction" />
+    <FlowItem icon="bell" label="Summary + link to invoice table" />
   </Branch>
-  <Branch title="Weekly — Dashboard" tone="accent">
+  <Branch title="Weekly / monthly — Web review" tone="accent">
     <FlowItem icon="layout-dashboard" label="Open dashboard" />
-    <FlowItem icon="bar-chart-3" label="Scan KPI cards" />
-    <FlowItem icon="pie-chart" label="Drill into categories" />
-    <FlowItem icon="edit-3" label="Correct mis-categorizations" />
+    <FlowItem icon="bar-chart-3" label="Scan KPIs" hint="Revenue, expenses, net profit, profitability" />
+    <FlowItem icon="pie-chart" label="Drill into category breakdown" />
+    <FlowItem icon="file-text" label="Review individual invoices" />
+    <FlowItem icon="edit-3" label="Edit or correct categorization" />
+    <FlowItem icon="message-square" label="Ask questions via chat" />
   </Branch>
-  <Branch title="Month-end — Reports" tone="accent">
-    <FlowItem icon="trending-up" label="Review 6-month trends" />
+  <Branch title="Month-end — Analysis" tone="accent">
+    <FlowItem icon="trending-up" label="Review spending trends over time" />
     <FlowItem icon="alert-triangle" label="Identify cost spikes" />
-    <FlowItem icon="download" label="Export for advisor" />
+    <FlowItem icon="download" label="Export for accountant or advisor" />
+  </Branch>
+  <Branch title="Ongoing — Model training" tone="accent">
+    <FlowItem icon="alert-triangle" label="AI misclassifies an expense" tone="warning" />
+    <FlowItem icon="file-text" label="Owner corrects in invoice table" />
+    <FlowItem icon="brain" label="Model learns for future uploads" />
   </Branch>
 </BranchTree>
+
+**Important states:**
+
+<StateGrid columns={3}>
+  <StateItem
+    icon="loader"
+    label="Processing"
+    hint="Receipt uploaded — AI extracting; status in WhatsApp"
+    tone="warning"
+  />
+  <StateItem
+    icon="check-circle-2"
+    label="Processed"
+    hint="Categorized — summary in WhatsApp + link to table"
+    tone="positive"
+  />
+  <StateItem
+    icon="alert-triangle"
+    label="Needs review"
+    hint="Low confidence or off categorization — flagged in table"
+    tone="warning"
+  />
+  <StateItem icon="clock" label="Pending" hint="Payment due in the future" tone="neutral" />
+  <StateItem icon="check" label="Paid" hint="Invoice marked as settled" tone="positive" />
+  <StateItem icon="alert-octagon" label="Overdue" hint="Past due, still unpaid" tone="negative" />
+  <StateItem
+    icon="scroll-text"
+    label="Empty state"
+    hint="New user — onboarding prompt in web app"
+    tone="neutral"
+  />
+  <StateItem
+    icon="layout-dashboard"
+    label="Loading"
+    hint="Dashboard fetching — skeleton cards and charts"
+    tone="neutral"
+  />
+</StateGrid>
 
 ## Final solution
 
@@ -355,12 +333,7 @@ The product was structured around two complementary journeys:
 
 **Solution:** Owner sends receipt photo to UMA's WhatsApp number. The image goes to an extraction service. An AI agent processes it, categorizes the expense, and sends back a confirmation message with a summary and a link to the full invoice table in the web app.
 
-**Why it works:**
-
-- Zero friction. The phone is already in their hand.
-- Immediate feedback. They know the system received it.
-- Async processing. They don't wait for extraction. The system works in the background.
-- Unified action. One WhatsApp conversation handles both capture and Q&A.
+The system worked because it prioritized **speed and simplicity**. Receipt uploads happened directly through **WhatsApp**, removing friction from the process while giving users **immediate feedback** that their files were received. AI processing happened asynchronously in the background, allowing owners to continue their workflow without waiting, while a single conversation thread handled both **expense capture** and **financial questions**.
 
 <Figure
   placeholderLabel="WhatsApp upload flow"
@@ -373,12 +346,7 @@ The product was structured around two complementary journeys:
 
 **Solution:** The dashboard shows four KPI cards (Total Revenue, Total Expenses, Net Profit, Profitability) at the top. Below, an Expenses Breakdown visualizes the top five cost categories with color-coded bars. A Spending Trends chart shows expense trajectory over the last six months.
 
-**Why it works:**
-
-- Immediate clarity. Three numbers (revenue, expenses, profit) answer the core question in seconds.
-- Semantic color coding. Green = good, red = risk, yellow = warning. No cognitive load.
-- Drill-down path. From KPIs to breakdown to historical trends. Complexity is layered, not overwhelming.
-- Mobile-first layout. Each section stacks vertically. Easy to scan on a phone.
+The dashboard worked because it focused on **clarity over complexity**. Core metrics like **revenue**, **expenses**, and **profit** answered the most important business question in seconds, while **semantic color coding** reduced cognitive load and made financial health instantly understandable. More detailed insights were progressively revealed through a clear **drill-down structure**, and the entire experience was designed with a **mobile-first layout** that remained easy to scan and navigate on smaller screens.
 
 <Figure
   placeholderLabel="Dashboard — KPIs, expense breakdown, spending trends"
@@ -391,13 +359,7 @@ The product was structured around two complementary journeys:
 
 **Solution:** A searchable, filterable table shows all invoices with columns: Supplier, Amount, Type (Invoice, Receipt, Delivery Note, Statement, etc.), Issue Date, Due Date, Status (Processed, Needs Review), Payment (Paid, Pending), and Actions. Users can click any row to view details, edit category, or mark as paid.
 
-**Why it works:**
-
-- Complete audit trail. Every expense is visible, traceable, timestamped.
-- User control. Mistakes are corrected immediately. AI learns from corrections.
-- Status visibility. Payment tracking reduces confusion about cash flow.
-- Bulk actions. Filter by supplier or category to manage related expenses together.
-- Export-ready. Clean data structure makes exporting for advisors straightforward.
+The expense management system worked because it combined **visibility**, **control**, and **operational clarity**. Every expense remained fully traceable through a complete **audit trail**, while users could quickly correct AI mistakes and improve data accuracy over time. Features like **payment status tracking**, **bulk management actions**, and **export-ready data structures** made it easier for restaurant owners to manage cash flow and collaborate with financial advisors without additional manual work.
 
 <Figure
   placeholderLabel="Invoice table"
@@ -435,12 +397,7 @@ The product was structured around two complementary journeys:
 
 **Solution:** A chat interface in the Reports section lets owners ask questions. The AI processes the query against the expense database and responds with a summary and relevant data.
 
-**Why it works:**
-
-- Natural interaction. No need to navigate filters or run reports. Just ask.
-- Contextual answers. The AI can reference specific suppliers, categories, or time periods.
-- Training opportunity. Unanswered or poorly answered questions signal gaps in the product.
-- Light feature. Added delight without core complexity. Users default to the dashboard, but power users love this.
+The AI assistant worked because it enabled a more **natural and conversational interaction model**. Instead of navigating filters or building reports manually, users could ask questions directly and receive **context-aware answers** tied to suppliers, categories, or time periods. It also created a valuable feedback loop, where unanswered questions exposed gaps in the product and opportunities for improvement. While not a core workflow, the feature added a layer of **speed**, **accessibility**, and **delight** that resonated especially well with power users.
 
 <Figure
   placeholderLabel="Chat — natural-language reports"
@@ -451,48 +408,17 @@ The product was structured around two complementary journeys:
 
 The design system was built ground-up to support production scale:
 
-**Components:**
+**Variants & responsive behavior:**
 
-- **KPI Cards:** Title, large metric, trend indicator (% change, direction arrow), subtext. Used for Revenue, Expenses, Net Profit, Profitability.
-- **Expense Breakdown Bar Chart:** Category label, colored bar, amount, percentage, trend arrow. Five categories visible by default.
-- **Spending Trends Line Chart:** Time-series with interactive points, dual-view toggle (6 months / 12 months).
-- **Invoice Table:** Headers, sortable columns, row highlighting on hover, status/payment badges, row menu (edit, delete, details).
-- **Status Badges:** Processed (green), Pending (yellow), Needs Review (orange), Overdue (red), Paid (green outline), etc.
-- **Navigation Sidebar:** Logo, menu items (Dashboard, Documents, Reports, Chat, Settings), active state indicator.
-- **Buttons:** Primary (lime green, full-width or inline), Secondary (outline), Danger (red), Icon buttons.
-- **Modals/Dialogs:** Invoice detail view, category editor, confirmation dialogs.
-- **Form inputs:** Text, number, select (for categories), date pickers. Label + input + error state.
-- **Empty states:** Illustration + headline + CTA button.
-- **Loading states:** Skeleton screens for cards, tables, charts.
-
-**Tokens:**
-
-- **Colors:** Semantic (Primary lime-green, Danger red, Warning yellow, Info blue, Neutral grays). Category colors (Food, Labor, Marketing, Operations, Admin — each with a distinct hue for visual recognition).
-- **Typography:** System font stack, sizes (12px to 32px), weights (400, 600, 700).
-- **Spacing:** 4px base unit (4, 8, 12, 16, 24, 32, 48px).
-- **Breakpoints:** 320px (mobile), 768px (tablet), 1024px (desktop).
-- **Shadows, borders, radius:** Defined globally for consistency.
-
-**Variants and responsive behavior:**
-
-- All components had mobile, tablet, and desktop variants.
-- Tables collapsed to card view on mobile.
-- KPI cards stacked vertically on mobile, three-column grid on desktop.
-- Charts became single-metric summaries on very small screens.
-- All interactive elements (buttons, inputs, badges) had hover, active, disabled, and focus states.
+Every component was designed with **mobile**, **tablet**, and **desktop variants** to ensure consistency across devices. Data-heavy interfaces like tables transformed into **card-based layouts on mobile**, while KPI sections adapted from stacked vertical views to multi-column desktop grids. Charts also simplified into **single-metric summaries** on smaller screens to preserve readability and reduce cognitive load. All interactive elements included fully defined **hover**, **active**, **disabled**, and **focus states**.
 
 **Engineering handoff:**
 
-- I exported Figma variables as JSON and fed them into Tailwind config, ensuring design tokens matched code tokens exactly.
-- Component specs included all states, interactive behaviors, and accessibility requirements (focus states, ARIA labels).
-- The CTO and I aligned on component APIs (React prop names, data structures) so implementation matched design intent.
+To reduce inconsistencies between design and implementation, **Figma variables** were exported as JSON and connected directly to the **Tailwind configuration**, ensuring design tokens matched production tokens exactly. Component documentation included interaction states, accessibility requirements, and behavioral specifications, while alignment with engineering covered **React component APIs**, prop structures, and implementation logic to preserve design intent throughout development.
 
 **Production considerations:**
 
-- Figma components mapped directly to React components. No visual drift.
-- Cursor + Figma MCP allowed me to generate code from design, review output, and iterate rapidly.
-- Manual testing focused on responsive behavior across real devices (not just browser dev tools).
-- No automated component testing due to timeline, but design system was stable enough that manual regression testing caught issues.
+Figma components were intentionally structured to map directly to **React components**, minimizing visual drift between design and production. Using **Cursor** and **Figma MCP**, I could rapidly generate, review, and iterate on frontend code directly from the design system. Due to timeline constraints, testing relied primarily on **manual QA across real devices** rather than automated component testing, but the design system was stable enough that regression issues remained manageable throughout development.
 
 <Figure
   placeholderLabel="Component inventory — 20+ components"
@@ -666,6 +592,9 @@ This shift — from Designer who hands off to Code, to Design Engineer who owns 
 The product didn't launch for business reasons, not product reasons. But the work created the foundation — product clarity, design system, production code, team alignment — that would have made rapid iteration possible if the business had gotten the chance.
 
 <Figure
-  placeholderLabel="From Product Designer to Product Design Engineer"
+  src="/case-studies/uma/images/final-reflection.jpg"
+  alt="UMA final reflection — from product designer to product design engineer"
+  width={2880}
+  height={1620}
   caption="UMA was the proof of concept that design and code can be owned end-to-end, at production scale, by one person — without handoff gaps, without visual drift, without separate worlds."
 />

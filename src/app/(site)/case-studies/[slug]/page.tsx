@@ -17,6 +17,7 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { CaseStudyScrollTracker } from "@/components/analytics/case-study-scroll-tracker";
 import { CaseStudyBody } from "@/components/case-study/case-study-body";
+import { CaseStudyBodyShell } from "@/components/case-study/case-study-body-shell";
 import { RelatedRail } from "@/components/case-study/related-rail";
 import { getRelatedItems } from "@/lib/content/related";
 
@@ -263,9 +264,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </Section>
       ) : null}
 
-      {/* MDX body — widened to max-w-7xl to accommodate the two-column layout */}
+      {/* MDX body — full viewport width (max 2440px) for the three-column grid */}
       <Section>
-        <Container width="wide">
+        <CaseStudyBodyShell>
           <CaseStudyBody
             headings={tocHeadings}
             rail={relatedItems.length > 0 ? <RelatedRail items={relatedItems} /> : undefined}
@@ -287,7 +288,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               />
             )}
           </CaseStudyBody>
-        </Container>
+        </CaseStudyBodyShell>
       </Section>
     </main>
   );
