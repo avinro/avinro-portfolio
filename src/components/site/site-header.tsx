@@ -199,7 +199,15 @@ export function SiteHeader() {
             className="focus-ring rounded-sm transition-opacity hover:opacity-70"
             aria-label="Avinro — home"
           >
-            <Image src="/logo.png" alt="" width={144} height={28} priority className="h-5 w-auto" />
+            <Image
+              src="/logo.png"
+              alt=""
+              width={144}
+              height={28}
+              priority
+              className="h-5"
+              style={{ width: "auto" }}
+            />
           </Link>
 
           {/* Desktop nav + CTA — hidden below md */}
