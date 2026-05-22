@@ -56,7 +56,7 @@ describe("case-studies content layer", () => {
   it("getCaseStudyBySlug resolves 'hello-dojo'", () => {
     const cs = getCaseStudyBySlug("hello-dojo");
     expect(cs).toBeDefined();
-    expect(cs?.frontmatter.title).toBe("Hello Dojo");
+    expect(cs?.frontmatter.title).toBe("helloDojo — Customer App");
   });
 
   it("getCaseStudyBySlug returns undefined for unknown slug", () => {
