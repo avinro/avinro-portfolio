@@ -61,7 +61,9 @@ Designed and built a production-ready customer app that unified rideshare and mu
   <WorkMetadataCard kind="client">helloDojo (startup)</WorkMetadataCard>
   <WorkMetadataCard kind="platform">iOS (React Native / React)</WorkMetadataCard>
   <WorkMetadataCard kind="team">1 designer (me), 1 CTO (backend/infrastructure)</WorkMetadataCard>
-  <WorkMetadataCard kind="scope">Product discovery, UX architecture, design system, frontend implementation</WorkMetadataCard>
+  <WorkMetadataCard kind="scope">
+    Product discovery, UX architecture, design system, frontend implementation
+  </WorkMetadataCard>
   <WorkMetadataCard kind="status">TestFlight (private beta)</WorkMetadataCard>
 </WorkMetadataGrid>
 
@@ -140,24 +142,24 @@ The core product challenge was designing a multi-modal experience where users co
 
 ### Role & Responsibilities
 
-I led the full product definition and execution of the helloDojo Customer App, owning 
-**product discovery**, 
-**UX architecture**, 
-**interaction design**, 
-**design systems**, and 
-**frontend implementation**. 
+I led the full product definition and execution of the helloDojo Customer App, owning
+**product discovery**,
+**UX architecture**,
+**interaction design**,
+**design systems**, and
+**frontend implementation**.
 As the sole designer, I worked directly with the CTO to translate business and product intent into scalable technical requirements, while managing the entire design-to-code workflow through AI-assisted frontend development.
 
-My work included designing the complete multi-service experience across rideshare, restaurants, yachts, beachclubs, nightlife, and the calendar/event system, while defining how users moved between 
-**Voice Mode**, 
-**Chat Mode**, and 
-**traditional UI flows** depending on context. 
+My work included designing the complete multi-service experience across rideshare, restaurants, yachts, beachclubs, nightlife, and the calendar/event system, while defining how users moved between
+**Voice Mode**,
+**Chat Mode**, and
+**traditional UI flows** depending on context.
 I also designed the core event connection logic that intelligently linked bookings together, suggested rides between destinations, and transformed the calendar into a contextual planning system rather than a static schedule.
 
-On the implementation side, I created the Customer App design system, including components, tokens, responsive behaviors, and interaction patterns tailored specifically for the app experience. 
-I then built the entire frontend in 
-**React** using AI-assisted workflows with 
-**Cursor** and 
+On the implementation side, I created the Customer App design system, including components, tokens, responsive behaviors, and interaction patterns tailored specifically for the app experience.
+I then built the entire frontend in
+**React** using AI-assisted workflows with
+**Cursor** and
 **Figma MCP**, ensuring visual consistency, interaction quality, and alignment between product design and production code across all interaction modes.
 
 <Figure
@@ -249,16 +251,16 @@ The initial instinct was voice-first. But designing for Ibiza's context—clubs,
 
 ## Key decisions
 
-| Decision | Why it mattered | Trade-off |
-|---|---|---|
-| **Three interaction modes (Voice, Chat, UI Flow)** | Users in loud clubs can't use voice. Users with hearing loss need alternatives. Users who want to browse all options need UI. Supporting all three modes kept the app usable across contexts while preserving the agent-first positioning. | Increased complexity: three distinct flows, three visual treatments, three state machines. More edge cases. More testing needed. |
-| **Tool calls as UI cards in Voice/Chat modes** | Pure voice without visual options creates ambiguity ("Did the system understand me?"). Showing restaurants, pricing, availability as cards while maintaining conversation flow gave users confidence and control. | Risk of splitting attention between voice/text and UI. Required careful visual hierarchy to keep Dojo and conversation primary. |
-| **Connected event logic—automatically suggest rides between bookings** | Users booking dinner then nightlife needed rides between venues. Rather than requiring two separate ride requests, the system detected the pattern and suggested "Your next reservation" as a destination. Made the app feel intelligent. | Complex product logic that required tight CTO coordination. Had to be defined upfront; changing it mid-build would break everything. |
-| **Calendar as the organizational model, not service categories** | Instead of "Rideshare" tab, "Restaurants" tab, "Yachts" tab (like Uber, Resy, separate apps), all bookings lived in one calendar. Events were events. Rides connected events. This unified the experience. | Lost some service-specific context. A restaurant booking and a yacht booking look similar, which can confuse new users. Required clear labeling. |
-| **Real-time map for rideshare, full-screen with sheet below** | Users needed to see driver location, distance, ETA. Full-screen map gave this data prominence. Sheet (collapsible) showed booking details, communication options, extras without hiding the map. | Map takes significant screen real estate. On smaller phones, hard to see details. Required careful responsive design. |
-| **Pill component on home—always shows next event** | Users needed quick context: "What's my next plan?" Pill showed upcoming reservation (time, venue, location). When a ride was in progress, pill switched to ride status. Kept home screen focused. | If user had many events, pill only showed the immediate next one. Users who wanted to see all events had to go to calendar. Trade-off: focus vs. full visibility. |
-| **Chat Mode with persistent input + scrollable history** | Users who preferred typing over voice needed a natural chat experience. Text input always visible at bottom. History scrollable. Option cards rendered inline below Dojo's messages. | Persistent chat input takes space. On small phones, less room for conversation history. |
-| **UI Flow as traditional stepping (like Uber/Resy, not agent-driven)** | Some users wanted to browse all restaurants before booking, not be guided by Dojo. UI Flow provided this: select service → enter details → see all options with filters → book. Familiar mental model. | UI Flow and Voice/Chat Mode feel visually different (intentional) but it's a mode switch, not a seamless transition. Users have to explicitly choose which mode. |
+| Decision                                                               | Why it mattered                                                                                                                                                                                                                            | Trade-off                                                                                                                                                         |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Three interaction modes (Voice, Chat, UI Flow)**                     | Users in loud clubs can't use voice. Users with hearing loss need alternatives. Users who want to browse all options need UI. Supporting all three modes kept the app usable across contexts while preserving the agent-first positioning. | Increased complexity: three distinct flows, three visual treatments, three state machines. More edge cases. More testing needed.                                  |
+| **Tool calls as UI cards in Voice/Chat modes**                         | Pure voice without visual options creates ambiguity ("Did the system understand me?"). Showing restaurants, pricing, availability as cards while maintaining conversation flow gave users confidence and control.                          | Risk of splitting attention between voice/text and UI. Required careful visual hierarchy to keep Dojo and conversation primary.                                   |
+| **Connected event logic—automatically suggest rides between bookings** | Users booking dinner then nightlife needed rides between venues. Rather than requiring two separate ride requests, the system detected the pattern and suggested "Your next reservation" as a destination. Made the app feel intelligent.  | Complex product logic that required tight CTO coordination. Had to be defined upfront; changing it mid-build would break everything.                              |
+| **Calendar as the organizational model, not service categories**       | Instead of "Rideshare" tab, "Restaurants" tab, "Yachts" tab (like Uber, Resy, separate apps), all bookings lived in one calendar. Events were events. Rides connected events. This unified the experience.                                 | Lost some service-specific context. A restaurant booking and a yacht booking look similar, which can confuse new users. Required clear labeling.                  |
+| **Real-time map for rideshare, full-screen with sheet below**          | Users needed to see driver location, distance, ETA. Full-screen map gave this data prominence. Sheet (collapsible) showed booking details, communication options, extras without hiding the map.                                           | Map takes significant screen real estate. On smaller phones, hard to see details. Required careful responsive design.                                             |
+| **Pill component on home—always shows next event**                     | Users needed quick context: "What's my next plan?" Pill showed upcoming reservation (time, venue, location). When a ride was in progress, pill switched to ride status. Kept home screen focused.                                          | If user had many events, pill only showed the immediate next one. Users who wanted to see all events had to go to calendar. Trade-off: focus vs. full visibility. |
+| **Chat Mode with persistent input + scrollable history**               | Users who preferred typing over voice needed a natural chat experience. Text input always visible at bottom. History scrollable. Option cards rendered inline below Dojo's messages.                                                       | Persistent chat input takes space. On small phones, less room for conversation history.                                                                           |
+| **UI Flow as traditional stepping (like Uber/Resy, not agent-driven)** | Some users wanted to browse all restaurants before booking, not be guided by Dojo. UI Flow provided this: select service → enter details → see all options with filters → book. Familiar mental model.                                     | UI Flow and Voice/Chat Mode feel visually different (intentional) but it's a mode switch, not a seamless transition. Users have to explicitly choose which mode.  |
 
 ## Exploration
 
@@ -274,7 +276,11 @@ Early in the project, we considered two directions: a traditional app modeled af
 
 The Customer App had four interconnected systems: rideshare, experience booking, calendar/event logic, and interaction modes. The core insight was identifying what was universal (party size, date, time, availability, confirmation) and what was service-specific (location for rideshare, menu preferences for dining, guest count for yachts, etc.).
 
-<BranchTree icon="smartphone" label="Customer App" hint="One booking engine, four systems, three modes">
+<BranchTree
+  icon="smartphone"
+  label="Customer App"
+  hint="One booking engine, four systems, three modes"
+>
   <Branch title="Rideshare system" tone="accent">
     <FlowItem icon="car" label="User requests a taxi via Voice/Chat/UI" />
     <FlowItem icon="map-pin" label="System shows available drivers in real-time on map" />
@@ -289,7 +295,10 @@ The Customer App had four interconnected systems: rideshare, experience booking,
   </Branch>
   <Branch title="Calendar / event system" tone="accent">
     <FlowItem icon="calendar" label="All bookings (rides + experiences) appear as events" />
-    <FlowItem icon="alert-triangle" label="System detects consecutive events at different locations" />
+    <FlowItem
+      icon="alert-triangle"
+      label="System detects consecutive events at different locations"
+    />
     <FlowItem icon="bell" label="Automatically suggests rides to connect them" />
     <FlowItem icon="layout-grid" label="Merges cards into Connected variant when ride booked" />
   </Branch>
@@ -325,43 +334,113 @@ I designed a **state machine** that mapped Voice Mode interactions to approximat
 
 **Triggers** in the codebase fired state transitions: user presses "Hold to Talk" → Listening state, speech-to-text processes → transition to Idle, backend returns options → Talking state, user taps selection → Confirming state. Dojo wasn't animated on a timer; Dojo responded to actual events. This made Voice Mode real conversation, not a system talking at you.
 
-<div 
-  className="rounded-xl overflow-hidden" 
-  style={{ 
-    display: 'grid', 
-    gap: '0', 
-    width: '100%'
+<div
+  className="overflow-hidden rounded-xl"
+  style={{
+    display: "grid",
+    gap: "0",
+    width: "100%",
   }}
   data-mascot-grid="true"
 >
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="01 - Idle">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="01 - Idle"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/01-Idle.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="02 - Talk">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="02 - Talk"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/02-talk.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="03 - Listen">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="03 - Listen"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/03-listen.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="04 - Asking">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="04 - Asking"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/04-asking.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="05 - Showing">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="05 - Showing"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/05-showing.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="06 - Idle Longer">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="06 - Idle Longer"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/06-idle-longer.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="07 - Super Happy">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="07 - Super Happy"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/07-super-happy.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="08 - Success">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="08 - Success"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/08-success.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="09 - Thinking">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="09 - Thinking"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/09-thinking.mp4" type="video/mp4" />
   </video>
-  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="10 - Disco">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="10 - Disco"
+  >
     <source src="/case-studies/hello-dojo/images/mascot/10-disco.mp4" type="video/mp4" />
   </video>
 </div>
@@ -405,7 +484,6 @@ User is presented with service categories: Get a Ride, Reserve Restaurant, Book 
   placeholderLabel="UI Flow — elevated treatment, stepped booking"
 />
 
-
 ### Calendar with Connected Events
 
 The calendar was the organizational spine of the app. All bookings (rides and experiences) appeared as events in a timeline.
@@ -448,9 +526,7 @@ From an engineering perspective, the system was structured to support a tight **
 
 Production considerations focused heavily on **real-time performance**, **network resilience**, **cross-mode consistency**, and **accessibility**. The app needed to handle live location updates, smooth transitions between conversational states, scalable event connection logic, and fallback behaviors when real-time systems failed. At the same time, all interaction modes needed to remain visually coherent across light and dark themes while preserving accessibility standards, touch target sizing, and clear visual feedback in fast-moving nightlife environments.
 
-<Figure
-  placeholderLabel="Customer App design system — custom components on shared tokens"
-/>
+<Figure placeholderLabel="Customer App design system — custom components on shared tokens" />
 
 ## Frontend / implementation layer
 
@@ -458,9 +534,7 @@ The Customer App was built in **React Native** using an **AI-assisted workflow**
 
 The tech stack included **React Native** with **TypeScript**, **Tailwind CSS** (via **NativeWind**), **TanStack Query**, **Zustand**, **react-native-maps**, **Stripe React Native**, **react-native-voice**, and **WebSockets**. This ensured **consistency** and **maintainability** across iOS.
 
-<Figure
-  placeholderLabel="Tech stack and architecture overview"
-/>
+<Figure placeholderLabel="Tech stack and architecture overview" />
 
 Product logic flowed through **three state machines**: **Voice Mode** (listen → process NLP → respond + show option cards → confirm → map/payment), **Chat Mode** (type → respond → option cards → confirm → transition), and **UI Flow** (select service → enter details → browse/filter → confirm → payment). **Connected event detection** automatically suggested rides between consecutive bookings and **merged event cards**. **Real-time map updates** refreshed driver position every 5 seconds via **WebSocket**, with smooth animations and fallback polling.
 
@@ -468,9 +542,7 @@ The **design-to-code bridge** used **Figma MCP integration**: AI read component 
 
 **Quality control** caught regressions in staging. **Voice Mode testing** verified speech-to-text accuracy and fallback UI. **Real-time map testing** confirmed 5-second updates without lag and network resilience. **Connected event logic testing** verified booking detection, ride suggestions, and card merging. **Component regression prevention** kept UI consistent across all three modes.
 
-<Figure
-  placeholderLabel="Frontend implementation and component testing results"
-/>
+<Figure placeholderLabel="Frontend implementation and component testing results" />
 
 ## Collaboration
 
