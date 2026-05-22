@@ -98,6 +98,8 @@ But this raised a product challenge: If voice interaction is the differentiator,
 The Customer App had to solve all of that.
 
 <Figure
+  src="/case-studies/hello-dojo/images/context.jpg"
+  alt="Ibiza's fragmented hospitality booking ecosystem"
   placeholderLabel="Ibiza's fragmented hospitality booking ecosystem"
 />
 
@@ -159,6 +161,8 @@ I then built the entire frontend in
 **Figma MCP**, ensuring visual consistency, interaction quality, and alignment between product design and production code across all interaction modes.
 
 <Figure
+  src="/case-studies/hello-dojo/images/role-responsibilities.jpg"
+  alt="Sole designer — product discovery to frontend implementation"
   placeholderLabel="Sole designer — product discovery to frontend implementation"
 />
 
@@ -260,38 +264,11 @@ The initial instinct was voice-first. But designing for Ibiza's context—clubs,
 
 Early in the project, we considered two directions: a traditional app modeled after Uber/Resy, or an agent-focused experience with voice as primary. The traditional approach—separate tabs for Rideshare, Restaurants, Yachts, Beachclubs, Nightlife; familiar mental models; proven patterns—was straightforward to build and would have felt familiar to users. But it wouldn't differentiate helloDojo from competitors. It would be just another app install in a crowded space. The agent-focused approach—Dojo as the primary interface, voice-first interaction, tool calls rendered as UI options, three modes (Voice, Chat, UI Flow) unified under one interaction paradigm—was riskier. Voice-only wouldn't work in loud clubs; we'd need fallbacks. Multi-mode meant three distinct UX flows and more complexity. But it offered something unique: a premium concierge experience that actually solved Ibiza's problem (one app, unified booking, intelligent connection of events). We chose the agent-focused direction because differentiation mattered more than simplicity. Users wouldn't install yet another Uber clone. But they might install an app that feels like having a personal concierge in their pocket, especially one that understands the particularity of Ibiza's nightlife (loud, fast-moving, plan-heavy evenings). The three-mode design was the answer to the "but what about loud clubs?" objection: voice is primary, chat is the fallback, UI Flow is the alternative for browsers. All three served the agent model; none felt like a degradation.
 
-<FlowSplit>
-  <FlowColumn
-    title="Option A — Uber-style interface"
-    subtitle="Map-first, tap-to-request, AI layered on top"
-    tone="negative"
-    badgeLabel="Discarded"
-  >
-    <FlowItem icon="map" label="Map remains primary" />
-    <FlowItem icon="smartphone" label="Tap to request" />
-    <FlowItem icon="bot" label="AI assists via NLP" />
-    <FlowItem
-      icon="alert-triangle"
-      label="Zero differentiation"
-      hint="Ignores Ibiza's environment"
-    />
-  </FlowColumn>
-  <FlowColumn
-    title="Option B — Agentic, three modes"
-    subtitle="Dojo as primary across Voice / Chat / UI"
-    tone="positive"
-    badgeLabel="Chosen"
-  >
-    <FlowItem icon="mic" label="Voice — premium hands-free" />
-    <FlowItem icon="message-square" label="Chat — accessible fallback" />
-    <FlowItem icon="layout-grid" label="UI Flow — structured browse" />
-    <FlowItem
-      icon="check-circle-2"
-      label="One Dojo, one booking engine"
-      hint="Three doors, same room"
-    />
-  </FlowColumn>
-</FlowSplit>
+<Figure
+  src="/case-studies/hello-dojo/images/exploration.jpg"
+  alt="Exploration — Option A vs Option B"
+  placeholderLabel="Exploration — Option A vs Option B"
+/>
 
 ## UX architecture
 
@@ -340,6 +317,66 @@ Once a driver is assigned, the app transitions to a real-time map showing driver
   placeholderLabel="Voice Mode — Dojo avatar + hold-to-talk + option cards"
 />
 
+### The Mascot
+
+The CEO's brief was simple: **"Dojo needs to feel like your pal."** This shifted the design perspective. Dojo wasn't just an avatar—it was the personality layer of Voice Mode, the visual embodiment of the agent.
+
+I designed a **state machine** that mapped Voice Mode interactions to approximately 10 distinct visual states. Each state signaled what the system was doing: listening, processing, responding, displaying options, confirming selections, handling errors. I worked with a **Rive animator** to translate this logic into interactive animations. Dojo expressed state through **eye movement and body color shifts**—no complex expressions, just clear visual feedback.
+
+**Triggers** in the codebase fired state transitions: user presses "Hold to Talk" → Listening state, speech-to-text processes → transition to Idle, backend returns options → Talking state, user taps selection → Confirming state. Dojo wasn't animated on a timer; Dojo responded to actual events. This made Voice Mode real conversation, not a system talking at you.
+
+<div 
+  className="rounded-xl overflow-hidden" 
+  style={{ 
+    display: 'grid', 
+    gap: '0', 
+    width: '100%'
+  }}
+  data-mascot-grid="true"
+>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="01 - Idle">
+    <source src="/case-studies/hello-dojo/images/mascot/01-Idle.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="02 - Talk">
+    <source src="/case-studies/hello-dojo/images/mascot/02-talk.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="03 - Listen">
+    <source src="/case-studies/hello-dojo/images/mascot/03-listen.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="04 - Asking">
+    <source src="/case-studies/hello-dojo/images/mascot/04-asking.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="05 - Showing">
+    <source src="/case-studies/hello-dojo/images/mascot/05-showing.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="06 - Idle Longer">
+    <source src="/case-studies/hello-dojo/images/mascot/06-idle-longer.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="07 - Super Happy">
+    <source src="/case-studies/hello-dojo/images/mascot/07-super-happy.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="08 - Success">
+    <source src="/case-studies/hello-dojo/images/mascot/08-success.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="09 - Thinking">
+    <source src="/case-studies/hello-dojo/images/mascot/09-thinking.mp4" type="video/mp4" />
+  </video>
+  <video autoPlay muted loop playsInline style={{ aspectRatio: '1', width: '100%' }} title="10 - Disco">
+    <source src="/case-studies/hello-dojo/images/mascot/10-disco.mp4" type="video/mp4" />
+  </video>
+</div>
+
+<style>{`
+  [data-mascot-grid="true"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    [data-mascot-grid="true"] {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+`}</style>
+
 ### Chat Mode: Conversational without voice
 
 Chat Mode is straightforward. User taps a chat input at the bottom of the home screen and types. Dojo responds in text. Below Dojo's message, option cards appear (drivers, restaurants, venues, pricing).
@@ -349,6 +386,8 @@ User can tap cards or type follow-ups ("More expensive options," "Closer to my l
 For rideshare, once a driver is assigned, the app transitions to the same map view as Voice Mode. For experience bookings, confirmation and payment are handled via standard form flows (date, time, party size, payment).
 
 <Figure
+  src="/case-studies/hello-dojo/images/chat-mode.jpg"
+  alt="Chat Mode — conversational text + inline option cards"
   placeholderLabel="Chat Mode — conversational text + inline option cards"
 />
 
@@ -454,6 +493,8 @@ One of the most impactful outcomes was the implementation of the **connected eve
 The project also established a strong **frontend and design system foundation** for future scaling. The Customer App introduced reusable components, shared tokens, responsive behaviors, real-time interaction patterns, and AI-assisted development workflows that enabled consistent UX across all interaction modes. By unifying five distinct service categories under a single product logic and conversational paradigm, the app demonstrated how complex operational systems could feel simple, connected, and context-aware for end users.
 
 <Figure
+  src="/case-studies/hello-dojo/images/results-impact.jpg"
+  alt="helloDojo Customer App — TestFlight beta with three interaction modes live"
   placeholderLabel="helloDojo Customer App — TestFlight beta with three interaction modes live"
 />
 
