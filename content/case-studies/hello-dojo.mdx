@@ -486,13 +486,9 @@ User is presented with service categories: Get a Ride, Reserve Restaurant, Book 
 
 ### Calendar with Connected Events
 
-The calendar was the organizational spine of the app. All bookings (rides and experiences) appeared as events in a timeline.
+The calendar acted as the **organizational backbone** of the Customer App, unifying rides and experience bookings into a single timeline-based system. Its core innovation was the **connected event logic**, which detected consecutive bookings across different locations and intelligently suggested rides between them based on timing and destination context.
 
-The core innovation was **connected events logic.** The system detected when a user had consecutive bookings at different locations and automatically:
-
-1. **Suggested a ride:** When viewing a booking, the app showed "Book a ride to your next reservation" if another booking existed within a logical timeframe.
-2. **Calculated optimal pickup/dropoff:** The system used the previous booking's end location as the ride's pickup and the next booking's location as the dropoff.
-3. **Merged event cards:** Once a ride was booked between two events, the calendar displayed all three cards (event A + ride + event B) as a visual unit. The ride card acted as a visual connector.
+When a logical connection existed, the system automatically calculated optimal pickup and dropoff points using the previous and upcoming reservations, then surfaced ride suggestions directly within the booking flow. Once confirmed, the calendar visually grouped the related reservations and transportation into a single connected experience, making the app feel context-aware rather than a collection of isolated transactions.
 
 <Figure
   src="/case-studies/hello-dojo/images/calendar-conected.jpg"
@@ -518,31 +514,29 @@ The map updated in real-time: driver position, ETA, distance all refreshed every
 
 ## Design System / Design Engineering
 
-The Customer App used a dedicated design system built on top of the broader **helloDojo design system**, combining **shared components** with app-specific interaction patterns tailored to rideshare, nightlife, booking flows, maps, and conversational interfaces. Shared foundations like buttons, cards, inputs, sheets, and modals inherited global tokens and behaviors from the main system, while the Customer App introduced custom interaction layers designed specifically for the multi-modal experience across **Voice Mode**, **Chat Mode**, and **UI Flow**.
+The Customer App used a dedicated design system built on top of the broader **helloDojo design system**, combining shared foundations with app-specific interaction patterns tailored to rideshare, nightlife, booking flows, maps, and conversational experiences. The system defined consistent **responsive behaviors**, interaction states, motion patterns, accessibility rules, and transition logic to ensure all three interaction modes — **Voice Mode**, **Chat Mode**, and **UI Flow** — felt cohesive rather than fragmented.
 
-The system included fully defined **responsive behaviors**, interaction states, motion patterns, spacing rules, typography scales, accessibility requirements, and transition logic to ensure consistency across mobile contexts and real-time experiences. Components were designed to support dynamic states like live ride tracking, conversational interactions, connected bookings, and adaptive layouts without fragmenting the experience between modes.
+From an engineering perspective, the system was designed around a tight **design-to-code workflow**. Component specifications in Figma included prop documentation, behavioral definitions, state combinations, and usage rules, while a custom **Figma MCP integration** allowed AI coding assistants to read component structures, constraints, and design tokens directly from the source files. Complex behaviors such as real-time updates, animated transitions, fallback states, and connected booking logic were documented with implementation-level detail to ensure frontend behavior matched the intended UX.
 
-From an engineering perspective, the system was structured to support a tight **design-to-code workflow**. Component specifications in Figma included prop documentation, behavior definitions, state combinations, and usage rules, while a custom **Figma MCP integration** allowed AI coding assistants to directly read component structures, constraints, and design tokens. Complex behaviors such as real-time updates, animated transitions, network fallback states, and responsive map interactions were documented with implementation-level detail to ensure frontend behavior matched the intended UX.
+<Figure
+  src="/case-studies/hello-dojo/images/design-system.jpg"
+  alt="Customer App design system — custom components on shared tokens"
+  placeholderLabel="Customer App design system — custom components on shared tokens"
+/>
 
-Production considerations focused heavily on **real-time performance**, **network resilience**, **cross-mode consistency**, and **accessibility**. The app needed to handle live location updates, smooth transitions between conversational states, scalable event connection logic, and fallback behaviors when real-time systems failed. At the same time, all interaction modes needed to remain visually coherent across light and dark themes while preserving accessibility standards, touch target sizing, and clear visual feedback in fast-moving nightlife environments.
+## Frontend / Implementation Layer
 
-<Figure placeholderLabel="Customer App design system — custom components on shared tokens" />
+The Customer App was built in **React Native** using an **AI-assisted development workflow** that combined Claude Opus for planning, GPT for code review, and Sonnet/Codex for implementation support. The technical stack included **TypeScript**, **NativeWind**, **TanStack Query**, **Zustand**, **WebSockets**, and integrations for maps, voice interaction, and payments, creating a scalable foundation for real-time and multi-modal experiences across iOS.
 
-## Frontend / implementation layer
+The product architecture revolved around three connected interaction systems: **Voice Mode**, **Chat Mode**, and **traditional UI flows**, each operating through dedicated state logic while remaining part of the same unified experience. Features like connected event detection, ride suggestions between reservations, and real-time map updates relied on synchronized frontend state and live backend communication to keep the experience context-aware and operationally reliable.
 
-The Customer App was built in **React Native** using an **AI-assisted workflow**. I wrote **production code** using **Claude Opus** for planning, **GPT** for code review, and **Sonnet/Codex** for component implementation. For complex logic—**Voice Mode**, **connected events**, **real-time maps**—I clarified product intent before code generation.
+The design-to-code workflow depended heavily on **Figma MCP integration**, allowing AI tooling to generate frontend code directly from structured design specifications while preserving token consistency, interaction behaviors, and responsive layouts. Quality control focused on regression prevention, real-time performance, voice interaction reliability, connected event logic validation, and maintaining consistent UX behavior across all three interaction modes.
 
-The tech stack included **React Native** with **TypeScript**, **Tailwind CSS** (via **NativeWind**), **TanStack Query**, **Zustand**, **react-native-maps**, **Stripe React Native**, **react-native-voice**, and **WebSockets**. This ensured **consistency** and **maintainability** across iOS.
-
-<Figure placeholderLabel="Tech stack and architecture overview" />
-
-Product logic flowed through **three state machines**: **Voice Mode** (listen → process NLP → respond + show option cards → confirm → map/payment), **Chat Mode** (type → respond → option cards → confirm → transition), and **UI Flow** (select service → enter details → browse/filter → confirm → payment). **Connected event detection** automatically suggested rides between consecutive bookings and **merged event cards**. **Real-time map updates** refreshed driver position every 5 seconds via **WebSocket**, with smooth animations and fallback polling.
-
-The **design-to-code bridge** used **Figma MCP integration**: AI read component specs, tokens, and constraints, then generated code adhering to **design system rules**. Every component documented props, states, and animation timings. **Token consistency** was managed via Tailwind utilities; **responsive behavior** adapted across devices (pill component, map scaling).
-
-**Quality control** caught regressions in staging. **Voice Mode testing** verified speech-to-text accuracy and fallback UI. **Real-time map testing** confirmed 5-second updates without lag and network resilience. **Connected event logic testing** verified booking detection, ride suggestions, and card merging. **Component regression prevention** kept UI consistent across all three modes.
-
-<Figure placeholderLabel="Frontend implementation and component testing results" />
+<Figure
+  src="/case-studies/hello-dojo/images/front-implementation.jpg"
+  alt="Frontend implementation and component testing results"
+  placeholderLabel="Frontend implementation and component testing results"
+/>
 
 ## Collaboration
 
