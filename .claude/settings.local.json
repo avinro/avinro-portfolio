@@ -15,7 +15,8 @@
       "Bash(timeout 3 curl -s -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"test\"}]}')",
       "Bash(curl *)",
       "Bash(python3)",
-      "Bash(pkill -f \"npm run dev\")"
+      "Bash(pkill -f \"npm run dev\")",
+      "Bash(kill 15055)"
     ]
   }
 }

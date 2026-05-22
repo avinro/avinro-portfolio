@@ -50,7 +50,7 @@ const mockItems: SelectedWorkItem[] = [
   {
     kind: "case-study",
     slug: "hello-dojo",
-    title: "Hello Dojo",
+    title: "helloDojo — Customer App",
     coverImage: "/covers/hello-dojo.jpg",
     order: 1,
   },
@@ -90,7 +90,7 @@ describe("FlowingWorkMenu", () => {
 
   it("renders each item title in the markup", () => {
     const html = renderToStaticMarkup(<FlowingWorkMenu items={mockItems} />);
-    expect(html).toContain("Hello Dojo");
+    expect(html).toContain("helloDojo — Customer App");
     expect(html).toContain("DomainPlug");
   });
 

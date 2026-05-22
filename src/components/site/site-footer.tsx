@@ -100,7 +100,14 @@ export function SiteFooter() {
             aria-label="Avinro — home"
             className="focus-ring-invert w-fit rounded-sm transition-opacity hover:opacity-70"
           >
-            <Image src="/logo.png" alt="" width={62} height={12} className="h-3 w-auto invert" />
+            <Image
+              src="/logo.png"
+              alt=""
+              width={62}
+              height={12}
+              className="h-3 invert"
+              style={{ width: "auto" }}
+            />
           </Link>
 
           {/* Nav + social + copyright row */}

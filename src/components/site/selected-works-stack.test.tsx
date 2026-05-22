@@ -38,9 +38,9 @@ vi.mock("gsap/ScrollTrigger", () => ({
 const mockCases: CaseStudy[] = [
   {
     frontmatter: {
-      title: "Hello Dojo",
+      title: "helloDojo — Customer App",
       slug: "hello-dojo",
-      client: "Hello Dojo",
+      client: "helloDojo",
       role: "Product Design Engineer Lead",
       year: 2023,
       coverage: ["research", "interaction"],
@@ -89,7 +89,7 @@ describe("SelectedWorksStack", () => {
 
   it("renders all case study titles", () => {
     const html = renderToStaticMarkup(<SelectedWorksStack cases={mockCases} />);
-    expect(html).toContain("Hello Dojo");
+    expect(html).toContain("helloDojo — Customer App");
     expect(html).toContain("UMA");
   });
 
