@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { homeContent } from "@/lib/content/home";
 import { SOCIAL_LINKS } from "@/lib/seo/site";
-import { CalendlyModal } from "@/components/site/calendly-modal";
+import { ContactSheet } from "@/components/site/contact-sheet";
 import { BehanceIcon } from "@/components/site/icons/behance-icon";
 import { GithubIcon } from "@/components/site/icons/github-icon";
 import { LinkedinIcon } from "@/components/site/icons/linkedin-icon";
@@ -73,7 +73,7 @@ export function SiteFooter() {
             {finalCta.heading}
           </h3>
 
-          <CalendlyModal ctaPosition="footer_link">
+          <ContactSheet ctaPosition="footer_link">
             <button
               type="button"
               data-cta-label={finalCta.linkLabel}
@@ -90,7 +90,7 @@ export function SiteFooter() {
                 />
               </span>
             </button>
-          </CalendlyModal>
+          </ContactSheet>
         </section>
 
         <div className="flex flex-col gap-8">

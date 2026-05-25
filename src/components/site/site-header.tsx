@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
-import { CalendlyModal } from "@/components/site/calendly-modal";
+import { ContactSheet } from "@/components/site/contact-sheet";
 import { useLenis } from "@/components/site/lenis-provider";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { isNavSectionActive } from "@/lib/navigation/nav-active";
@@ -220,7 +220,7 @@ export function SiteHeader() {
                 </SiteTextLink>
               );
             })}
-            <CalendlyModal ctaPosition="header">
+            <ContactSheet ctaPosition="header">
               <Button
                 size="default"
                 className="font-mono text-xs tracking-wider uppercase"
@@ -230,7 +230,7 @@ export function SiteHeader() {
               >
                 {primaryCta.label}
               </Button>
-            </CalendlyModal>
+            </ContactSheet>
           </nav>
 
           {/* Hamburger / close button — mobile only */}
@@ -327,7 +327,7 @@ export function SiteHeader() {
             )}
             style={isMenuOpen ? { animationDelay: `${String(280 + 3 * 60)}ms` } : undefined}
           >
-            <CalendlyModal ctaPosition="mobile_overlay">
+            <ContactSheet ctaPosition="mobile_overlay">
               <Button
                 size="lg"
                 className="min-h-[44px] w-full"
@@ -341,7 +341,7 @@ export function SiteHeader() {
               >
                 {primaryCta.label}
               </Button>
-            </CalendlyModal>
+            </ContactSheet>
           </div>
         </div>
       </div>

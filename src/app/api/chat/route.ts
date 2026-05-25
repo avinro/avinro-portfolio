@@ -68,7 +68,7 @@ export async function POST(req: Request): Promise<Response> {
     const google = createGoogleGenerativeAI({ apiKey });
 
     const result = streamText({
-      model: google("gemini-2.5-flash-lite"),
+      model: google("gemini-3.1-flash-lite"),
       system: buildSystemPrompt(),
       messages: safeMessages,
     });
