@@ -11,7 +11,7 @@ import {
   useMemo,
 } from "react";
 import DOMPurify from "dompurify";
-import { MessageCircleQuestion, ArrowUp, Square, AlertCircle } from "lucide-react";
+import { BotMessageSquare, ArrowUp, Square, AlertCircle } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/site/lenis-provider";
 import { track } from "@/lib/analytics/events";
@@ -436,28 +437,42 @@ export function AiChat() {
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetTrigger asChild>
-        <button
-          ref={fabRef}
-          className={cn(
-            "fixed z-[45]",
-            "right-4 bottom-8",
-            "md:right-6",
-            "bg-primary text-primary-foreground",
-            "flex size-14 items-center justify-center rounded-full",
-            "transition-all duration-200",
-            "hover:scale-110 hover:shadow-lg motion-reduce:hover:scale-100 motion-reduce:hover:shadow-md",
-            "active:scale-95 motion-reduce:active:scale-100",
-            "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-            "touch-manipulation select-none",
-          )}
-          aria-haspopup="dialog"
-          aria-label="Chat with Vivi about Ary's work"
-          type="button"
-        >
-          <MessageCircleQuestion className="size-6" aria-hidden />
-        </button>
-      </SheetTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SheetTrigger asChild>
+            <button
+              ref={fabRef}
+              className={cn(
+                "fixed z-[45]",
+                "right-4 bottom-8",
+                "md:right-6",
+                "bg-primary text-primary-foreground",
+                "flex size-14 items-center justify-center rounded-full",
+                "transition-all duration-200",
+                "hover:scale-110 hover:shadow-lg motion-reduce:hover:scale-100 motion-reduce:hover:shadow-md",
+                "active:scale-95 motion-reduce:active:scale-100",
+                "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+                "touch-manipulation select-none",
+              )}
+              aria-haspopup="dialog"
+              aria-label="Chat with Vivi about Ary's work"
+              type="button"
+            >
+              {!open && (
+                <span
+                  className="bg-primary/40 pulse-short absolute inset-0 rounded-full motion-reduce:hidden"
+                  aria-hidden
+                />
+              )}
+              <BotMessageSquare className="relative size-6" aria-hidden />
+            </button>
+          </SheetTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={4} align="end" className="max-w-xs">
+          Hi, I&apos;m Vivi, Ary&apos;s assistant. You can ask me anything about their work and
+          experience.
+        </TooltipContent>
+      </Tooltip>
 
       <SheetContent
         variant="chat"

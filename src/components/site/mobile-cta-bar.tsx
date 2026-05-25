@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
-import { CalendlyModal } from "@/components/site/calendly-modal";
+import { ContactSheet } from "@/components/site/contact-sheet";
 import { cn } from "@/lib/utils";
 
 /*
@@ -54,7 +54,7 @@ export function MobileCtaBar() {
         footerVisible && "pointer-events-none translate-y-full opacity-0",
       )}
     >
-      <CalendlyModal ctaPosition="mobile_bar">
+      <ContactSheet ctaPosition="mobile_bar">
         <Button
           className="min-h-[44px] w-full"
           data-cta-label={primaryCta.label}
@@ -63,7 +63,7 @@ export function MobileCtaBar() {
         >
           {primaryCta.label}
         </Button>
-      </CalendlyModal>
+      </ContactSheet>
       {/* Bottom padding below button so the bar doesn't clip content */}
       <div className="h-3" aria-hidden="true" />
     </div>

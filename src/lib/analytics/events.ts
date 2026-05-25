@@ -21,6 +21,7 @@ import { getPosthog } from "./posthog";
 export type CtaPosition =
   | "header"
   | "mobile_bar"
+  | "mobile_overlay"
   | "hero_secondary"
   | "footer_link"
   | "next_case"
@@ -49,6 +50,8 @@ export type AppEvent =
       props: { slug: string; threshold: ScrollThreshold };
     }
   | { name: "calendly_modal_open"; props: { position: string } }
+  | { name: "contact_menu_open"; props: { position: string } }
+  | { name: "contact_email_click"; props: { position: string } }
   | { name: "ai_chat_open"; props: Record<string, never> }
   | { name: "ai_chat_message_sent"; props: { messageCount: number } };
 

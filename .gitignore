@@ -42,6 +42,9 @@ yarn-error.log*
 !.cursor/rules/
 !.cursor/rules/*.mdc
 
+# claude code — ignore local settings
+.claude/settings.local.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

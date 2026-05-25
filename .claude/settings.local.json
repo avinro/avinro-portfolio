@@ -16,7 +16,9 @@
       "Bash(curl *)",
       "Bash(python3)",
       "Bash(pkill -f \"npm run dev\")",
-      "Bash(kill 15055)"
+      "Bash(kill 15055)",
+      "Bash(npx vitest *)",
+      "Bash(npx prettier *)"
     ]
   }
 }

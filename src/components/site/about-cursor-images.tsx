@@ -14,12 +14,12 @@ import { Container } from "@/components/layout/container";
  * Behavior:
  *   The section is tall (300dvh) to give the user scroll runway.
  *   Inside, a sticky viewport-height wrapper keeps the bio text dead-center
- *   while 5 images slide across the screen at different vertical bands
+ *   while 10 images slide across the screen at different vertical bands
  *   and stagger times.
  *
  *   Z-index alternation:
- *     Indices 0, 2, 4 → z-0  (behind text at z-10)
- *     Indices 1, 3    → z-20 (in front of text)
+ *     Even indices  → z-0  (behind text at z-10)
+ *     Odd indices   → z-20 (in front of text)
  *
  *   Each image has a [progressStart, progressEnd] scroll range and an
  *   [xStart → xEnd] translation in viewport-width units so images cross
@@ -54,17 +54,29 @@ interface ImageConfig {
   height: string;
   /** z-index: 0 = behind text (z-10), 20 = in front */
   zIndex: number;
+  /** Hide below md breakpoint — keeps mobile to 7 images */
+  hideOnMobile?: boolean;
 }
 
-// Uniform stagger S=0.10, range W=0.60 → 4S+W=1.0 (perfect fill).
-// All 5 images are on screen simultaneously from progress 0.40 to 0.60.
+// useScroll offset ["start end", "end start"] tracks the full visible life of
+// the section (400dvh = 300dvh section + 100dvh viewport):
+//   0.00–0.25  pre-sticky  (section enters from below)
+//   0.25–0.75  sticky      (section pinned at top)
+//   0.75–1.00  post-sticky (section exits above)
 //
+// 10 images interleaved in two groups of 5 (S=0.07 within each group,
+// offset by 0.035 between groups), span [0.05, 0.97].
+// Range width W=0.62 per image (wider = appears sooner, exits later).
+// ~5 images on screen simultaneously throughout most of the sticky phase.
+//
+// Z-index: odd indices → z-20 (in front of text), even → z-0 (behind).
 // Sizes use min(Nvw, Xpx) so images scale with the viewport on narrow screens
 // (mobile: up to 60vw) while being capped to the original desktop pixel sizes
 // on wide viewports — no JS breakpoint detection needed.
 const IMAGE_CONFIGS: ImageConfig[] = [
+  // --- group A (original 5) ---
   {
-    range: [0.0, 0.6],
+    range: [0.05, 0.67],
     xFrom: 130,
     xTo: -130,
     top: "8%",
@@ -74,7 +86,7 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     zIndex: 0,
   },
   {
-    range: [0.1, 0.7],
+    range: [0.12, 0.74],
     xFrom: -130,
     xTo: 130,
     top: "55%",
@@ -84,7 +96,7 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     zIndex: 20,
   },
   {
-    range: [0.2, 0.8],
+    range: [0.19, 0.81],
     xFrom: 130,
     xTo: -130,
     top: "28%",
@@ -94,7 +106,7 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     zIndex: 0,
   },
   {
-    range: [0.3, 0.9],
+    range: [0.26, 0.88],
     xFrom: -130,
     xTo: 130,
     top: "62%",
@@ -104,7 +116,7 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     zIndex: 20,
   },
   {
-    range: [0.4, 1.0],
+    range: [0.33, 0.95],
     xFrom: 130,
     xTo: -130,
     top: "15%",
@@ -112,6 +124,63 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     width: "min(55vw, 375px)",
     height: "min(47vw, 317px)",
     zIndex: 0,
+  },
+  // --- group B (new 5, interleaved at +0.035 offset from group A) ---
+  // Vertical positions chosen so same-direction images are far apart:
+  //   R→L in use: 8%, 15%, 28%  → group B adds 58%, 82%
+  //   L→R in use: 55%, 62%      → group B adds 5%, 32%, 45%
+  {
+    range: [0.08, 0.7],
+    xFrom: -130,
+    xTo: 130,
+    top: "5%",
+    rotate: "-2deg",
+    width: "min(52vw, 350px)",
+    height: "min(38vw, 250px)",
+    zIndex: 20,
+    hideOnMobile: true,
+  },
+  {
+    range: [0.15, 0.77],
+    xFrom: 130,
+    xTo: -130,
+    top: "58%",
+    rotate: "4deg",
+    width: "min(48vw, 320px)",
+    height: "min(65vw, 440px)",
+    zIndex: 0,
+    hideOnMobile: true,
+  },
+  {
+    range: [0.22, 0.84],
+    xFrom: -130,
+    xTo: 130,
+    top: "32%",
+    rotate: "-5deg",
+    width: "min(56vw, 380px)",
+    height: "min(40vw, 268px)",
+    zIndex: 20,
+    hideOnMobile: true,
+  },
+  {
+    range: [0.29, 0.91],
+    xFrom: 130,
+    xTo: -130,
+    top: "82%",
+    rotate: "2deg",
+    width: "min(46vw, 305px)",
+    height: "min(62vw, 415px)",
+    zIndex: 0,
+  },
+  {
+    range: [0.36, 0.97],
+    xFrom: -130,
+    xTo: 130,
+    top: "45%",
+    rotate: "-6deg",
+    width: "min(58vw, 390px)",
+    height: "min(42vw, 280px)",
+    zIndex: 20,
   },
 ];
 
@@ -145,7 +214,7 @@ function ScrollPanImage({ src, config, scrollYProgress }: ScrollPanImageProps) {
         height: config.height,
         zIndex: config.zIndex,
       }}
-      className="overflow-hidden rounded-lg shadow-xl will-change-transform"
+      className={`overflow-hidden rounded-lg shadow-xl will-change-transform${config.hideOnMobile ? "hidden md:block" : ""}`}
     >
       <Image
         src={src}
@@ -204,6 +273,41 @@ function StaticCollage() {
       height: "min(18%, 317px)",
       rotate: "6deg",
     },
+    {
+      bottom: "4%",
+      left: "38%",
+      width: "min(48%, 350px)",
+      height: "min(19%, 250px)",
+      rotate: "-2deg",
+    },
+    {
+      top: "2%",
+      left: "28%",
+      width: "min(40%, 320px)",
+      height: "min(33%, 440px)",
+      rotate: "4deg",
+    },
+    {
+      top: "35%",
+      right: "8%",
+      width: "min(44%, 380px)",
+      height: "min(21%, 268px)",
+      rotate: "-5deg",
+    },
+    {
+      top: "18%",
+      left: "20%",
+      width: "min(38%, 305px)",
+      height: "min(31%, 415px)",
+      rotate: "2deg",
+    },
+    {
+      bottom: "20%",
+      left: "22%",
+      width: "min(46%, 390px)",
+      height: "min(22%, 280px)",
+      rotate: "-6deg",
+    },
   ];
 
   return (
@@ -211,7 +315,7 @@ function StaticCollage() {
       {homeContent.aboutImages.map((img, i) => (
         <div
           key={img.src}
-          className="absolute overflow-hidden rounded-lg shadow-lg"
+          className={`absolute overflow-hidden rounded-lg shadow-lg${[5, 6, 7].includes(i) ? "hidden md:block" : ""}`}
           style={POSITIONS[i]}
           aria-hidden="true"
         >
@@ -251,7 +355,7 @@ export function AboutCursorImages() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   });
 
   return (

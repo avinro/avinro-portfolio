@@ -161,14 +161,19 @@ export const homeContent: HomeContent = {
     href: "/contact",
   },
   // About section floating images (see IMAGE_CONFIGS in about-cursor-images.tsx).
-  // Order maps to slot index 0–4: 0/2/4 = landscape frames (~1.38 / ~1.18), 1/3 = portrait (~0.73).
-  // Asset mix is 2× 4:3 landscape + 3× 3:4 portrait; slot 4 uses a portrait in a landscape frame (object-cover crops sides).
+  // Indices 0–4 = original group A; indices 5–9 = new group B (placeholders).
+  // Missing files trigger the onError gray-box fallback in the component.
   aboutImages: [
     { src: "/about/lifestyle/01.webp", alt: "" },
     { src: "/about/lifestyle/02.webp", alt: "" },
     { src: "/about/lifestyle/03.webp", alt: "" },
     { src: "/about/lifestyle/04.webp", alt: "" },
     { src: "/about/lifestyle/05.webp", alt: "" },
+    { src: "/about/lifestyle/06.webp", alt: "" },
+    { src: "/about/lifestyle/07.webp", alt: "" },
+    { src: "/about/lifestyle/08.webp", alt: "" },
+    { src: "/about/lifestyle/09.webp", alt: "" },
+    { src: "/about/lifestyle/10.webp", alt: "" },
   ],
 };
 

@@ -418,6 +418,18 @@ html.lenis-smooth {
       box-shadow: 0 0 0 10px rgb(102 255 153 / 0);
     }
   }
+
+  .pulse-short {
+    animation: ping-short 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping-short {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
 }
 
 /* ─── Button shine effect ─────────────────────────────────────────────────────
