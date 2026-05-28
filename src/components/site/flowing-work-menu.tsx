@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { gsap } from "gsap";
 
@@ -36,9 +37,12 @@ function findClosestEdge(
 }
 
 function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boolean }) {
+  const t = useTranslations("workMenu");
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
   const ariaLabel =
-    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
+    item.kind === "work"
+      ? t("viewWork", { title: item.title })
+      : t("viewCaseStudy", { title: item.title });
 
   return (
     <Link
@@ -52,7 +56,7 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
           {item.title}
         </span>
         <span className="text-muted-foreground hidden font-mono text-[10px] tracking-widest uppercase sm:inline">
-          {item.kind === "work" ? "Work" : "Case study"}
+          {item.kind === "work" ? t("work") : t("caseStudy")}
         </span>
       </div>
       <div className="relative ml-auto h-14 max-w-36 min-w-0 flex-1 overflow-hidden rounded-full sm:ml-0 sm:size-14 sm:max-w-none sm:flex-none sm:shrink-0 sm:rounded-md">
@@ -74,9 +78,12 @@ const MARQUEE_SPEED = 15;
 const ENTER_EASE = { duration: 0.6, ease: "expo.out" };
 
 function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProps) {
+  const t = useTranslations("workMenu");
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
   const ariaLabel =
-    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
+    item.kind === "work"
+      ? t("viewWork", { title: item.title })
+      : t("viewCaseStudy", { title: item.title });
 
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -198,7 +205,7 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
           className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase"
           aria-hidden="true"
         >
-          {item.kind === "work" ? "Work" : "Case study"}
+          {item.kind === "work" ? t("work") : t("caseStudy")}
         </span>
       </Link>
       <div
@@ -239,6 +246,7 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
 }
 
 export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
+  const t = useTranslations("workMenu");
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
 
   useEffect(() => {
@@ -261,11 +269,11 @@ export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
   return (
     <section
       data-slot="flowing-work-menu"
-      aria-label="Selected work"
+      aria-label={t("sectionLabel")}
       className="bg-background text-foreground relative h-[calc(var(--item-count)*20vh)] min-h-[60vh] md:h-[calc(var(--item-count)*25vh)]"
       style={{ "--item-count": items.length } as React.CSSProperties}
     >
-      <nav className="flex h-full flex-col" aria-label="Selected work">
+      <nav className="flex h-full flex-col" aria-label={t("sectionLabel")}>
         {items.map((item, i) =>
           isDesktopMotion ? (
             <FlowingWorkItem

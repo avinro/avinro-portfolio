@@ -132,5 +132,3 @@ export const homeContent: HomeContent = {
     { src: "/about/lifestyle/10.webp", alt: "" },
   ],
 };
-
-export const siteMetaDescription = homeContent.hero.headline;

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
 import { SITE_URL, SITE_NAME, OWNER_JOB_TITLE } from "@/lib/seo/site";
 import { SITE_OG_IMAGE, SITE_TWITTER_CARD } from "@/lib/seo/social";
 import { PersonJsonLd } from "@/lib/seo/json-ld";
 import { getPublishedCaseStudies } from "@/lib/content/case-studies";
 import { getPublishedWorks } from "@/lib/content/works";
-import { siteMetaDescription } from "@/lib/content/home";
 import { testimonials } from "@/lib/content/testimonials";
 import { HomeHero } from "@/components/site/home-hero";
 import { WorkDivider } from "@/components/site/work-divider";
@@ -16,29 +17,40 @@ import { TestimonialsCarousel } from "@/components/site/testimonials-carousel";
 
 const HOME_TITLE = `${SITE_NAME} — ${OWNER_JOB_TITLE}`;
 
-export const metadata: Metadata = {
-  title: HOME_TITLE,
-  description: siteMetaDescription,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  const description = t("siteDescription");
+  return {
     title: HOME_TITLE,
-    description: siteMetaDescription,
-    url: SITE_URL,
-    images: [SITE_OG_IMAGE],
-  },
-  twitter: {
-    card: SITE_TWITTER_CARD,
-    title: HOME_TITLE,
-    description: siteMetaDescription,
-    images: [SITE_OG_IMAGE.url],
-  },
-};
+    description,
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: HOME_TITLE,
+      description,
+      url: SITE_URL,
+      images: [SITE_OG_IMAGE],
+    },
+    twitter: {
+      card: SITE_TWITTER_CARD,
+      title: HOME_TITLE,
+      description,
+      images: [SITE_OG_IMAGE.url],
+    },
+  };
+}
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const featured: SelectedWorkItem[] = [
-    ...getPublishedCaseStudies()
+    ...getPublishedCaseStudies(locale)
       .filter((c) => c.frontmatter.featured)
       .map((c) => ({
         kind: "case-study" as const,
@@ -47,7 +59,7 @@ export default function Home() {
         coverImage: c.frontmatter.coverImage,
         order: c.frontmatter.order,
       })),
-    ...getPublishedWorks()
+    ...getPublishedWorks(locale)
       .filter((w) => w.frontmatter.featured)
       .map((w) => ({
         kind: "work" as const,

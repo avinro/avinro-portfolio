@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
+import { Link, usePathname } from "@/i18n/navigation";
 import { homeContent } from "@/lib/content/home";
 import { SOCIAL_LINKS } from "@/lib/seo/site";
 import { ContactSheet } from "@/components/site/contact-sheet";
@@ -15,10 +15,10 @@ import { SiteTextLink } from "@/components/site/site-text-link";
 import { isNavSectionActive } from "@/lib/navigation/nav-active";
 
 const footerLinks = [
-  { label: "Work", href: "/work" },
-  { label: "Case studies", href: "/case-studies" },
-  { label: "About", href: "/about" },
-  { label: "Privacy", href: "/privacy" },
+  { labelKey: "work", href: "/work" },
+  { labelKey: "caseStudies", href: "/case-studies" },
+  { labelKey: "about", href: "/about" },
+  { labelKey: "privacy", href: "/privacy" },
 ] as const;
 
 const socialLinks = [
@@ -28,6 +28,8 @@ const socialLinks = [
 
 export function SiteFooter() {
   const pathname = usePathname();
+  const tNav = useTranslations("nav");
+  const tHome = useTranslations("home");
   const year = new Date().getFullYear();
   const { finalCta } = homeContent;
 
@@ -49,19 +51,19 @@ export function SiteFooter() {
               lineHeight: "0.9",
             }}
           >
-            {finalCta.heading}
+            {tHome("finalCta.heading")}
           </h3>
 
           <ContactSheet ctaPosition="footer_link">
             <button
               type="button"
-              data-cta-label={finalCta.linkLabel}
+              data-cta-label={tHome("finalCta.linkLabel")}
               data-cta-href={finalCta.linkHref}
               data-cta-position="footer_link"
               className="focus-ring-invert group focus-visible:ring-background focus-visible:ring-offset-foreground font-display hover:text-background/90 inline-flex w-fit cursor-pointer text-2xl font-semibold tracking-tight transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none motion-reduce:transition-none sm:text-3xl"
             >
               <span className="relative inline-flex items-center gap-2 pb-0.5">
-                {finalCta.linkLabel}
+                {tHome("finalCta.linkLabel")}
                 <span aria-hidden="true">→</span>
                 <span
                   aria-hidden
@@ -75,7 +77,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-8">
           <Link
             href="/"
-            aria-label="Avinro — home"
+            aria-label={tNav("home")}
             className="focus-ring-invert w-fit rounded-sm transition-opacity hover:opacity-70"
           >
             <Image
@@ -88,7 +90,7 @@ export function SiteFooter() {
             />
           </Link>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <nav aria-label="Footer navigation" className="flex gap-5">
+            <nav aria-label={tNav("footerNavigation")} className="flex gap-5">
               {footerLinks.map((link) => {
                 const active = isNavSectionActive(pathname, link.href);
                 return (
@@ -98,12 +100,12 @@ export function SiteFooter() {
                     variant="footerNav"
                     active={active}
                   >
-                    {link.label}
+                    {tNav(link.labelKey)}
                   </SiteTextLink>
                 );
               })}
             </nav>
-            <div className="flex items-center gap-4" aria-label="Social links">
+            <div className="flex items-center gap-4" aria-label={tNav("socialLinks")}>
               {socialLinks.map(({ label, href, Icon }) => (
                 <a
                   key={label}

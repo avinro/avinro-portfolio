@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
+
+import { Link } from "@/i18n/navigation";
+import { routing, type Locale } from "@/i18n/routing";
 import { getWorkBySlug, getWorkSlugs, getPublishedWorkNeighbors } from "@/lib/content/works";
 import { SITE_URL, SITE_NAME } from "@/lib/seo/site";
 import { mdxOptions } from "@/lib/mdx/options";
@@ -14,16 +17,18 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
 export function generateStaticParams() {
-  return getWorkSlugs().map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    getWorkSlugs(locale).map((slug) => ({ locale, slug })),
+  );
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const work = getWorkBySlug(slug);
+  const { locale, slug } = await params;
+  const work = getWorkBySlug(slug, locale);
   if (!work) return {};
 
   const { frontmatter } = work;
@@ -67,12 +72,11 @@ interface WorkProjectNavLinkProps {
   variant: "previous" | "next";
   title: string;
   slug: string;
+  label: string;
 }
 
-function WorkProjectNavLink({ variant, title, slug }: WorkProjectNavLinkProps) {
+function WorkProjectNavLink({ variant, title, slug, label }: WorkProjectNavLinkProps) {
   const isNext = variant === "next";
-  const kicker = isNext ? "Next project" : "Previous project";
-  const ariaPrefix = isNext ? "Next project" : "Previous project";
   const href = `/work/${slug}`;
   const position = isNext ? "next_work" : "prev_work";
 
@@ -89,10 +93,10 @@ function WorkProjectNavLink({ variant, title, slug }: WorkProjectNavLinkProps) {
 
   return (
     <div>
-      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">{kicker}</p>
+      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">{label}</p>
       <Link
         href={href}
-        aria-label={`${ariaPrefix}: ${title}`}
+        aria-label={`${label}: ${title}`}
         data-cta-label={title}
         data-cta-href={href}
         data-cta-position={position}
@@ -119,6 +123,8 @@ interface WorkProjectAdjacentNavProps {
   prevSlug: string | null;
   nextTitle: string | null;
   nextSlug: string | null;
+  previousLabel: string;
+  nextLabel: string;
 }
 
 function WorkProjectAdjacentNav({
@@ -126,6 +132,8 @@ function WorkProjectAdjacentNav({
   prevSlug,
   nextTitle,
   nextSlug,
+  previousLabel,
+  nextLabel,
 }: WorkProjectAdjacentNavProps) {
   if (!prevSlug && !nextSlug) return null;
 
@@ -142,13 +150,23 @@ function WorkProjectAdjacentNav({
       <div className={layoutClassName}>
         {hasPrev && prevSlug && prevTitle ? (
           <div className="min-w-0">
-            <WorkProjectNavLink variant="previous" title={prevTitle} slug={prevSlug} />
+            <WorkProjectNavLink
+              variant="previous"
+              title={prevTitle}
+              slug={prevSlug}
+              label={previousLabel}
+            />
           </div>
         ) : null}
         {hasNext && nextSlug && nextTitle ? (
           <div className={`min-w-0 ${both ? "sm:text-right" : ""}`}>
             <div className={both ? "flex sm:justify-end" : undefined}>
-              <WorkProjectNavLink variant="next" title={nextTitle} slug={nextSlug} />
+              <WorkProjectNavLink
+                variant="next"
+                title={nextTitle}
+                slug={nextSlug}
+                label={nextLabel}
+              />
             </div>
           </div>
         ) : null}
@@ -186,38 +204,62 @@ function buildWorkMdxSource(
   content: string,
   resultImage: string | undefined,
   title: string,
+  resultCaption: string,
 ): string {
   if (!resultImage?.trim()) return content;
   if (content.includes(resultImage)) return content;
-  if (!/^## Result\s/m.test(content)) return content;
+
+  const resultHeadingPattern = /^## Result[^\n]*\n+/m;
+  if (!resultHeadingPattern.test(content)) return content;
 
   const figureBlock = `<Figure
   src=${JSON.stringify(resultImage)}
   alt=${JSON.stringify(`${title} — prototype payoff`)}
-  caption=${JSON.stringify(
-    "High-fidelity prototype — key screens aligned with the listing card hover state.",
-  )}
+  caption=${JSON.stringify(resultCaption)}
   aspect="landscape"
 />
 
 `;
 
-  return content.replace(/^## Result\s*\n+/m, `## Result\n\n${figureBlock}`);
+  return content.replace(resultHeadingPattern, (match) => `${match}${figureBlock}`);
 }
 
-export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const work = getWorkBySlug(slug);
+export default async function WorkPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>;
+}) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("work");
+  const work = getWorkBySlug(slug, locale);
   if (!work) notFound();
 
   const { frontmatter, content } = work;
 
-  const { prev: prevWork, next: nextWork } = getPublishedWorkNeighbors(slug);
+  const { prev: prevWork, next: nextWork } = getPublishedWorkNeighbors(slug, locale);
 
-  const mdxSource = buildWorkMdxSource(content, frontmatter.resultImage, frontmatter.title);
+  const mdxSource = buildWorkMdxSource(
+    content,
+    frontmatter.resultImage,
+    frontmatter.title,
+    t("metadata.resultCaption"),
+  );
   const hasIntro = mdxSource.trim().length > 0;
-  const headerMetadata = buildWorkHeaderMetadata(frontmatter);
+  const headerMetadata = buildWorkHeaderMetadata(frontmatter, t("metadata.viewLive"));
   const headerTags = buildWorkHeaderTags(frontmatter.tags, frontmatter.tools);
+
+  const metadataLabelMap = {
+    type: t("metadata.type"),
+    client: t("metadata.client"),
+    category: t("metadata.category"),
+    industry: t("metadata.industry"),
+    year: t("metadata.year"),
+    platform: t("metadata.platform"),
+    status: t("metadata.status"),
+    role: t("metadata.role"),
+    live: t("metadata.live"),
+  } as const;
 
   return (
     <main id="main-content">
@@ -229,7 +271,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
                 <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                   {frontmatter.title}
                 </h1>
-                <WorkHeaderTags labels={headerTags} />
+                <WorkHeaderTags labels={headerTags} ariaLabel={t("metadata.projectTopics")} />
               </div>
 
               <p className="text-muted-foreground text-base leading-relaxed sm:text-lg lg:pt-1">
@@ -243,7 +285,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               aspect={frontmatter.coverAspect}
             />
 
-            <WorkHeaderMeta items={headerMetadata} />
+            <WorkHeaderMeta items={headerMetadata} labelMap={metadataLabelMap} />
           </div>
         </Container>
       </Section>
@@ -261,7 +303,7 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
           <Container width="wide">
             <div className="border-border/40 mb-8 flex items-center gap-4 border-t pt-6">
               <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-                Selected screens
+                {t("selectedScreens")}
               </p>
             </div>
             <div className="flex flex-col gap-8">
@@ -281,6 +323,8 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               prevSlug={prevWork?.frontmatter.slug ?? null}
               nextTitle={nextWork?.frontmatter.title ?? null}
               nextSlug={nextWork?.frontmatter.slug ?? null}
+              previousLabel={t("previousProject")}
+              nextLabel={t("nextProject")}
             />
           </Container>
         </Section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import type { Testimonial } from "@/lib/content/testimonials";
 import { Container } from "@/components/layout/container";
@@ -17,6 +18,7 @@ interface TestimonialCardProps {
 }
 
 function TestimonialCard({ testimonial, index, total, decorative }: TestimonialCardProps) {
+  const t = useTranslations("testimonials");
   const fullName = `${testimonial.firstName} ${testimonial.lastName}`;
 
   return (
@@ -24,7 +26,7 @@ function TestimonialCard({ testimonial, index, total, decorative }: TestimonialC
       role={decorative ? undefined : "group"}
       aria-roledescription={decorative ? undefined : "slide"}
       aria-label={
-        decorative ? undefined : `Testimonial ${String(index + 1)} of ${String(total)}: ${fullName}`
+        decorative ? undefined : t("cardAria", { index: index + 1, total, name: fullName })
       }
       aria-hidden={decorative ? true : undefined}
       className="w-[70vw] flex-shrink-0 sm:w-[400px] lg:w-[360px]"
@@ -79,6 +81,8 @@ interface TestimonialsCarouselProps {
 }
 
 export function TestimonialsCarousel({ testimonials: items }: TestimonialsCarouselProps) {
+  const t = useTranslations("testimonials");
+  const tHome = useTranslations("home");
   const trackRef = useRef<HTMLDivElement>(null);
   const speedRef = useRef(1);
   const offsetRef = useRef(0);
@@ -127,7 +131,7 @@ export function TestimonialsCarousel({ testimonials: items }: TestimonialsCarous
     <Section>
       <Container>
         <p className="text-muted-foreground w-full text-center font-mono text-xs tracking-[0.15em] uppercase">
-          Testimonials
+          {tHome("socialProof.sectionTitle")}
         </p>
         <div
           className="relative -mx-4 mt-8 overflow-hidden sm:-mx-6 lg:-mx-8"
@@ -145,7 +149,7 @@ export function TestimonialsCarousel({ testimonials: items }: TestimonialsCarous
           <div
             ref={trackRef}
             role="region"
-            aria-label="Client testimonials"
+            aria-label={t("carouselAria")}
             aria-roledescription="carousel"
             className="flex w-max gap-4 sm:gap-6"
           >

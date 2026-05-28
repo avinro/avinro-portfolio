@@ -1,0 +1,595 @@
+---
+title: helloDojo — Customer App
+slug: hello-dojo
+client: helloDojo
+role: Product Design Engineer
+year: 2026
+coverage:
+  - product strategy
+  - ux architecture
+  - design system
+  - frontend
+outcome: "Diseñé y lancé una app iOS para clientes lista para producción que unificó rideshare y reservas multi-categoría mediante tres modos de interacción agéntica y lógica inteligente de conexión de eventos basada en calendario. Estado: beta privada en TestFlight."
+coverImage: /case-studies/hello-dojo/cover.jpg
+hoverImage: /case-studies/hello-dojo/images/final-reflection.jpg
+order: 1
+featured: true
+sector: Hospitality
+softwareType: iOS app
+summary: "Diseñé y construí una app de clientes lista para producción que unificó rideshare y reservas multi-categoría (restaurantes, yates, beachclubs, nightclubs) mediante una interfaz agéntica, tres modos de interacción y lógica inteligente de conexión de eventos, demostrando que una reserva voice-first podía ser premium, flexible y técnicamente viable."
+tags:
+  - Product design
+  - Agentic UX
+  - Voice interaction
+  - iOS
+  - Design system
+gradient: from-orange-400 to-rose-600
+kpis:
+  - value: "3"
+    label: Modos de interacción
+    sublabel: "Voz, chat, UI Flow — un motor de reservas"
+    sentiment: positive
+  - value: "6 mo"
+    label: De discovery a TestFlight
+    sublabel: Producto e implementación end-to-end
+    sentiment: positive
+  - value: "4"
+    label: Categorías de servicio
+    sublabel: "Rideshare, dining, yachts, nightlife"
+    sentiment: positive
+  - value: Beta
+    label: Estado en TestFlight
+    sublabel: "Beta privada, listo para producción"
+    sentiment: neutral
+---
+
+## Impacto en una línea
+
+Diseñé y construí una app de clientes lista para producción que unificó rideshare y reservas multi-categoría mediante una interfaz agéntica, tres modos de interacción distintos y una lógica inteligente de conexión de eventos, demostrando que la reserva voice-first podía ser premium, flexible y técnicamente viable.
+
+<Figure
+  src="/case-studies/hello-dojo/images/oneline-impact.jpg"
+  alt="helloDojo Customer App — visión general del producto"
+  placeholderLabel="helloDojo Customer App — visión general del producto"
+/>
+
+## Resumen rápido
+
+<WorkMetadataGrid>
+  <WorkMetadataCard kind="role">Product Design Engineer</WorkMetadataCard>
+  <WorkMetadataCard kind="timeline">Noviembre 2025 – Mayo 2026 (6 meses)</WorkMetadataCard>
+  <WorkMetadataCard kind="client">helloDojo (startup)</WorkMetadataCard>
+  <WorkMetadataCard kind="platform">iOS (React Native / React)</WorkMetadataCard>
+  <WorkMetadataCard kind="team">1 diseñador (yo), 1 CTO (backend/infraestructura)</WorkMetadataCard>
+  <WorkMetadataCard kind="scope">
+    Product discovery, arquitectura UX, sistema de diseño, implementación frontend
+  </WorkMetadataCard>
+  <WorkMetadataCard kind="status">TestFlight (beta privada)</WorkMetadataCard>
+</WorkMetadataGrid>
+
+## Resumen ejecutivo
+
+La Customer App era el **núcleo del producto de helloDojo**. Unificaba **rideshare, reservas de restaurantes, reservas de yates, reservas de beachclubs y experiencias de nightlife** bajo una sola interfaz impulsada por **Dojo, un concierge de IA agéntico**. Mi rol fue traducir el insight estratégico —**"enfocado en el agente, no solo otro Uber"**— en una **experiencia funcional y lista para producción**. Diseñé **tres modos de interacción (Voz, Chat, UI Flow)** que servían a distintos contextos y preferencias de usuario, todos conectados por la misma **lógica de reservas y eventos** subyacente. Lo más crítico: resolví un **problema de producto complejo**: conectar inteligentemente **reservas consecutivas** a través del **calendario** de la app, sugiriendo automáticamente **viajes entre eventos** y fusionando **tarjetas de evento** cuando se reservaba un viaje. En **6 meses**, trabajando de cerca con el **CTO**, lancé una **app completamente funcional** con **seguimiento de rideshare en tiempo real**, **interacción por voz con tool calls** y un **sistema de calendario que entendía la intención del usuario a través de múltiples categorías de servicio**.
+
+<PrincipleGrid>
+  <PrincipleItem
+    icon="mic"
+    title="Modo Voz"
+    body="Mantén pulsado para hablar, manos libres premium. Dojo responde por voz y muestra tarjetas de opciones bajo el avatar — la misma conversación continúa, ya sea que toques o hables."
+  />
+  <PrincipleItem
+    icon="message-square"
+    title="Modo Chat"
+    body="El mismo flujo que la voz, pero escrito. Para clubes ruidosos, accesibilidad auditiva o simple preferencia. Las tarjetas de opciones aparecen debajo de cada respuesta de Dojo."
+  />
+  <PrincipleItem
+    icon="layout-grid"
+    title="UI Flow"
+    body="Para usuarios que quieren explorar los 50 restaurantes antes de decidir. Por pasos, filtrable, tratamiento visual elevado — sigue pasando por el mismo motor de reservas."
+  />
+</PrincipleGrid>
+
+## Contexto
+
+La Customer App era el producto principal de helloDojo. Tenía que resolver el problema central de hospitality de Ibiza: experiencias de reserva fragmentadas donde los usuarios hacen malabares entre varias apps, llamadas y conversaciones de WhatsApp para reservar taxis, cenas, yates, beachclubs y experiencias de nightlife.
+
+La dirección estratégica fue clara desde el principio: **No ser otro clon de Uber.** En lugar de eso, hacer de Dojo —un concierge de IA— la interfaz principal. Los usuarios deberían sentir que hablan con un concierge capaz que entiende su noche, no que tocan botones en una app transaccional.
+
+Pero esto planteaba un reto de producto: si la interacción por voz es el diferenciador, ¿cómo haces que funcione cuando los usuarios están en clubes ruidosos? ¿Cómo muestras opciones complejas (disponibilidad de restaurantes, precios, cocina) solo por voz? ¿Y cómo haces que la app sea lo bastante inteligente para entender que un usuario que reserva cena a las 22:00 podría necesitar un viaje hasta allí, y luego otro viaje a un segundo local a medianoche?
+
+La Customer App tenía que resolver todo eso.
+
+<Figure
+  src="/case-studies/hello-dojo/images/context.jpg"
+  alt="El ecosistema fragmentado de reservas de hospitality de Ibiza"
+  placeholderLabel="El ecosistema fragmentado de reservas de hospitality de Ibiza"
+/>
+
+## Planteamiento del problema
+
+### Problema del usuario
+
+Los usuarios en Ibiza necesitaban una forma más rápida y conectada de gestionar sus noches, desde reservar taxis y locales hasta coordinar yates, restaurantes y beachclubs sin saltar entre varias apps ni hacer llamadas. La experiencia tenía que funcionar en entornos ruidosos y de ritmo rápido como clubes, villas y barcos, donde la conveniencia y la velocidad importaban más que los patrones de interacción tradicionales. Plataformas existentes como Uber, Resy y Booking resolvían problemas aislados pero carecían de conciencia contextual entre actividades, obligando a los usuarios a coordinar manualmente viajes, reservas y horarios por su cuenta.
+
+### Problema del negocio
+
+helloDojo necesitaba construir una Customer App que se sintiera lo bastante diferenciada para justificar instalar una nueva app, sin dejar de ser operativamente escalable a través de rideshare, reservas, pagos y seguimiento en tiempo real. La plataforma también necesitaba generar suficiente demanda de consumidores para atraer locales y proveedores al ecosistema. El mayor riesgo era el posicionamiento: si la experiencia se sentía como otro clon de Uber, los usuarios no tendrían motivo para cambiar, pero si el modelo de interacción voice-first fallaba en entornos ruidosos del mundo real, el principal diferenciador del producto se vendría abajo.
+
+### Problema de producto
+
+El reto central de producto era diseñar una experiencia multimodal donde los usuarios pudieran cambiar sin fricción entre **voz**, **chat** y **flujos de UI tradicionales** según el contexto. El sistema tenía que mantener la interacción conversacional sin dejar de mostrar visualmente opciones de reserva complejas, entender las relaciones entre reservas consecutivas a lo largo de toda una noche y sugerir viajes entre eventos de forma inteligente. Al mismo tiempo, la app debía soportar seguimiento de rideshare en tiempo real, planificación basada en calendario y patrones de interacción fiables para usuarios que operan en entornos de nightlife ruidosos donde la voz por sí sola no siempre era viable.
+
+<PrincipleGrid>
+  <PrincipleItem
+    icon="users"
+    title="Problema del usuario"
+    body="Turistas y locales necesitan viajes, cenas, yates y mesas — pero el sistema funciona a base de contactos internos, apps dispersas y concierges que no entienden el idioma."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="briefcase"
+    title="Problema del negocio"
+    body="Capturar volumen de transacciones en rideshare y dining antes de que lleguen los competidores. A medio hacer o fragmentado = fracaso en un mercado obsesionado con la imagen."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="puzzle"
+    title="Problema de producto"
+    body="Unificar categorías de servicio radicalmente distintas (viajes instantáneos, reservas anticipadas, pagos, logística) bajo una sola experiencia — sin abrumar ni fragmentar."
+    tone="warning"
+  />
+</PrincipleGrid>
+
+### Rol y responsabilidades
+
+Lideré la definición y ejecución completa de producto de la Customer App de helloDojo, haciéndome cargo de
+**product discovery**,
+**arquitectura UX**,
+**diseño de interacción**,
+**sistemas de diseño** e
+**implementación frontend**.
+Como único diseñador, trabajé directamente con el CTO para traducir la intención de negocio y producto en requisitos técnicos escalables, gestionando todo el flujo de diseño a código mediante desarrollo frontend asistido por IA.
+
+Mi trabajo incluyó diseñar la experiencia multi-servicio completa a través de rideshare, restaurantes, yates, beachclubs, nightlife y el sistema de calendario/eventos, además de definir cómo se movían los usuarios entre
+**Modo Voz**,
+**Modo Chat** y
+**flujos de UI tradicionales** según el contexto.
+También diseñé la lógica central de conexión de eventos que enlazaba inteligentemente las reservas entre sí, sugería viajes entre destinos y transformaba el calendario en un sistema de planificación contextual en lugar de un horario estático.
+
+En el lado de la implementación, creé el sistema de diseño de la Customer App, incluyendo componentes, tokens, comportamientos responsive y patrones de interacción adaptados específicamente a la experiencia de la app.
+Luego construí todo el frontend en
+**React** usando flujos asistidos por IA con
+**Cursor** y
+**Figma MCP**, asegurando consistencia visual, calidad de interacción y alineación entre el diseño de producto y el código de producción en todos los modos de interacción.
+
+<Figure
+  src="/case-studies/hello-dojo/images/role-responsibilities.jpg"
+  alt="Único diseñador — de product discovery a implementación frontend"
+  placeholderLabel="Único diseñador — de product discovery a implementación frontend"
+/>
+
+## Restricciones
+
+<PrincipleGrid>
+  <PrincipleItem
+    icon="flask-conical"
+    title="Sin investigación de usuarios"
+    body="El CEO validó la demanda de rideshare para Ibiza, pero las reservas de experiencias (restaurantes, yates, beachclubs, nightclubs) eran una suposición fundamentada. Diseñé sin pruebas de usuario."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="mic"
+    title="Incógnitas técnicas con la voz"
+    body="Latencia de text-to-speech, precisión de speech-to-text en entornos ruidosos, UX de fallback para comandos ambiguos — todo había que resolverlo en el diseño."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="route"
+    title="Lógica de eventos compleja"
+    body="El sistema de reservas conectadas (detectar eventos consecutivos, sugerir viajes, fusionar tarjetas) requería coordinación estrecha con el CTO y una definición de producto clara desde el inicio."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="zap"
+    title="Rendimiento en tiempo real"
+    body="Seguimiento de rideshare, actualizaciones de ubicación del conductor en tiempo real, cambios de estado instantáneos — todo tenía que sentirse fluido en móvil con condiciones de red variables."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="layers"
+    title="Tres modos, un solo codebase"
+    body="Modo Voz, Modo Chat y UI Flow tenían que compartir componentes y lógica sintiéndose visual y conductualmente distintos."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="alert-triangle"
+    title="Presión de producto en paralelo"
+    body="El CEO quería rideshare + dining + yates + beachclubs + nightclubs lanzados simultáneamente. Sin enfoque por fases. Las cinco categorías de servicio se lanzaron con la app."
+    tone="warning"
+  />
+  <PrincipleItem
+    icon="users"
+    title="Tamaño del equipo"
+    body="Solo yo (diseño + frontend) y el CTO (backend). Sin QA dedicado hasta dos semanas antes de que el proyecto se pausara. Sin product manager. Decisiones rápidas pero también de alto riesgo."
+    tone="warning"
+  />
+</PrincipleGrid>
+
+## Estrategia de producto
+
+El trabajo se guió por un insight central: **enfoque en el agente significa tres modos, no uno.**
+
+El instinto inicial fue voice-first. Pero diseñar para el contexto de Ibiza —clubes, playas, villas, nightlife— implicaba reconocer que la voz por sí sola no funcionaría en todas partes. Locales ruidosos, pérdida auditiva, preferencia del usuario y contexto social (no querer hablar en un restaurante tranquilo) significaban que los usuarios necesitaban alternativas. Pero las alternativas no podían sentirse como un fallback. El Modo Chat y el UI Flow tenían que sentirse como opciones equivalentes, no versiones degradadas del Modo Voz. Los tres modos necesitaban acceder al mismo motor de reservas, la misma lógica, las mismas opciones.
+
+<PrincipleGrid>
+  <PrincipleItem
+    icon="bot"
+    title="La interfaz de agente como modelo mental"
+    body="Ya sea que hables, escribas o toques, estás interactuando con Dojo. El modo es el canal, no el producto."
+  />
+  <PrincipleItem
+    icon="sparkles"
+    title="Los tool calls como UI"
+    body="En el Modo Voz, cuando Dojo necesita mostrar opciones (restaurantes, conductores, precios), estas aparecen como tarjetas de UI bajo el avatar. La conversación continúa."
+  />
+  <PrincipleItem
+    icon="calendar"
+    title="El calendario como lógica de servicio"
+    body="La app entiende que las reservas son eventos, y los eventos crean demanda de viajes. Si tienes cena a las 22:00 y un club a medianoche en ubicaciones distintas, necesitas viajes."
+  />
+  <PrincipleItem
+    icon="radio"
+    title="El tiempo real como base"
+    body="Para el rideshare (el servicio más sensible al tiempo), los usuarios necesitaban seguimiento en vivo. Cualquier cosa menos se sentía rota."
+  />
+  <PrincipleItem
+    icon="accessibility"
+    title="La accesibilidad como primaria, no secundaria"
+    body="Tres modos no era un extra; era el modelo de negocio. El modo voz probaba la diferenciación. Los modos chat y UI aseguraban que la app funcionara para todos."
+  />
+</PrincipleGrid>
+
+## Decisiones clave
+
+| Decisión                                                               | Por qué importaba                                                                                                                                                                                                                            | Trade-off                                                                                                                                                         |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tres modos de interacción (Voz, Chat, UI Flow)**                     | Los usuarios en clubes ruidosos no pueden usar la voz. Los usuarios con pérdida auditiva necesitan alternativas. Quienes quieren explorar todas las opciones necesitan UI. Soportar los tres modos mantuvo la app usable en todos los contextos preservando el posicionamiento agent-first. | Mayor complejidad: tres flujos distintos, tres tratamientos visuales, tres máquinas de estado. Más casos límite. Más pruebas necesarias.                          |
+| **Tool calls como tarjetas de UI en los modos Voz/Chat**               | La voz pura sin opciones visuales crea ambigüedad ("¿El sistema me entendió?"). Mostrar restaurantes, precios y disponibilidad como tarjetas manteniendo el flujo conversacional dio a los usuarios confianza y control.                    | Riesgo de dividir la atención entre voz/texto y UI. Requirió una jerarquía visual cuidadosa para mantener a Dojo y la conversación como protagonistas.            |
+| **Lógica de eventos conectados — sugerir viajes entre reservas automáticamente** | Los usuarios que reservaban cena y luego nightlife necesitaban viajes entre locales. En lugar de exigir dos solicitudes de viaje separadas, el sistema detectaba el patrón y sugería "Tu próxima reserva" como destino. Hizo que la app se sintiera inteligente. | Lógica de producto compleja que requirió coordinación estrecha con el CTO. Había que definirla desde el inicio; cambiarla a mitad de la construcción lo rompería todo. |
+| **El calendario como modelo organizativo, no las categorías de servicio** | En lugar de una pestaña de "Rideshare", una de "Restaurantes", una de "Yates" (como Uber, Resy o apps separadas), todas las reservas vivían en un solo calendario. Los eventos eran eventos. Los viajes conectaban eventos. Esto unificó la experiencia. | Se perdió algo de contexto específico por servicio. Una reserva de restaurante y una de yate se parecen, lo que puede confundir a nuevos usuarios. Requirió un etiquetado claro. |
+| **Mapa en tiempo real para rideshare, a pantalla completa con sheet debajo** | Los usuarios necesitaban ver la ubicación del conductor, la distancia, el ETA. El mapa a pantalla completa dio prominencia a estos datos. El sheet (colapsable) mostraba detalles de la reserva, opciones de comunicación y extras sin ocultar el mapa. | El mapa ocupa una porción significativa de pantalla. En móviles pequeños, cuesta ver los detalles. Requirió un diseño responsive cuidadoso.                        |
+| **Componente píldora en home — siempre muestra el próximo evento**     | Los usuarios necesitaban contexto rápido: "¿Cuál es mi próximo plan?" La píldora mostraba la próxima reserva (hora, local, ubicación). Cuando un viaje estaba en curso, la píldora cambiaba al estado del viaje. Mantuvo la pantalla de inicio enfocada. | Si el usuario tenía muchos eventos, la píldora solo mostraba el inmediato siguiente. Quienes querían ver todos los eventos tenían que ir al calendario. Trade-off: foco vs. visibilidad total. |
+| **Modo Chat con input persistente + historial desplazable**           | Los usuarios que preferían escribir sobre hablar necesitaban una experiencia de chat natural. Input de texto siempre visible abajo. Historial desplazable. Tarjetas de opciones renderizadas inline debajo de los mensajes de Dojo.        | El input de chat persistente ocupa espacio. En móviles pequeños, menos lugar para el historial de conversación.                                                  |
+| **UI Flow como navegación por pasos tradicional (como Uber/Resy, no guiada por el agente)** | Algunos usuarios querían explorar todos los restaurantes antes de reservar, no ser guiados por Dojo. El UI Flow lo proveía: seleccionar servicio → ingresar detalles → ver todas las opciones con filtros → reservar. Modelo mental familiar. | El UI Flow y el Modo Voz/Chat se ven visualmente distintos (intencional) pero es un cambio de modo, no una transición fluida. Los usuarios tienen que elegir explícitamente qué modo usar. |
+
+## Exploración
+
+Al inicio del proyecto consideramos dos direcciones: una app tradicional modelada según Uber/Resy, o una experiencia enfocada en el agente con la voz como principal. El enfoque tradicional —pestañas separadas para Rideshare, Restaurantes, Yates, Beachclubs, Nightlife; modelos mentales familiares; patrones probados— era sencillo de construir y se habría sentido familiar para los usuarios. Pero no diferenciaría a helloDojo de los competidores. Sería solo otra app instalada en un espacio saturado. El enfoque centrado en el agente —Dojo como interfaz principal, interacción voice-first, tool calls renderizados como opciones de UI, tres modos (Voz, Chat, UI Flow) unificados bajo un solo paradigma de interacción— era más arriesgado. La voz sola no funcionaría en clubes ruidosos; necesitaríamos fallbacks. El multimodo implicaba tres flujos de UX distintos y más complejidad. Pero ofrecía algo único: una experiencia de concierge premium que de verdad resolvía el problema de Ibiza (una app, reserva unificada, conexión inteligente de eventos). Elegimos la dirección centrada en el agente porque la diferenciación importaba más que la simplicidad. Los usuarios no instalarían otro clon de Uber. Pero quizá instalarían una app que se siente como tener un concierge personal en el bolsillo, especialmente uno que entiende la particularidad del nightlife de Ibiza (noches ruidosas, de ritmo rápido y cargadas de planes). El diseño de tres modos fue la respuesta a la objeción de "¿pero qué pasa con los clubes ruidosos?": la voz es la principal, el chat es el fallback, el UI Flow es la alternativa para quienes exploran. Los tres servían al modelo de agente; ninguno se sentía como una degradación.
+
+<Figure
+  src="/case-studies/hello-dojo/images/exploration.jpg"
+  alt="Exploración — Opción A vs Opción B"
+  placeholderLabel="Exploración — Opción A vs Opción B"
+/>
+
+## Arquitectura UX
+
+La Customer App tenía cuatro sistemas interconectados: rideshare, reserva de experiencias, lógica de calendario/eventos y modos de interacción. El insight central fue identificar qué era universal (tamaño del grupo, fecha, hora, disponibilidad, confirmación) y qué era específico de cada servicio (ubicación para rideshare, preferencias de menú para dining, número de invitados para yates, etc.).
+
+<BranchTree
+  icon="smartphone"
+  label="Customer App"
+  hint="Un motor de reservas, cuatro sistemas, tres modos"
+>
+  <Branch title="Sistema de rideshare" tone="accent">
+    <FlowItem icon="car" label="El usuario pide un taxi por Voz/Chat/UI" />
+    <FlowItem icon="map-pin" label="El sistema muestra conductores disponibles en tiempo real en el mapa" />
+    <FlowItem icon="check-circle-2" label="El usuario confirma; se asigna conductor" />
+    <FlowItem icon="radio" label="Seguimiento en tiempo real hasta que el viaje termina" />
+  </Branch>
+  <Branch title="Reserva de experiencias" tone="accent">
+    <FlowItem icon="wine" label="El usuario pide una reserva (restaurante, yate, etc.)" />
+    <FlowItem icon="layout-grid" label="El sistema muestra locales disponibles que cumplen los criterios" />
+    <FlowItem icon="file-text" label="El usuario selecciona y confirma" />
+    <FlowItem icon="credit-card" label="El sistema gestiona el pago" />
+  </Branch>
+  <Branch title="Sistema de calendario / eventos" tone="accent">
+    <FlowItem icon="calendar" label="Todas las reservas (viajes + experiencias) aparecen como eventos" />
+    <FlowItem
+      icon="alert-triangle"
+      label="El sistema detecta eventos consecutivos en ubicaciones distintas"
+    />
+    <FlowItem icon="bell" label="Sugiere automáticamente viajes para conectarlos" />
+    <FlowItem icon="layout-grid" label="Fusiona las tarjetas en una variante Conectada al reservar un viaje" />
+  </Branch>
+  <Branch title="Modos de interacción" tone="accent">
+    <FlowItem icon="mic" label="Modo Voz — mantén pulsado para hablar con opciones" />
+    <FlowItem icon="message-square" label="Modo Chat — texto con tarjetas de opciones" />
+    <FlowItem icon="layout-grid" label="UI Flow — por pasos, filtrable, tradicional" />
+    <FlowItem icon="check-circle-2" label="Los tres convergen en la misma confirmación" />
+  </Branch>
+</BranchTree>
+
+## Solución final
+
+### Modo Voz: Dojo como el agente visible
+
+El diseño del Modo Voz se centró en hacer que Dojo se sintiera vivo y presente. La app abre con un avatar de Dojo a pantalla completa (animado, responsivo). Cuando el usuario mantiene pulsado para hablar y dice ("Necesito un taxi a Pacha"), Dojo procesa la solicitud. Mientras procesa, el avatar pulsa (feedback visual). Una vez procesado, Dojo responde por text-to-speech y simultáneamente muestra las opciones como tarjetas de UI bajo el avatar (tarjetas de conductor que muestran vehículo, nombre del conductor, calificación, ETA).
+
+El tamaño y la posición del avatar cambian según el estado: centrado y grande cuando está inactivo, encogido y desplazado hacia arriba cuando aparecen las opciones (para dejar espacio a las tarjetas). Esta animación indica que la conversación entra en una fase de selección. Los usuarios pueden entonces tocar una tarjeta para confirmar o seguir hablando ("Dame el de mejor calificación").
+
+Una vez asignado un conductor, la app transiciona a un mapa en tiempo real que muestra la ubicación del conductor, la ubicación del usuario, la ruta y el ETA. Un sheet debajo (colapsable) muestra los detalles del viaje sin ocultar el mapa.
+
+<Figure
+  src="/case-studies/hello-dojo/images/voice-mode.jpg"
+  alt="Modo Voz — avatar de Dojo + mantener pulsado para hablar + tarjetas de opciones"
+  placeholderLabel="Modo Voz — avatar de Dojo + mantener pulsado para hablar + tarjetas de opciones"
+/>
+
+### La mascota
+
+El brief del CEO fue simple: **"Dojo necesita sentirse como tu colega."** Esto cambió la perspectiva de diseño. Dojo no era solo un avatar: era la capa de personalidad del Modo Voz, la encarnación visual del agente.
+
+Diseñé una **máquina de estados** que mapeaba las interacciones del Modo Voz a aproximadamente 10 estados visuales distintos. Cada estado señalaba lo que hacía el sistema: escuchando, procesando, respondiendo, mostrando opciones, confirmando selecciones, manejando errores. Trabajé con un **animador de Rive** para traducir esta lógica en animaciones interactivas. Dojo expresaba el estado mediante **movimiento de ojos y cambios de color del cuerpo** — sin expresiones complejas, solo un feedback visual claro.
+
+Los **triggers** en el codebase disparaban las transiciones de estado: el usuario pulsa "Mantén pulsado para hablar" → estado Escuchando, el speech-to-text procesa → transición a Inactivo, el backend devuelve opciones → estado Hablando, el usuario toca una selección → estado Confirmando. Dojo no se animaba con un temporizador; Dojo respondía a eventos reales. Esto hizo del Modo Voz una conversación real, no un sistema hablándote.
+
+<div
+  className="overflow-hidden rounded-xl"
+  style={{
+    display: "grid",
+    gap: "0",
+    width: "100%",
+  }}
+  data-mascot-grid="true"
+>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="01 - Inactivo"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/01-Idle.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="02 - Hablar"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/02-talk.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="03 - Escuchar"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/03-listen.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="04 - Preguntando"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/04-asking.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="05 - Mostrando"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/05-showing.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="06 - Inactivo prolongado"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/06-idle-longer.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="07 - Muy feliz"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/07-super-happy.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="08 - Éxito"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/08-success.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="09 - Pensando"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/09-thinking.mp4" type="video/mp4" />
+  </video>
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ aspectRatio: "1", width: "100%" }}
+    title="10 - Disco"
+  >
+    <source src="/case-studies/hello-dojo/images/mascot/10-disco.mp4" type="video/mp4" />
+  </video>
+</div>
+
+<style>{`
+  [data-mascot-grid="true"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    [data-mascot-grid="true"] {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+`}</style>
+
+### Modo Chat: conversacional sin voz
+
+El Modo Chat es directo. El usuario toca un input de chat en la parte inferior de la pantalla de inicio y escribe. Dojo responde en texto. Debajo del mensaje de Dojo aparecen tarjetas de opciones (conductores, restaurantes, locales, precios).
+
+El usuario puede tocar tarjetas o escribir seguimientos ("Opciones más caras", "Más cerca de mi ubicación", "¿Cuál tiene las mejores reseñas?"). El historial de conversación se desplaza; los usuarios siempre ven el contexto.
+
+Para el rideshare, una vez asignado un conductor, la app transiciona a la misma vista de mapa que el Modo Voz. Para las reservas de experiencias, la confirmación y el pago se gestionan mediante flujos de formulario estándar (fecha, hora, tamaño del grupo, pago).
+
+<Figure
+  src="/case-studies/hello-dojo/images/chat-mode.jpg"
+  alt="Modo Chat — texto conversacional + tarjetas de opciones inline"
+  placeholderLabel="Modo Chat — texto conversacional + tarjetas de opciones inline"
+/>
+
+### UI Flow: reserva tradicional, tratamiento premium
+
+El UI Flow es para usuarios que prefieren explorar y tener control. La pantalla de inicio tiene una opción de menú para entrar al UI Flow.
+
+Al usuario se le presentan categorías de servicio: Pedir un viaje, Reservar restaurante, Reservar yate, Reservar beachclub, Reservar nightclub.
+
+**Tratamiento visual:** el UI Flow tiene un fondo elevado (gris claro o blanco, frente al oscuro de Voz/Chat). Más espacio para respirar. Indicadores de paso. Estados de botón claros. Los filtros son persistentes.
+
+<Figure
+  src="/case-studies/hello-dojo/images/ui-flow 1.jpg"
+  alt="UI Flow — tratamiento elevado, reserva por pasos"
+  placeholderLabel="UI Flow — tratamiento elevado, reserva por pasos"
+/>
+
+### Calendario con eventos conectados
+
+El calendario actuaba como la **columna vertebral organizativa** de la Customer App, unificando viajes y reservas de experiencias en un único sistema basado en línea de tiempo. Su innovación central era la **lógica de eventos conectados**, que detectaba reservas consecutivas en distintas ubicaciones y sugería inteligentemente viajes entre ellas según el momento y el contexto del destino.
+
+Cuando existía una conexión lógica, el sistema calculaba automáticamente los puntos óptimos de recogida y bajada usando las reservas anterior y siguiente, y luego mostraba sugerencias de viaje directamente dentro del flujo de reserva. Una vez confirmadas, el calendario agrupaba visualmente las reservas y el transporte relacionados en una sola experiencia conectada, haciendo que la app se sintiera consciente del contexto en lugar de una colección de transacciones aisladas.
+
+<Figure
+  src="/case-studies/hello-dojo/images/calendar-conected.jpg"
+  alt="Calendario con eventos conectados — detectar, sugerir, fusionar"
+  placeholderLabel="Calendario con eventos conectados — detectar, sugerir, fusionar"
+/>
+
+### Seguimiento de rideshare en tiempo real y componente píldora
+
+Una vez confirmado un viaje, la app transicionaba a una vista de mapa a pantalla completa. El mapa mostraba la ubicación del usuario (punto azul), la ubicación y dirección del conductor (icono de coche con flecha), la ruta calculada (línea azul), el ETA hasta la recogida (texto grande arriba) y la distancia.
+
+Debajo del mapa, un sheet colapsable mostraba el nombre y la calificación del conductor, la marca/modelo del vehículo, el estado actual ("El conductor está a 2 minutos"), un botón de mensaje (toca para escribir al conductor) y un botón para cancelar el viaje.
+
+El mapa se actualizaba en tiempo real: la posición del conductor, el ETA y la distancia se refrescaban cada 5 segundos.
+
+**Componente píldora:** en la pantalla de inicio, un componente con forma de píldora cerca de la parte superior mostraba el próximo evento (nombre del local, hora, ubicación). Cuando un viaje estaba en curso, la píldora cambiaba de estado: fondo azul, mostrando el estado del viaje ("El conductor llega en 2 min", "En camino a Pacha", "Llegando en 3 min"). Tocar la píldora navegaba a la vista de mapa.
+
+<Figure
+  src="/case-studies/hello-dojo/images/ui-flow 2.jpg"
+  alt="Mapa de rideshare en tiempo real + sheet colapsable + componente píldora"
+  placeholderLabel="Mapa de rideshare en tiempo real + sheet colapsable + componente píldora"
+/>
+
+## Sistema de diseño / Design Engineering
+
+La Customer App usó un sistema de diseño dedicado construido sobre el **sistema de diseño más amplio de helloDojo**, combinando fundamentos compartidos con patrones de interacción específicos de la app adaptados a rideshare, nightlife, flujos de reserva, mapas y experiencias conversacionales. El sistema definía **comportamientos responsive** consistentes, estados de interacción, patrones de movimiento, reglas de accesibilidad y lógica de transición para asegurar que los tres modos de interacción —**Modo Voz**, **Modo Chat** y **UI Flow**— se sintieran cohesivos en lugar de fragmentados.
+
+Desde una perspectiva de ingeniería, el sistema se diseñó en torno a un **flujo de diseño a código** ajustado. Las especificaciones de componentes en Figma incluían documentación de props, definiciones de comportamiento, combinaciones de estados y reglas de uso, mientras que una **integración personalizada con Figma MCP** permitía a los asistentes de código con IA leer estructuras de componentes, restricciones y tokens de diseño directamente desde los archivos fuente. Comportamientos complejos como las actualizaciones en tiempo real, las transiciones animadas, los estados de fallback y la lógica de reservas conectadas se documentaron con detalle a nivel de implementación para asegurar que el comportamiento del frontend coincidiera con la UX prevista.
+
+<Figure
+  src="/case-studies/hello-dojo/images/design-system.jpg"
+  alt="Sistema de diseño de la Customer App — componentes personalizados sobre tokens compartidos"
+  placeholderLabel="Sistema de diseño de la Customer App — componentes personalizados sobre tokens compartidos"
+/>
+
+## Frontend / Capa de implementación
+
+La Customer App se construyó en **React Native** usando un **flujo de desarrollo asistido por IA** que combinaba Claude Opus para la planificación, GPT para la revisión de código y Sonnet/Codex como apoyo a la implementación. El stack técnico incluía **TypeScript**, **NativeWind**, **TanStack Query**, **Zustand**, **WebSockets** e integraciones para mapas, interacción por voz y pagos, creando una base escalable para experiencias en tiempo real y multimodales en iOS.
+
+La arquitectura de producto giraba en torno a tres sistemas de interacción conectados: **Modo Voz**, **Modo Chat** y **flujos de UI tradicionales**, cada uno operando mediante una lógica de estado dedicada sin dejar de formar parte de la misma experiencia unificada. Funciones como la detección de eventos conectados, las sugerencias de viaje entre reservas y las actualizaciones de mapa en tiempo real dependían de un estado de frontend sincronizado y de comunicación en vivo con el backend para mantener la experiencia consciente del contexto y operativamente fiable.
+
+El flujo de diseño a código dependía en gran medida de la **integración con Figma MCP**, permitiendo que el tooling de IA generara código de frontend directamente a partir de especificaciones de diseño estructuradas, preservando la consistencia de tokens, los comportamientos de interacción y los layouts responsive. El control de calidad se centró en la prevención de regresiones, el rendimiento en tiempo real, la fiabilidad de la interacción por voz, la validación de la lógica de eventos conectados y el mantenimiento de un comportamiento de UX consistente en los tres modos de interacción.
+
+<Figure
+  src="/case-studies/hello-dojo/images/front-implementation.jpg"
+  alt="Implementación frontend y resultados de pruebas de componentes"
+  placeholderLabel="Implementación frontend y resultados de pruebas de componentes"
+/>
+
+## Colaboración
+
+El equipo era pequeño: yo (diseño + frontend) y el CTO (backend/infraestructura). Sin product manager. Toma de decisiones rápida, pero también de alto riesgo.
+
+**Con el CTO:** trabajé de cerca para traducir la lógica de producto en APIs. Cuando diseñé el Modo Voz con tool calls, el CTO tuvo que implementar el procesamiento de NLP y la integración de tool calls. Cuando diseñé los eventos conectados, el CTO tuvo que implementar la lógica de detección, la sugerencia de viajes y la fusión de calendario en el backend. Cuando diseñé el seguimiento de mapa en tiempo real, el CTO tuvo que configurar WebSockets y optimizar para intervalos de actualización de 5 segundos.
+
+Nos alineamos pronto en las estructuras de datos: qué información necesitaba devolver el backend en cada llamada de API, qué estados gestionaría la app, qué validación ocurriría en el servidor frente al cliente. Las especificaciones de producto claras (flujos, estados, casos límite) redujeron el retrabajo.
+
+**Flujo de frontend:** construí la app en React usando generación de código asistida por IA. Gestioné el paso de Figma a código mediante la integración con MCP: especificaciones de diseño en Figma → la IA las lee → genera código → yo reviso la calidad → itero. El CTO revisaba las decisiones arquitectónicas mayores pero no cada componente.
+
+**Iteración:** como lanzamos todo a la vez (las 5 categorías de servicio), hubo iteración limitada basada en feedback de usuarios. Los cambios se hicieron en respuesta a hallazgos de QA (dos semanas antes del lanzamiento) y a casos límite descubiertos durante la implementación, no a partir de pruebas de usuario.
+
+## Resultados e impacto
+
+La Customer App se lanzó a **TestFlight** con los tres modos de interacción totalmente operativos, incluyendo **Modo Voz**, **Modo Chat** y **flujos de UI tradicionales** funcionando bajo un sistema de interacción unificado. La plataforma soportó con éxito el seguimiento de rideshare en tiempo real, las conexiones inteligentes de reservas, las interacciones conversacionales y una experiencia de calendario unificada capaz de organizar viajes, restaurantes, yates, beachclubs y reservas de nightlife dentro de una sola aplicación.
+
+Uno de los resultados de mayor impacto fue la implementación de la **lógica de eventos conectados**, que permitió al sistema entender las relaciones entre reservas consecutivas y sugerir automáticamente viajes entre destinos. En lugar de tratar las reservas como transacciones aisladas, la app se comportaba más como un concierge inteligente que entendía el contexto de toda una noche, haciendo que la experiencia se sintiera significativamente más cohesiva y adaptable que las plataformas de reserva tradicionales.
+
+El proyecto también estableció una sólida **base de frontend y de sistema de diseño** para escalar en el futuro. La Customer App introdujo componentes reutilizables, tokens compartidos, comportamientos responsive, patrones de interacción en tiempo real y flujos de desarrollo asistido por IA que permitieron una UX consistente en todos los modos de interacción. Al unificar cinco categorías de servicio distintas bajo una sola lógica de producto y un paradigma conversacional, la app demostró cómo sistemas operativos complejos pueden sentirse simples, conectados y conscientes del contexto para los usuarios finales.
+
+<Figure
+  src="/case-studies/hello-dojo/images/results-impact.jpg"
+  alt="helloDojo Customer App — beta en TestFlight con los tres modos de interacción en vivo"
+  placeholderLabel="helloDojo Customer App — beta en TestFlight con los tres modos de interacción en vivo"
+/>
+
+## Qué mejoraría
+
+La siguiente gran prioridad sería validar los supuestos centrales detrás del **modelo de interacción multimodal**, especialmente en torno al uso del **Modo Voz** en entornos reales. Sin analítica de producción ni pruebas de usuario, sigue sin estar claro si los usuarios preferirían genuinamente la interacción por voz o recurrirían de forma natural al Chat y a los flujos de UI tradicionales en escenarios de nightlife ajetreados. Un lanzamiento beta con instrumentación en torno al cambio de modo, las tasas de finalización y los puntos de fallo ayudaría a validar si la voz se siente realmente valiosa o simplemente novedosa.
+
+También refinaría la **inteligencia de eventos conectados** de la plataforma incorporando contexto del mundo real como tiempos de viaje, condiciones de tráfico y patrones de transporte específicos de Ibiza. Iteración adicional sobre elementos de UI contextuales, el rendimiento del chat en sesiones largas y una auditoría de accesibilidad más avanzada mejoraría la usabilidad en entornos de alta presión y en recorridos de usuario más largos. Asegurar que el asistente Dojo mantuviera una personalidad consistente en todos los modos de interacción también fortalecería la identidad del producto.
+
+Desde una perspectiva de estrategia de producto, avanzaría hacia **flujos de reserva más específicos por servicio** en lugar de usar una estructura de interacción generalizada para todas las categorías. Restaurantes, yates, beachclubs y nightlife implican expectativas y restricciones de reserva distintas que merecen patrones de UX adaptados. También recomendaría una **estrategia de lanzamiento más por fases**, lanzando primero rideshare y sumando progresivamente servicios adicionales después para validar los modelos de interacción, reducir la complejidad operativa e iterar sobre la plataforma con comportamiento real de usuarios antes de escalar más el ecosistema.
+
+## Reflexión final
+
+La Customer App demostró que puedo diseñar y construir interacciones complejas y multimodo a escala. El Modo Voz exigió pensar más allá de la "UI bonita", hacia el diseño de agentes, la visualización de tool calls, las transiciones de estado y el comportamiento de fallback. Los eventos conectados exigieron definir una lógica de producto clara desde el inicio y traducirla a código. El seguimiento en tiempo real exigió pensar en rendimiento y resiliencia de red.
+
+El diseño de tres modos —Voz, Chat, UI Flow— es la evidencia más fuerte de pensamiento de producto. En lugar de construir una app solo de voz (arriesgada, de nicho) o un clon tradicional de Uber (sin diferenciación), creé tres caminos que sirven a distintos contextos, todos unificados bajo Dojo y la misma lógica de reservas. Esto es lo que significa pensar en todo el rango de contextos del usuario, no solo en el happy path.
+
+El trabajo demuestra:
+
+- **Pensamiento de producto:** "enfoque en el agente" traducido en tres modos distintos, no solo voz. Reconocer que el contexto de Ibiza requería flexibilidad fue una decisión de producto.
+- **Arquitectura UX:** gestionar tres modos, cinco categorías de servicio, estado en tiempo real y lógica de calendario requirió flujos claros, máquinas de estado y mapeo de casos límite.
+- **Design engineering:** los componentes, tokens y variantes tenían que escalar entre modos. La UI de voz requirió animaciones y estados específicos. El mapa requirió optimización de rendimiento. Los eventos conectados requirieron un diseño visual claro para mostrar relaciones.
+- **Implementación frontend:** construir código React de producción, gestionar actualizaciones en tiempo real, traducir especificaciones de Figma a código vía MCP, manejar tres paradigmas de interacción distintos en un solo codebase.
+- **Entregar bajo restricción:** 6 meses, equipo de dos personas, sin investigación de usuarios, incógnitas técnicas con la voz, lógica de eventos compleja, lanzamiento paralelo de cinco categorías de servicio — y aun así entregar una app coherente y lista para producción.
+
+La capacidad de la Customer App de unificar rideshare, dining, yates, beachclubs y nightlife bajo una sola interfaz con tres modos de interacción, lógica de eventos conectados y seguimiento en tiempo real es la prueba. Esto no es una funcionalidad; esto es un sistema.
+
+<Figure
+  src="/case-studies/hello-dojo/images/final-reflection.jpg"
+  alt="helloDojo Customer App — estado final"
+  placeholderLabel="helloDojo Customer App — estado final"
+/>

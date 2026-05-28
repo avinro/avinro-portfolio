@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { TocHeading } from "@/lib/content/toc";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +10,7 @@ interface TocSidebarProps {
 }
 
 export function TocSidebar({ headings }: TocSidebarProps) {
+  const t = useTranslations("toc");
   const [activeId, setActiveId] = useState<string>("");
   const [isMobileStuck, setIsMobileStuck] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -81,7 +83,7 @@ export function TocSidebar({ headings }: TocSidebarProps) {
   const activeHeading = headings.find((h) => h.id === activeId);
 
   const navList = (
-    <nav aria-label="On this page">
+    <nav aria-label={t("onThisPage")}>
       <ul className="space-y-1">
         {headings.map(({ id, text }) => {
           const isActive = id === activeId;
@@ -120,7 +122,7 @@ export function TocSidebar({ headings }: TocSidebarProps) {
             : "mb-2 opacity-100",
         )}
       >
-        On this page
+        {t("onThisPage")}
       </p>
       <details
         ref={mobileDetailsRef}
@@ -128,7 +130,7 @@ export function TocSidebar({ headings }: TocSidebarProps) {
       >
         <summary className="flex cursor-pointer items-center justify-between px-4 py-3 select-none">
           <span className="text-foreground text-base leading-relaxed">
-            {activeHeading ? activeHeading.text : "Select a section"}
+            {activeHeading ? activeHeading.text : t("selectSection")}
           </span>
           <svg
             width="16"
@@ -151,9 +153,12 @@ export function TocSidebar({ headings }: TocSidebarProps) {
   );
 
   const desktopSidebar = (
-    <aside aria-label="On this page" className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+    <aside
+      aria-label={t("onThisPage")}
+      className="hidden lg:sticky lg:top-24 lg:block lg:self-start"
+    >
       <p className="text-muted-foreground mb-3 font-mono text-xs tracking-widest uppercase">
-        On this page
+        {t("onThisPage")}
       </p>
       <div className="max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">{navList}</div>
     </aside>

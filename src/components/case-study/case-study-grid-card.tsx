@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 import { PixelTransition } from "@/components/ui/pixel-transition";
 import { cn } from "@/lib/utils";

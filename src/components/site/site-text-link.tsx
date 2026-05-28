@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithoutRef } from "react";
 
+import { Link } from "@/i18n/navigation";
 import { siteUnderlineBarClassName } from "@/components/site/site-link-underline";
 import { cn } from "@/lib/utils";
 

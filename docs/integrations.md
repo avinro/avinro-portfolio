@@ -51,8 +51,11 @@ Server-only module. Never import from client components.
 **Prompt injection prevention:**
 
 - System prompt is built statically from repo-owned MDX files at call time; no user input enters the system prompt
+- The chat route accepts only user-authored messages from the browser; client-sent assistant history is ignored
+- The chat route blocks prompt-disclosure and jailbreak requests before calling Gemini
 - `sanitizeMessage()` strips `<system>`, `[INST]`, `<<SYS>>` tags from all user messages
 - Message history is capped at the last 10 messages; each message truncated to 1,000 characters
+- Gemini output is reviewed server-side before being returned; suspected instruction leaks are replaced with a safe refusal
 - AI response HTML is sanitised via DOMPurify with a strict allowlist before `dangerouslySetInnerHTML`
 
 Every call (including disabled ones) is logged with token counts, latency, and cost estimate.

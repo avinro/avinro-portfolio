@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
+
+import { Link } from "@/i18n/navigation";
+import { routing, type Locale } from "@/i18n/routing";
 import {
   getCaseStudyBySlug,
   getCaseStudySlugs,
@@ -22,16 +25,18 @@ import { RelatedRail } from "@/components/case-study/related-rail";
 import { getRelatedItems } from "@/lib/content/related";
 
 export function generateStaticParams() {
-  return getCaseStudySlugs().map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    getCaseStudySlugs(locale).map((slug) => ({ locale, slug })),
+  );
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
+  const { locale, slug } = await params;
+  const cs = getCaseStudyBySlug(slug, locale);
   if (!cs) return {};
 
   const { frontmatter } = cs;
@@ -84,6 +89,12 @@ interface CoverMetaProps {
   coverage: string[];
   coverImage: string;
   readingTimeText: string;
+  labels: {
+    client: string;
+    role: string;
+    year: string;
+    readTime: string;
+  };
 }
 
 function CoverMeta({
@@ -94,6 +105,7 @@ function CoverMeta({
   coverage,
   coverImage,
   readingTimeText,
+  labels,
 }: CoverMetaProps) {
   return (
     <div className="flex flex-col gap-8">
@@ -111,25 +123,25 @@ function CoverMeta({
       <div className="border-border/40 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-4">
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Client
+            {labels.client}
           </span>
           <span className="text-sm font-medium">{client}</span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Role
+            {labels.role}
           </span>
           <span className="text-sm font-medium">{role}</span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Year
+            {labels.year}
           </span>
           <span className="text-sm font-medium tabular-nums">{year}</span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Read time
+            {labels.readTime}
           </span>
           <ReadingTimeChip text={readingTimeText} />
         </div>
@@ -152,17 +164,16 @@ function CoverMeta({
 interface NextCaseCTAProps {
   nextTitle: string;
   nextSlug: string;
+  label: string;
 }
 
-function NextCaseCTA({ nextTitle, nextSlug }: NextCaseCTAProps) {
+function NextCaseCTA({ nextTitle, nextSlug, label }: NextCaseCTAProps) {
   return (
     <div className="border-border/40 mt-16 border-t pt-12">
-      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-        Next case study
-      </p>
+      <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">{label}</p>
       <Link
         href={`/case-studies/${nextSlug}`}
-        aria-label={`Next case study: ${nextTitle}`}
+        aria-label={`${label}: ${nextTitle}`}
         data-cta-label={nextTitle}
         data-cta-href={`/case-studies/${nextSlug}`}
         data-cta-position="next_case"
@@ -182,17 +193,23 @@ function NextCaseCTA({ nextTitle, nextSlug }: NextCaseCTAProps) {
   );
 }
 
-export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
+export default async function CaseStudyPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>;
+}) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("caseStudies");
+  const cs = getCaseStudyBySlug(slug, locale);
   if (!cs) notFound();
 
   const { frontmatter, content, readingTime } = cs;
   const tocHeadings = extractTocHeadings(content);
 
-  const relatedItems = getRelatedItems(slug);
+  const relatedItems = getRelatedItems(slug, locale);
 
-  const published = getPublishedCaseStudies();
+  const published = getPublishedCaseStudies(locale);
   const currentIdx = published.findIndex((p) => p.frontmatter.slug === slug);
   const nextCs =
     currentIdx !== -1 && published.length > 1
@@ -216,6 +233,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             coverage={frontmatter.coverage}
             coverImage={frontmatter.coverImage}
             readingTimeText={readingTime.text}
+            labels={{
+              client: t("coverMeta.client"),
+              role: t("coverMeta.role"),
+              year: t("coverMeta.year"),
+              readTime: t("coverMeta.readTime"),
+            }}
           />
         </Container>
       </Section>
@@ -224,7 +247,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         <Section spacing="card">
           <Container width="caseStudy">
             <p className="text-muted-foreground mb-6 font-mono text-xs tracking-widest uppercase">
-              Outcome
+              {t("outcome")}
             </p>
             <Stats data={frontmatter.kpis} />
           </Container>
@@ -245,6 +268,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <NextCaseCTA
                 nextTitle={nextCs.frontmatter.title}
                 nextSlug={nextCs.frontmatter.slug}
+                label={t("nextCaseStudy")}
               />
             )}
           </CaseStudyBody>

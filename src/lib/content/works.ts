@@ -89,14 +89,19 @@ export interface Work {
   };
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "works");
+const CONTENT_ROOT = path.join(process.cwd(), "content", "works");
 
-function readAllWorkFiles(): Work[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+function contentDir(locale: string): string {
+  return path.join(CONTENT_ROOT, locale);
+}
+
+function readAllWorkFiles(locale: string): Work[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files.map((file) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+    const raw = fs.readFileSync(path.join(dir, file), "utf-8");
     const { data, content } = matter(raw);
 
     const result = WorkFrontmatterSchema.safeParse(data);
@@ -104,7 +109,7 @@ function readAllWorkFiles(): Work[] {
       const issues = result.error.issues
         .map((i) => `  ${i.path.join(".")}: ${i.message}`)
         .join("\n");
-      throw new Error(`Invalid frontmatter in content/works/${file}:\n${issues}`);
+      throw new Error(`Invalid frontmatter in content/works/${locale}/${file}:\n${issues}`);
     }
 
     const rt = readingTime(content);
@@ -121,23 +126,28 @@ function readAllWorkFiles(): Work[] {
   });
 }
 
-let _cache: Work[] | null = null;
+const _cache = new Map<string, Work[]>();
 
-function getAll(): Work[] {
-  _cache ??= readAllWorkFiles().sort((a, b) => a.frontmatter.order - b.frontmatter.order);
-  return _cache;
+function getAll(locale = "en"): Work[] {
+  if (!_cache.has(locale)) {
+    _cache.set(
+      locale,
+      readAllWorkFiles(locale).sort((a, b) => a.frontmatter.order - b.frontmatter.order),
+    );
+  }
+  return _cache.get(locale) ?? [];
 }
 
-export function getAllWorks(): Work[] {
-  return getAll();
+export function getAllWorks(locale = "en"): Work[] {
+  return getAll(locale);
 }
 
-export function getPublishedWorks(): Work[] {
-  return getAll().filter((w) => !w.frontmatter.draft);
+export function getPublishedWorks(locale = "en"): Work[] {
+  return getAll(locale).filter((w) => !w.frontmatter.draft);
 }
 
-export function getWorkBySlug(slug: string): Work | undefined {
-  return getAll().find((w) => w.frontmatter.slug === slug);
+export function getWorkBySlug(slug: string, locale = "en"): Work | undefined {
+  return getAll(locale).find((w) => w.frontmatter.slug === slug);
 }
 
 export interface PublishedWorkNeighbors {
@@ -145,8 +155,8 @@ export interface PublishedWorkNeighbors {
   next: Work | null;
 }
 
-export function getPublishedWorkNeighbors(slug: string): PublishedWorkNeighbors {
-  const published = getPublishedWorks();
+export function getPublishedWorkNeighbors(slug: string, locale = "en"): PublishedWorkNeighbors {
+  const published = getPublishedWorks(locale);
   const idx = published.findIndex((w) => w.frontmatter.slug === slug);
   if (idx === -1) return { prev: null, next: null };
   return {
@@ -155,8 +165,8 @@ export function getPublishedWorkNeighbors(slug: string): PublishedWorkNeighbors 
   };
 }
 
-export function getWorkSlugs(): string[] {
-  return getAll().map((w) => w.frontmatter.slug);
+export function getWorkSlugs(locale = "en"): string[] {
+  return getAll(locale).map((w) => w.frontmatter.slug);
 }
 
 export interface WorkSitemapEntry {
@@ -164,17 +174,18 @@ export interface WorkSitemapEntry {
   lastModified: Date;
 }
 
-export function getPublishedWorksForSitemap(): WorkSitemapEntry[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+export function getPublishedWorksForSitemap(locale = "en"): WorkSitemapEntry[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files
     .map((file) => {
-      const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
       const { data } = matter(raw);
       const result = WorkFrontmatterSchema.safeParse(data);
       if (!result.success || result.data.draft) return null;
-      const mtime = fs.statSync(path.join(CONTENT_DIR, file)).mtime;
+      const mtime = fs.statSync(path.join(dir, file)).mtime;
       return { slug: result.data.slug, lastModified: mtime };
     })
     .filter((entry): entry is WorkSitemapEntry => entry !== null);

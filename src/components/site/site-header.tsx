@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
+import { Link, usePathname } from "@/i18n/navigation";
 import { homeContent } from "@/lib/content/home";
 import { Button } from "@/components/ui/button";
 import { ContactSheet } from "@/components/site/contact-sheet";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { useLenis } from "@/components/site/lenis-provider";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { isNavSectionActive } from "@/lib/navigation/nav-active";
@@ -15,15 +16,17 @@ import { isNavSectionActive } from "@/lib/navigation/nav-active";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Work", href: "/work" },
-  { label: "Case studies", href: "/case-studies" },
-  { label: "About", href: "/about" },
+  { labelKey: "work", href: "/work" },
+  { labelKey: "caseStudies", href: "/case-studies" },
+  { labelKey: "about", href: "/about" },
 ] as const;
 
 const SCROLL_THRESHOLD = 40;
 
 export function SiteHeader() {
   const { primaryCta } = homeContent;
+  const tNav = useTranslations("nav");
+  const tHome = useTranslations("home");
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
@@ -112,7 +115,7 @@ export function SiteHeader() {
         href="#main-content"
         className="focus-ring bg-primary text-primary-foreground absolute top-4 left-4 z-50 -translate-y-16 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0"
       >
-        Skip to main content
+        {tNav("skipToContent")}
       </a>
       <div
         aria-hidden="true"
@@ -150,7 +153,7 @@ export function SiteHeader() {
             href="/"
             onClick={handleLogoClick}
             className="focus-ring rounded-sm transition-opacity hover:opacity-70"
-            aria-label="Avinro — home"
+            aria-label={tNav("home")}
           >
             <Image
               src="/logo.png"
@@ -162,24 +165,25 @@ export function SiteHeader() {
               style={{ width: "auto" }}
             />
           </Link>
-          <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
+          <nav aria-label={tNav("mainNavigation")} className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => {
               const active = isNavSectionActive(pathname, link.href);
               return (
                 <SiteTextLink key={link.href} href={link.href} variant="navDesktop" active={active}>
-                  {link.label}
+                  {tNav(link.labelKey)}
                 </SiteTextLink>
               );
             })}
+            <LanguageSwitcher variant="desktop" />
             <ContactSheet ctaPosition="header">
               <Button
                 size="default"
                 className="font-mono text-xs tracking-wider uppercase"
-                data-cta-label={primaryCta.label}
+                data-cta-label={tHome("primaryCta.label")}
                 data-cta-href={primaryCta.href}
                 data-cta-position="header"
               >
-                {primaryCta.label}
+                {tHome("primaryCta.label")}
               </Button>
             </ContactSheet>
           </nav>
@@ -190,7 +194,7 @@ export function SiteHeader() {
             }}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav-panel"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMenuOpen ? tNav("closeMenu") : tNav("openMenu")}
             className="focus-ring relative flex h-[44px] w-[44px] items-center justify-center rounded-md md:hidden"
           >
             <span className="relative block h-[14px] w-5" aria-hidden="true">
@@ -227,7 +231,7 @@ export function SiteHeader() {
           aria-hidden={!isMenuOpen}
         >
           <nav
-            aria-label="Mobile navigation"
+            aria-label={tNav("mobileNavigation")}
             className={cn(
               "flex flex-col items-center justify-center gap-8 text-center",
               isMenuOpen ? "flex-1" : "hidden",
@@ -252,10 +256,19 @@ export function SiteHeader() {
                   )}
                   style={isMenuOpen ? { animationDelay: `${String(280 + i * 60)}ms` } : undefined}
                 >
-                  {link.label}
+                  {tNav(link.labelKey)}
                 </SiteTextLink>
               );
             })}
+            <LanguageSwitcher
+              variant="mobile"
+              className={cn(
+                isMenuOpen
+                  ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
+                  : "pointer-events-none [transform:none] [animation:none] opacity-0",
+              )}
+              style={isMenuOpen ? { animationDelay: "460ms" } : undefined}
+            />
           </nav>
           <div
             className={cn(
@@ -264,7 +277,7 @@ export function SiteHeader() {
                 ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
                 : "pointer-events-none [transform:none] [animation:none] opacity-0",
             )}
-            style={isMenuOpen ? { animationDelay: `${String(280 + 3 * 60)}ms` } : undefined}
+            style={isMenuOpen ? { animationDelay: "520ms" } : undefined}
           >
             <ContactSheet ctaPosition="mobile_overlay">
               <Button
@@ -274,11 +287,11 @@ export function SiteHeader() {
                 onClick={() => {
                   closeMenuInstantly();
                 }}
-                data-cta-label={primaryCta.label}
+                data-cta-label={tHome("primaryCta.label")}
                 data-cta-href={primaryCta.href}
                 data-cta-position="mobile_overlay"
               >
-                {primaryCta.label}
+                {tHome("primaryCta.label")}
               </Button>
             </ContactSheet>
           </div>

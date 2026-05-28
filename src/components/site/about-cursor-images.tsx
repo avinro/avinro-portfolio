@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
+import { useTranslations } from "next-intl";
 
 import { homeContent } from "@/lib/content/home";
 import { Container } from "@/components/layout/container";
@@ -273,6 +274,7 @@ function StaticCollage() {
 
 export function AboutCursorImages() {
   const { aboutTeaser } = homeContent;
+  const t = useTranslations("home");
   const sectionRef = useRef<HTMLElement>(null);
   const [reducedMotion] = useState(
     () =>
@@ -288,7 +290,7 @@ export function AboutCursorImages() {
   return (
     <section
       ref={sectionRef}
-      aria-label="About"
+      aria-label={t("aboutTeaser.aria")}
       className="bg-background relative"
       style={{ height: "300dvh" }}
     >
@@ -297,7 +299,7 @@ export function AboutCursorImages() {
           <>
             <StaticCollage />
             <div className="relative z-10 flex h-full items-center justify-center px-4">
-              <TextContent aboutTeaser={aboutTeaser} />
+              <TextContent linkHref={aboutTeaser.linkHref} />
             </div>
           </>
         ) : (
@@ -314,7 +316,7 @@ export function AboutCursorImages() {
             </div>
 
             <div className="relative z-10 flex h-full items-center justify-center px-4">
-              <TextContent aboutTeaser={aboutTeaser} />
+              <TextContent linkHref={aboutTeaser.linkHref} />
             </div>
           </>
         )}
@@ -323,28 +325,23 @@ export function AboutCursorImages() {
   );
 }
 
-interface AboutTeaser {
-  greeting: string;
-  bio: string;
-  linkLabel: string;
-  linkHref: string;
-}
+function TextContent({ linkHref }: { linkHref: string }) {
+  const t = useTranslations("home");
 
-function TextContent({ aboutTeaser }: { aboutTeaser: AboutTeaser }) {
   return (
     <Container width="narrow">
       <div className="mx-auto flex max-w-xl flex-col items-center gap-5 text-center">
         <div className="flex flex-col gap-3">
           <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight text-balance sm:text-3xl">
-            {aboutTeaser.greeting}
+            {t("aboutTeaser.greeting")}
           </p>
           <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight text-balance sm:text-3xl">
-            {aboutTeaser.bio}
+            {t("aboutTeaser.bio")}
           </p>
         </div>
         <span className="relative z-20 inline-flex justify-center">
-          <SiteTextLink href={aboutTeaser.linkHref} variant="inlineMono">
-            {aboutTeaser.linkLabel}
+          <SiteTextLink href={linkHref} variant="inlineMono">
+            {t("aboutTeaser.linkLabel")}
             <span aria-hidden="true" className="transition-transform duration-150">
               →
             </span>

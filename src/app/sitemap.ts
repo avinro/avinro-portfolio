@@ -3,6 +3,17 @@ import { SITE_URL } from "@/lib/seo/site";
 import { getPublishedCaseStudiesForSitemap } from "@/lib/content/case-studies";
 import { getPublishedWorksForSitemap } from "@/lib/content/works";
 
+function languageAlternates(pathname = "") {
+  const path = pathname === "/" ? "" : pathname;
+
+  return {
+    languages: {
+      en: `${SITE_URL}${path}`,
+      es: `${SITE_URL}/es${path}`,
+    },
+  };
+}
+
 /**
  * Native App Router sitemap — no external dependency needed.
  *
@@ -23,24 +34,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: buildDate,
       changeFrequency: "monthly",
       priority: 1,
+      alternates: languageAlternates("/"),
     },
     {
       url: `${SITE_URL}/work`,
       lastModified: buildDate,
       changeFrequency: "monthly",
       priority: 0.9,
+      alternates: languageAlternates("/work"),
     },
     {
       url: `${SITE_URL}/case-studies`,
       lastModified: buildDate,
       changeFrequency: "monthly",
       priority: 0.9,
+      alternates: languageAlternates("/case-studies"),
     },
     {
       url: `${SITE_URL}/about`,
       lastModified: buildDate,
       changeFrequency: "yearly",
       priority: 0.8,
+      alternates: languageAlternates("/about"),
     },
   ];
 
@@ -50,6 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly",
       priority: 0.85,
+      alternates: languageAlternates(`/case-studies/${slug}`),
     }),
   );
 
@@ -59,6 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
+      alternates: languageAlternates(`/work/${slug}`),
     }),
   );
 

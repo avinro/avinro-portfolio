@@ -1,20 +1,31 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
 import { getPublishedCaseStudies } from "@/lib/content/case-studies";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { CaseStudyGrid } from "@/components/case-study/case-study-grid";
 
-export const metadata: Metadata = {
-  title: "Case Studies",
-  description: "A selection of 0→1 products and multi-app systems, designed and shipped.",
-  alternates: {
-    canonical: "/case-studies",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "caseStudies" });
+  return {
+    title: t("pageTitle"),
+    description: t("pageDescription"),
+    alternates: { canonical: "/case-studies" },
+  };
+}
 
-export default function CaseStudiesPage() {
-  const cases = getPublishedCaseStudies();
+export default async function CaseStudiesPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("caseStudies");
+  const cases = getPublishedCaseStudies(locale);
 
   return (
     <main id="main-content">
@@ -27,14 +38,14 @@ export default function CaseStudiesPage() {
         <Container>
           <div className="flex flex-col items-center gap-4 text-center">
             <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-              Into my process
+              {t("kicker")}
             </p>
             <h1 className="font-display text-foreground text-4xl font-semibold tracking-tight sm:text-5xl">
-              Problems solved,
-              <br className="hidden sm:block" /> products shipped.
+              {t("headline").split("\n")[0]}
+              <br className="hidden sm:block" /> {t("headline").split("\n")[1]}
             </h1>
             <p className="text-muted-foreground max-w-md text-base leading-relaxed sm:text-lg md:max-w-none">
-              Real constraints, real teams, real outcomes.
+              {t("intro")}
             </p>
           </div>
         </Container>

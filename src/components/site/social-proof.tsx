@@ -1,8 +1,11 @@
+import { useTranslations } from "next-intl";
+
 import { homeContent } from "@/lib/content/home";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
 export function SocialProof() {
+  const t = useTranslations("home");
   const { socialProof } = homeContent;
 
   return (
@@ -10,7 +13,7 @@ export function SocialProof() {
       <Container>
         <div className="flex flex-col gap-8">
           <p className="text-muted-foreground w-full text-center font-mono text-xs tracking-[0.15em] uppercase">
-            {socialProof.sectionTitle}
+            {t("socialProof.sectionTitle")}
           </p>
           <figure className="flex flex-col gap-6">
             <span

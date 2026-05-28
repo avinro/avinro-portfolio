@@ -15,8 +15,9 @@ import AboutPage from "./page";
 describe("AboutPage", () => {
   let html: string;
 
-  beforeAll(() => {
-    html = renderToStaticMarkup(<AboutPage />);
+  beforeAll(async () => {
+    const page = await AboutPage({ params: Promise.resolve({ locale: "en" }) });
+    html = renderToStaticMarkup(page);
   });
 
   it("renders without throwing and produces non-empty markup", () => {

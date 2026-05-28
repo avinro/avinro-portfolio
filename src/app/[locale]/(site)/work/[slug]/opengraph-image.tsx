@@ -1,21 +1,28 @@
 import { ImageResponse } from "next/og";
-import { getCaseStudyBySlug, getCaseStudySlugs } from "@/lib/content/case-studies";
+import { routing, type Locale } from "@/i18n/routing";
+import { getWorkBySlug, getWorkSlugs } from "@/lib/content/works";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export function generateStaticParams() {
-  return getCaseStudySlugs().map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    getWorkSlugs(locale).map((slug) => ({ locale, slug })),
+  );
 }
 
-export default async function CaseStudyOGImage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const cs = getCaseStudyBySlug(slug);
+export default async function WorkOGImage({
+  params,
+}: {
+  params: Promise<{ locale: Locale; slug: string }>;
+}) {
+  const { locale, slug } = await params;
+  const work = getWorkBySlug(slug, locale);
 
-  const title = cs?.frontmatter.title ?? "Case Study";
-  const client = cs?.frontmatter.client ?? "";
-  const year = cs?.frontmatter.year != null ? String(cs.frontmatter.year) : "";
+  const title = work?.frontmatter.title ?? "Work";
+  const category = work?.frontmatter.category ?? "";
+  const year = work?.frontmatter.year != null ? String(work.frontmatter.year) : "";
 
   return new ImageResponse(
     <div
@@ -41,7 +48,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
           marginBottom: 40,
         }}
       >
-        avinro.com · Case Study
+        avinro.com · Work
       </span>
       <span
         style={{
@@ -56,7 +63,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
       >
         {title}
       </span>
-      {(client || year) && (
+      {(category || year) && (
         <span
           style={{
             fontSize: 24,
@@ -64,7 +71,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
             color: "#71717A",
           }}
         >
-          {[client, year].filter(Boolean).join(" · ")}
+          {[category, year].filter(Boolean).join(" · ")}
         </span>
       )}
       <div

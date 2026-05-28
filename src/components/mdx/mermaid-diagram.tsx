@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface MermaidDiagramProps {
@@ -16,6 +17,7 @@ function extractLabel(src: string): string {
 type MermaidRenderResult = { svg: string } | { bindFunctions?: (el: Element) => void; svg: string };
 
 export function MermaidDiagram({ source, className }: MermaidDiagramProps) {
+  const t = useTranslations("mdx");
   const decoded = Buffer.from(source, "base64").toString("utf-8");
   const label = extractLabel(decoded);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +89,7 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps) {
       ) : (
         <div
           aria-busy="true"
-          aria-label="Loading diagram…"
+          aria-label={t("loadingDiagram")}
           className="bg-muted animate-pulse rounded"
           style={{ aspectRatio: "16 / 5", minHeight: "120px" }}
         />

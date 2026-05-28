@@ -5,7 +5,7 @@ import type { AiCallLog, Logger } from "./types";
 
 export type { AiCallLog, Logger };
 
-const MODEL_ID = "gemini-2.0-flash-lite";
+const MODEL_ID = "gemini-3.1-flash-lite-preview";
 
 const RETRYABLE_STATUSES = new Set([429, 503]);
 

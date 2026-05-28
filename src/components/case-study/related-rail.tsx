@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
 import { cn } from "@/lib/utils";
 import type { RelatedItem } from "@/lib/content/related";
@@ -9,16 +10,18 @@ interface RelatedRailProps {
   className?: string;
 }
 
-export function RelatedRail({ items, className }: RelatedRailProps) {
+export async function RelatedRail({ items, className }: RelatedRailProps) {
   if (items.length === 0) return null;
+
+  const t = await getTranslations("related");
 
   return (
     <aside
-      aria-label="Explore more"
+      aria-label={t("exploreMore")}
       className={cn("hidden xl:block", "xl:sticky xl:top-24 xl:self-start", className)}
     >
       <p className="text-muted-foreground mb-4 font-mono text-xs tracking-widest uppercase">
-        Explore more
+        {t("exploreMore")}
       </p>
 
       <ul className="flex flex-col gap-3">

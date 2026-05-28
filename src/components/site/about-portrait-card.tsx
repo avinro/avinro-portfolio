@@ -3,18 +3,19 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 const SPRING = { damping: 30, stiffness: 100, mass: 2 } as const;
 
 const CAPTION_SPRING = { stiffness: 350, damping: 30, mass: 1 } as const;
 
-const BADGES = ["anime lover", "bad bunny fan", "video games", "crypto enthusiast"] as const;
-
 function InterestBadges({ className }: { className?: string }) {
+  const t = useTranslations("about");
+  const badges = t.raw("interests") as string[];
   return (
     <>
-      {BADGES.map((badge) => (
+      {badges.map((badge) => (
         <span
           key={badge}
           className={cn(
@@ -34,6 +35,7 @@ export interface AboutPortraitCardProps {
 }
 
 export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
+  const t = useTranslations("about");
   const figureRef = useRef<HTMLElement>(null);
   const [lastY, setLastY] = useState(0);
 
@@ -88,7 +90,7 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
     <figure
       ref={figureRef}
       data-testid="portrait-card"
-      aria-label="Portrait of Ary"
+      aria-label={t("portraitAria")}
       className="relative flex w-full items-center justify-center"
       style={{ perspective: "800px" }}
       onMouseMove={handleMouseMove}
@@ -108,7 +110,7 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
         <div className="border-border/40 bg-muted relative aspect-[3/4] w-full overflow-hidden rounded-xl border">
           <Image
             src={imageSrc}
-            alt="Ary — portrait"
+            alt={t("portraitAlt")}
             fill
             sizes="(max-width: 768px) 100vw, 320px"
             className="object-cover"
@@ -116,7 +118,7 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
           />
         </div>
         <div
-          aria-label="Interests"
+          aria-label={t("interestsAria")}
           className="absolute bottom-4 left-0 z-10 flex w-full flex-wrap justify-start gap-2 px-4 md:hidden"
         >
           <InterestBadges />

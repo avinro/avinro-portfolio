@@ -2,10 +2,11 @@
 
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ArrowDown, Download } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
 import { homeContent } from "@/lib/content/home";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ const CircularText = dynamic(
 
 export function HomeHero() {
   const { hero, aboutTeaser } = homeContent;
+  const t = useTranslations("home");
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const [isCircleHovered, setIsCircleHovered] = useState(false);
 
@@ -37,7 +39,7 @@ export function HomeHero() {
       <div className="animate-in fade-in fill-mode-both pointer-events-auto absolute top-[10vh] right-6 z-10 delay-700 duration-1000 md:hidden">
         <Link
           href={aboutTeaser.linkHref}
-          aria-label="About — get to know my background"
+          aria-label={t("hero.circularAria")}
           className="group cursor-pointer rounded-full"
           data-cta-href={aboutTeaser.linkHref}
           data-cta-label="Hero circular — About"
@@ -51,7 +53,7 @@ export function HomeHero() {
         >
           <div className="relative" style={{ width: 120, height: 120 }}>
             <CircularText
-              text={isCircleHovered ? hero.circularTextHover : hero.circularText}
+              text={isCircleHovered ? t("hero.circularTextHover") : t("hero.circularText")}
               textChangeTransition="shuffle"
               spinDuration={20}
               onHover="slowDown"
@@ -82,7 +84,7 @@ export function HomeHero() {
         <div className="animate-in fade-in fill-mode-both pointer-events-auto absolute top-0 right-0 z-10 hidden delay-700 duration-1000 md:block">
           <Link
             href={aboutTeaser.linkHref}
-            aria-label="About — get to know my background"
+            aria-label={t("hero.circularAria")}
             className="group cursor-pointer rounded-full"
             data-cta-href={aboutTeaser.linkHref}
             data-cta-label="Hero circular — About"
@@ -96,7 +98,7 @@ export function HomeHero() {
           >
             <div className="relative" style={{ width: 180, height: 180 }}>
               <CircularText
-                text={isCircleHovered ? hero.circularTextHover : hero.circularText}
+                text={isCircleHovered ? t("hero.circularTextHover") : t("hero.circularText")}
                 textChangeTransition="shuffle"
                 spinDuration={20}
                 onHover="slowDown"
@@ -130,7 +132,7 @@ export function HomeHero() {
                 aria-hidden="true"
                 className="pulse-ring inline-block h-1.5 w-1.5 rounded-full bg-green-500"
               />
-              {hero.badgeText}
+              {t("hero.badgeText")}
             </Badge>
           </div>
           <h1
@@ -143,7 +145,7 @@ export function HomeHero() {
             }}
           >
             <VariableProximity
-              label={hero.headline}
+              label={t("hero.headline")}
               containerRef={headlineRef}
               fromFontVariationSettings="'wght' 500, 'opsz' 14"
               toFontVariationSettings="'wght' 900, 'opsz' 40"
@@ -157,29 +159,29 @@ export function HomeHero() {
             />
           </h1>
           <p className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both text-muted-foreground max-w-xl text-base leading-snug delay-150 duration-700 sm:text-xl md:text-2xl">
-            {hero.subheadline}
+            {t("hero.subheadline")}
           </p>
           <div className="animate-in fade-in fill-mode-both flex flex-wrap gap-3 delay-300 duration-700">
             <Button asChild variant="default" size="lg">
               <Link
                 href={hero.primaryCtaHref}
-                data-cta-label={hero.primaryCta}
+                data-cta-label={t("hero.primaryCta")}
                 data-cta-href={hero.primaryCtaHref}
                 data-cta-position="hero_primary"
               >
-                {hero.primaryCta}
+                {t("hero.primaryCta")}
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
               <a
                 href={hero.downloadCtaHref}
                 download
-                data-cta-label={hero.downloadCta}
+                data-cta-label={t("hero.downloadCta")}
                 data-cta-href={hero.downloadCtaHref}
                 data-cta-position="hero_download"
               >
                 <Download className="h-4 w-4" />
-                {hero.downloadCta}
+                {t("hero.downloadCta")}
               </a>
             </Button>
           </div>

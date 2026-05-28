@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
 import { aboutContent } from "@/lib/content/about";
 import { SITE_OG_IMAGE, SITE_TWITTER_CARD } from "@/lib/seo/social";
 import { PersonJsonLd } from "@/lib/seo/json-ld";
@@ -9,28 +11,34 @@ import { Section } from "@/components/layout/section";
 import { ProcessStack } from "@/components/site/process-stack";
 import { AboutPortraitCardLoader } from "@/components/site/about-portrait-card-loader";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Product Design Engineer working at the intersection of strategy, design, and front-end implementation. Background, experience, tools, and design philosophy.",
-  alternates: {
-    canonical: "/about",
-  },
-  openGraph: {
-    title: "Avinro — Product Design Engineer",
-    description:
-      "Product Design Engineer working at the intersection of strategy, design, and front-end implementation.",
-    url: "/about",
-    images: [SITE_OG_IMAGE],
-  },
-  twitter: {
-    card: SITE_TWITTER_CARD,
-    title: "Avinro — Product Design Engineer",
-    description:
-      "Product Design Engineer working at the intersection of strategy, design, and front-end implementation.",
-    images: [SITE_OG_IMAGE.url],
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  const bio = t.raw("hero.bio") as string[];
+  return {
+    title: t("title"),
+    description: bio[0],
+    alternates: {
+      canonical: "/about",
+    },
+    openGraph: {
+      title: t("og.title"),
+      description: t("og.description"),
+      url: "/about",
+      images: [SITE_OG_IMAGE],
+    },
+    twitter: {
+      card: SITE_TWITTER_CARD,
+      title: t("og.title"),
+      description: t("og.description"),
+      images: [SITE_OG_IMAGE.url],
+    },
+  };
+}
 
 function SectionKicker({ children }: { children: React.ReactNode }) {
   return (
@@ -107,8 +115,31 @@ function ToolGroupBlock({ group }: { group: ToolGroup }) {
   );
 }
 
-export default function AboutPage() {
+export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("about");
   const { hero, experience, education, tools, process } = aboutContent;
+  const heroBio = t.raw("hero.bio") as string[];
+  const experienceOutcomes = t.raw("experience.entries") as { outcome: string }[];
+  const educationEntries = t.raw("education.entries") as { description: string }[];
+  const processStages = t.raw("process.stages") as {
+    title: string;
+    subtitle: string;
+    body: string;
+  }[];
+  const localizedExperience = experience.entries.map((entry, index) => ({
+    ...entry,
+    outcome: experienceOutcomes[index]?.outcome ?? entry.outcome,
+  }));
+  const localizedEducation = education.entries.map((entry, index) => ({
+    ...entry,
+    description: educationEntries[index]?.description ?? entry.description,
+  }));
+  const localizedStages = process.stages.map((stage, index) => ({
+    ...stage,
+    ...processStages[index],
+  }));
 
   return (
     <main id="main-content">
@@ -117,17 +148,17 @@ export default function AboutPage() {
         <Container>
           <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
             <div className="flex flex-col gap-6 md:flex-1">
-              <SectionKicker>About</SectionKicker>
+              <SectionKicker>{t("title")}</SectionKicker>
 
               <h1
                 className="font-display font-semibold tracking-tight text-balance"
                 style={{ fontSize: "var(--text-display-sm)", lineHeight: 1.1 }}
               >
-                Product Design Engineer.
+                {t("hero.headline")}
               </h1>
 
               <div className="flex flex-col gap-4">
-                {hero.bio.map((paragraph, i) => (
+                {heroBio.map((paragraph, i) => (
                   <p key={i} className="text-muted-foreground text-base leading-relaxed sm:text-lg">
                     {paragraph}
                   </p>
@@ -143,10 +174,10 @@ export default function AboutPage() {
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
-            <SectionKicker>{experience.sectionTitle}</SectionKicker>
-            <h2 className="sr-only">{experience.sectionTitle}</h2>
+            <SectionKicker>{t("experience.sectionTitle")}</SectionKicker>
+            <h2 className="sr-only">{t("experience.sectionTitle")}</h2>
             <div>
-              {experience.entries.map((entry) => (
+              {localizedExperience.map((entry) => (
                 <ExperienceRow key={`${entry.year}-${entry.role}-${entry.company}`} entry={entry} />
               ))}
             </div>
@@ -156,10 +187,10 @@ export default function AboutPage() {
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
-            <SectionKicker>{education.sectionTitle}</SectionKicker>
-            <h2 className="sr-only">{education.sectionTitle}</h2>
+            <SectionKicker>{t("education.sectionTitle")}</SectionKicker>
+            <h2 className="sr-only">{t("education.sectionTitle")}</h2>
             <div>
-              {education.entries.map((entry) => (
+              {localizedEducation.map((entry) => (
                 <EducationRow key={`${entry.years}-${entry.degree}`} entry={entry} />
               ))}
             </div>
@@ -169,8 +200,8 @@ export default function AboutPage() {
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
-            <SectionKicker>{tools.sectionTitle}</SectionKicker>
-            <h2 className="sr-only">{tools.sectionTitle}</h2>
+            <SectionKicker>{t("tools.sectionTitle")}</SectionKicker>
+            <h2 className="sr-only">{t("tools.sectionTitle")}</h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {tools.groups.map((group) => (
                 <ToolGroupBlock key={group.label} group={group} />
@@ -182,9 +213,9 @@ export default function AboutPage() {
       <Section>
         <Container>
           <ProcessStack
-            sectionTitle={process.sectionTitle}
-            intro={process.intro}
-            stages={process.stages}
+            sectionTitle={t("process.sectionTitle")}
+            intro={t("process.intro")}
+            stages={localizedStages}
           />
         </Container>
       </Section>

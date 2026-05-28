@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { CalendarDays, Mail, ArrowRight, ExternalLink } from "lucide-react";
 
 import {
@@ -27,6 +28,7 @@ interface ContactSheetProps {
 
 export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheetProps) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("contactSheet");
   const lenis = useLenis();
 
   const handleOpenChange = (next: boolean) => {
@@ -75,14 +77,12 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
         >
           <div className="shrink-0 px-6 pb-8">
             <SheetHeader className="mt-8 gap-1">
-              <SheetTitle>Have a project in mind?</SheetTitle>
+              <SheetTitle>{t("title")}</SheetTitle>
               <p className="font-display text-muted-foreground/70 text-3xl font-semibold tracking-tight">
-                Let&apos;s build it.
+                {t("tagline")}
               </p>
             </SheetHeader>
-            <SheetDescription className="mt-3">
-              Choose how you&apos;d like to reach out.
-            </SheetDescription>
+            <SheetDescription className="mt-3">{t("description")}</SheetDescription>
           </div>
           <div className="flex flex-col gap-3 px-6 pb-6">
             <button
@@ -96,9 +96,9 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
             >
               <CalendarDays className="size-5 shrink-0" aria-hidden="true" />
               <div className="flex flex-1 flex-col text-left">
-                <span className="text-sm leading-tight font-semibold">Schedule a 30 min call</span>
+                <span className="text-sm leading-tight font-semibold">{t("scheduleCta")}</span>
                 <span className="text-primary-foreground/70 mt-0.5 text-xs">
-                  Free · no commitment
+                  {t("scheduleSubtext")}
                 </span>
               </div>
               <ArrowRight className="size-4 shrink-0 opacity-70" aria-hidden="true" />
@@ -114,7 +114,7 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
             >
               <Mail className="text-muted-foreground size-5 shrink-0" aria-hidden="true" />
               <div className="flex flex-1 flex-col text-left">
-                <span className="text-sm leading-tight font-semibold">Send me an email</span>
+                <span className="text-sm leading-tight font-semibold">{t("emailCta")}</span>
                 <span className="text-muted-foreground mt-0.5 text-xs">{EMAIL}</span>
               </div>
               <ExternalLink className="text-muted-foreground size-4 shrink-0" aria-hidden="true" />

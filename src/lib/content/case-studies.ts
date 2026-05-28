@@ -51,13 +51,19 @@ export interface CaseStudy {
   };
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "case-studies");
+const CONTENT_ROOT = path.join(process.cwd(), "content", "case-studies");
 
-function readAllCaseStudyFiles(): CaseStudy[] {
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+function contentDir(locale: string): string {
+  return path.join(CONTENT_ROOT, locale);
+}
+
+function readAllCaseStudyFiles(locale: string): CaseStudy[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files.map((file) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+    const raw = fs.readFileSync(path.join(dir, file), "utf-8");
     const { data, content } = matter(raw);
 
     const result = CaseStudyFrontmatterSchema.safeParse(data);
@@ -65,7 +71,7 @@ function readAllCaseStudyFiles(): CaseStudy[] {
       const issues = result.error.issues
         .map((i) => `  ${i.path.join(".")}: ${i.message}`)
         .join("\n");
-      throw new Error(`Invalid frontmatter in content/case-studies/${file}:\n${issues}`);
+      throw new Error(`Invalid frontmatter in content/case-studies/${locale}/${file}:\n${issues}`);
     }
 
     const rt = readingTime(content);
@@ -82,27 +88,32 @@ function readAllCaseStudyFiles(): CaseStudy[] {
   });
 }
 
-let _cache: CaseStudy[] | null = null;
+const _cache = new Map<string, CaseStudy[]>();
 
-function getAll(): CaseStudy[] {
-  _cache ??= readAllCaseStudyFiles().sort((a, b) => a.frontmatter.order - b.frontmatter.order);
-  return _cache;
+function getAll(locale = "en"): CaseStudy[] {
+  if (!_cache.has(locale)) {
+    _cache.set(
+      locale,
+      readAllCaseStudyFiles(locale).sort((a, b) => a.frontmatter.order - b.frontmatter.order),
+    );
+  }
+  return _cache.get(locale) ?? [];
 }
 
-export function getAllCaseStudies(): CaseStudy[] {
-  return getAll();
+export function getAllCaseStudies(locale = "en"): CaseStudy[] {
+  return getAll(locale);
 }
 
-export function getPublishedCaseStudies(): CaseStudy[] {
-  return getAll().filter((cs) => !cs.frontmatter.draft);
+export function getPublishedCaseStudies(locale = "en"): CaseStudy[] {
+  return getAll(locale).filter((cs) => !cs.frontmatter.draft);
 }
 
-export function getCaseStudyBySlug(slug: string): CaseStudy | undefined {
-  return getAll().find((cs) => cs.frontmatter.slug === slug);
+export function getCaseStudyBySlug(slug: string, locale = "en"): CaseStudy | undefined {
+  return getAll(locale).find((cs) => cs.frontmatter.slug === slug);
 }
 
-export function getCaseStudySlugs(): string[] {
-  return getAll().map((cs) => cs.frontmatter.slug);
+export function getCaseStudySlugs(locale = "en"): string[] {
+  return getAll(locale).map((cs) => cs.frontmatter.slug);
 }
 
 export interface CaseStudySitemapEntry {
@@ -110,16 +121,18 @@ export interface CaseStudySitemapEntry {
   lastModified: Date;
 }
 
-export function getPublishedCaseStudiesForSitemap(): CaseStudySitemapEntry[] {
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+export function getPublishedCaseStudiesForSitemap(locale = "en"): CaseStudySitemapEntry[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files
     .map((file) => {
-      const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
       const { data } = matter(raw);
       const result = CaseStudyFrontmatterSchema.safeParse(data);
       if (!result.success || result.data.draft) return null;
-      const mtime = fs.statSync(path.join(CONTENT_DIR, file)).mtime;
+      const mtime = fs.statSync(path.join(dir, file)).mtime;
       return { slug: result.data.slug, lastModified: mtime };
     })
     .filter((entry): entry is CaseStudySitemapEntry => entry !== null);

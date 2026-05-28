@@ -1,9 +1,12 @@
+import { useTranslations } from "next-intl";
+
 import { homeContent } from "@/lib/content/home";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
 export function AboutTeaser() {
+  const t = useTranslations("home");
   const { aboutTeaser } = homeContent;
 
   return (
@@ -12,14 +15,14 @@ export function AboutTeaser() {
         <div className="max-w3xl mx-auto flex flex-col items-center gap-5 text-center">
           <div className="flex flex-col gap-3">
             <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
-              {aboutTeaser.greeting}
+              {t("aboutTeaser.greeting")}
             </p>
             <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
-              {aboutTeaser.bio}
+              {t("aboutTeaser.bio")}
             </p>
           </div>
           <SiteTextLink href={aboutTeaser.linkHref} variant="inlineMono">
-            {aboutTeaser.linkLabel}
+            {t("aboutTeaser.linkLabel")}
             <span aria-hidden="true" className="transition-transform duration-150">
               →
             </span>

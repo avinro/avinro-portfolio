@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
+import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 import { MdxInternalBodyLink } from "./mdx-internal-body-link";
 import { MermaidDiagram } from "./mermaid-diagram";
@@ -459,13 +460,14 @@ interface BeforeAfterProps {
   className?: string;
 }
 
-export function BeforeAfter({
+export async function BeforeAfter({
   label,
   before,
   after,
   sentiment = "neutral",
   className,
 }: BeforeAfterProps) {
+  const t = await getTranslations("mdx");
   const afterColorClass =
     sentiment === "positive"
       ? "text-emerald-500 dark:text-emerald-400"
@@ -476,7 +478,7 @@ export function BeforeAfter({
   return (
     <div
       role="figure"
-      aria-label={`${label}: changed from ${before} to ${after}`}
+      aria-label={t("changedFromTo", { label, before, after })}
       className={cn("border-border/40 my-8 overflow-hidden rounded-xl border", className)}
     >
       <p className="text-muted-foreground border-border/40 border-b px-5 py-3 font-mono text-xs tracking-widest uppercase sm:px-6">
@@ -488,7 +490,7 @@ export function BeforeAfter({
             aria-hidden="true"
             className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
           >
-            Before
+            {t("before")}
           </span>
           <span className="font-display text-muted-foreground text-3xl font-semibold tabular-nums sm:text-4xl">
             {before}
@@ -506,7 +508,7 @@ export function BeforeAfter({
             aria-hidden="true"
             className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
           >
-            After
+            {t("after")}
           </span>
           <span
             className={cn(

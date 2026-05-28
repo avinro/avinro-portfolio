@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { useTranslations } from "next-intl";
 
-import { homeContent } from "@/lib/content/home";
 import { TextType } from "@/components/motion/text-type";
 import { useLenis } from "@/components/site/lenis-provider";
 import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
@@ -20,6 +20,7 @@ interface IntroOpenerProps {
 }
 
 export function IntroOpener({ onComplete }: IntroOpenerProps) {
+  const t = useTranslations("home");
   const overlayRef = useRef<HTMLDivElement>(null);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const exitingRef = useRef(false);
@@ -27,8 +28,8 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
 
   const [introPhrases] = useState(() => {
     const desktop = window.matchMedia(`(min-width: ${String(INTRO_MD_MIN_WIDTH_PX)}px)`).matches;
-    const first = desktop ? homeContent.intro.phrase1.desktop : homeContent.intro.phrase1.mobile;
-    return [first, homeContent.intro.phrase2];
+    const first = desktop ? t("intro.phrase1.desktop") : t("intro.phrase1.mobile");
+    return [first, t("intro.phrase2")];
   });
 
   const typingSpeedByPhrase = useMemo(
@@ -109,7 +110,7 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
       ref={overlayRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Intro"
+      aria-label={t("intro.ariaLabel")}
       tabIndex={-1}
       suppressHydrationWarning
       className="bg-foreground text-background fixed inset-0 z-[70] flex items-center justify-center px-6 text-center focus:outline-none"

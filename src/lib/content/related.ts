@@ -34,8 +34,8 @@ export interface RelatedItem {
  * Returns up to MAX_ITEMS related items for a given case study slug.
  * Returns an empty array when no related content is available.
  */
-export function getRelatedItems(currentSlug: string): RelatedItem[] {
-  const caseStudies = getPublishedCaseStudies()
+export function getRelatedItems(currentSlug: string, locale = "en"): RelatedItem[] {
+  const caseStudies = getPublishedCaseStudies(locale)
     .filter((cs) => cs.frontmatter.slug !== currentSlug)
     .sort((a, b) => a.frontmatter.order - b.frontmatter.order)
     .map<RelatedItem>((cs) => ({
@@ -48,7 +48,7 @@ export function getRelatedItems(currentSlug: string): RelatedItem[] {
       order: cs.frontmatter.order,
     }));
 
-  const works = getPublishedWorks()
+  const works = getPublishedWorks(locale)
     .sort((a, b) => {
       const aOrder = a.frontmatter.featuredOrder ?? a.frontmatter.order;
       const bOrder = b.frontmatter.featuredOrder ?? b.frontmatter.order;
