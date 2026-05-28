@@ -36,24 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-/*
- * Home page — public portfolio landing.
- *
- * Sections:
- *   1. HomeHero            — headline, sub, secondary CTA + CircularText protagonist
- *   2. WorkDivider (top)   — slim h4-scale marquee, scrolls left
- *   3. FlowingWorkMenu     — unified featured works (case studies + visual works)
- *                            each row shows a kind badge (Work / Case study)
- *   3b. WorkDivider (bot)  — same marquee, scrolls right (bookends work section)
- *   4. AboutCursorImages   — bio with cursor-trail images (desktop) / scroll parallax (mobile)
- *   5. TestimonialsCarousel — infinite marquee (rAF transform), hover slowdown
- *
- * Footer lives in (site)/layout.tsx as a curtain behind the content wrapper.
- *
- * Featured items from both case studies and works are merged into a single
- * list sorted by featuredOrder (when set) falling back to order. Each item
- * carries a `kind` discriminator so FlowingWorkMenu routes to the right path.
- */
 export default function Home() {
   const featured: SelectedWorkItem[] = [
     ...getPublishedCaseStudies()

@@ -12,30 +12,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 const LENIS_RESIZE_DEBOUNCE_MS = 100;
 
-// ---------------------------------------------------------------------------
-// Context — exposes the Lenis instance for programmatic scrollTo calls
-// ---------------------------------------------------------------------------
-
 const LenisContext = createContext<Lenis | null>(null);
 
 export function useLenis(): Lenis | null {
   return useContext(LenisContext);
 }
-
-// ---------------------------------------------------------------------------
-// LenisProvider
-//
-// Initialises Lenis smooth scroll with GSAP ScrollTrigger sync.
-// Disabled on:
-//   - Mobile viewports (<768px) — iOS/Android native inertia is sufficient
-//   - prefers-reduced-motion — respect user accessibility preference
-//
-// Z-index layer scale (applied at layout level, documented here):
-//   z-0   SiteFooter curtain (behind all content)
-//   z-10  Content wrapper (children)
-//   z-40  SiteHeader, MobileCtaBar (always on top)
-//   z-50  Temporary interaction layers (max)
-// ---------------------------------------------------------------------------
 
 interface LenisProviderProps {
   children: ReactNode;
@@ -43,16 +24,12 @@ interface LenisProviderProps {
 
 export function LenisProvider({ children }: LenisProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
-  // State drives the context value so consumers re-render when Lenis mounts.
-  // Reading lenisRef.current during render is flagged by react-hooks/refs.
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.matchMedia("(max-width: 767.5px)").matches;
 
-    // Skip Lenis on mobile or when user prefers reduced motion.
-    // ScrollTrigger still works with native scroll in both cases.
     if (prefersReducedMotion || isMobile) {
       ScrollTrigger.refresh();
       return;
@@ -68,8 +45,6 @@ export function LenisProvider({ children }: LenisProviderProps) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLenisInstance(lenis);
 
-    // Bind ScrollTrigger.update so it is called as a standalone function
-    // (avoids @typescript-eslint/unbound-method warning).
     const onScroll = () => {
       ScrollTrigger.update();
     };
@@ -77,24 +52,16 @@ export function LenisProvider({ children }: LenisProviderProps) {
       lenis.raf(time * 1000);
     };
 
-    // Sync Lenis scroll position with GSAP ScrollTrigger each frame.
     lenis.on("scroll", onScroll);
     gsap.ticker.add(tickerFn);
-    // Disable GSAP lag smoothing to prevent ScrollTrigger jitter under Lenis.
     gsap.ticker.lagSmoothing(0);
 
-    // Recompute scroll bounds once fonts and lazy images have settled.
-    // Without this, Lenis may read a shorter scrollHeight on pages with large
-    // deferred sections (e.g. home 300dvh AboutCursorImages + lazy thumbnails),
-    // causing it to stop scrolling before the curtain footer fully reveals.
     scheduleRefreshLenisBounds(lenis);
     const onLoad = () => {
       refreshLenisBounds(lenis);
     };
     window.addEventListener("load", onLoad, { once: true });
 
-    // SiteIntroGate mounts the full site tree after the intro — observe height changes
-    // so Lenis limits stay in sync (intro-only mount would otherwise cap scroll early).
     let resizeDebounceId: ReturnType<typeof setTimeout> | undefined;
     const resizeObserver = new ResizeObserver(() => {
       if (resizeDebounceId) clearTimeout(resizeDebounceId);

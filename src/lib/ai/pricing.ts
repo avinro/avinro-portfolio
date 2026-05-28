@@ -9,9 +9,7 @@ export const PRICING_VERSION = "2026-05";
 export const PRICING_LAST_UPDATED = "2026-05-05";
 
 export const GEMINI_FLASH_LITE_PRICING = {
-  /** USD per 1 million input tokens */
   inputUsdPer1MTokens: 0.075,
-  /** USD per 1 million output tokens */
   outputUsdPer1MTokens: 0.3,
 } as const;
 

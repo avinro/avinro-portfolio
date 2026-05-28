@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 
 export interface VisualViewportState {
-  /** Approximate bottom inset from the OS keyboard overlapping the layout viewport (px). */
   keyboardInset: number;
-  /** Visual viewport height when available; falls back to innerHeight. */
   viewportHeight: number;
 }
 

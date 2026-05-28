@@ -9,10 +9,6 @@ import { Section } from "@/components/layout/section";
 import { ProcessStack } from "@/components/site/process-stack";
 import { AboutPortraitCardLoader } from "@/components/site/about-portrait-card-loader";
 
-// ---------------------------------------------------------------------------
-// Metadata
-// ---------------------------------------------------------------------------
-
 export const metadata: Metadata = {
   title: "About",
   description:
@@ -36,14 +32,6 @@ export const metadata: Metadata = {
   },
 };
 
-// ---------------------------------------------------------------------------
-// Section helpers — inline, page-specific, not reused elsewhere
-// ---------------------------------------------------------------------------
-
-/*
- * SectionKicker — small mono label above each section.
- * Same convention as SocialProof and SelectedWork kickers.
- */
 function SectionKicker({ children }: { children: React.ReactNode }) {
   return (
     <p className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
@@ -52,10 +40,6 @@ function SectionKicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-/*
- * ExperienceRow — single timeline entry.
- * year (mono) · role — company · outcome paragraph
- */
 function ExperienceRow({ entry }: { entry: ExperienceEntry }) {
   return (
     <div className="border-border/40 flex flex-col gap-1 border-b py-6 first:border-t sm:flex-row sm:items-start sm:gap-12">
@@ -77,16 +61,9 @@ function ExperienceRow({ entry }: { entry: ExperienceEntry }) {
   );
 }
 
-/*
- * EducationRow — single education entry, same vocabulary as ExperienceRow.
- */
 function EducationRow({ entry }: { entry: EducationEntry }) {
   return (
     <div className="border-border/40 flex flex-col gap-1 border-b py-6 first:border-t sm:flex-row sm:items-start sm:gap-8">
-      {/*
-       * When a description is present, show the graduation year (end of range).
-       * Otherwise show the start year as usual.
-       */}
       <span className="text-muted-foreground w-16 shrink-0 font-mono text-sm tabular-nums">
         {entry.description ? entry.years.slice(-4) : entry.years.slice(0, 4)}
       </span>
@@ -109,9 +86,6 @@ function EducationRow({ entry }: { entry: EducationEntry }) {
   );
 }
 
-/*
- * ToolChip — single tool label pill.
- */
 function ToolChip({ label }: { label: string }) {
   return (
     <span className="bg-muted text-muted-foreground rounded-full px-3 py-1 font-mono text-xs tracking-wide uppercase">
@@ -120,9 +94,6 @@ function ToolChip({ label }: { label: string }) {
   );
 }
 
-/*
- * ToolGroupBlock — one labelled group of tool chips.
- */
 function ToolGroupBlock({ group }: { group: ToolGroup }) {
   return (
     <div className="flex flex-col gap-3">
@@ -136,35 +107,15 @@ function ToolGroupBlock({ group }: { group: ToolGroup }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
-/*
- * About page.
- *
- * Sections (in order):
- *   1. Hero         — bio + portrait placeholder
- *   2. Experience   — editorial timeline rows
- *   3. Education    — single education entry
- *   4. Tools        — three chip groups
- *   5. My Process   — scroll-driven stacked cards (ProcessStack)
- *
- * Server component — ProcessStack is the only client island.
- * Mobile-first: all base styles target 375px, sm:/md: are additive.
- */
 export default function AboutPage() {
   const { hero, experience, education, tools, process } = aboutContent;
 
   return (
     <main id="main-content">
       <PersonJsonLd />
-
-      {/* ── 1. Hero ─────────────────────────────────────────────────────── */}
       <Section spacing="heroInternalCompact">
         <Container>
           <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
-            {/* Text column */}
             <div className="flex flex-col gap-6 md:flex-1">
               <SectionKicker>About</SectionKicker>
 
@@ -183,21 +134,12 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-
-            {/*
-             * Portrait card — 3D tilt + hover badges on desktop; badges and
-             * caption always visible on mobile (no hover on touch).
-             * Loaded client-side only (ssr: false) so Motion hooks don't run
-             * during server-side rendering or static markup tests.
-             */}
             <div className="w-full md:w-72 lg:w-80">
               <AboutPortraitCardLoader imageSrc={hero.portraitSrc} />
             </div>
           </div>
         </Container>
       </Section>
-
-      {/* ── 2. Experience ───────────────────────────────────────────────── */}
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
@@ -211,8 +153,6 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
-
-      {/* ── 3. Education ────────────────────────────────────────────────── */}
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
@@ -226,8 +166,6 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
-
-      {/* ── 4. Tools & methods ──────────────────────────────────────────── */}
       <Section>
         <Container>
           <div className="flex flex-col gap-8">
@@ -241,14 +179,8 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
-
-      {/* ── 5. My Process ───────────────────────────────────────────────── */}
       <Section>
         <Container>
-          {/*
-           * Header + cards are co-located inside ProcessStack so the header
-           * can fade out when the last card reaches its pin position.
-           */}
           <ProcessStack
             sectionTitle={process.sectionTitle}
             intro={process.intro}

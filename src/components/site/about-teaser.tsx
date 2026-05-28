@@ -3,20 +3,6 @@ import { SiteTextLink } from "@/components/site/site-text-link";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
-/*
- * AboutTeaser — short bio with a link to the full /about page.
- *
- * Design intent (PRO-13 visual refinement):
- *   The generic "About" heading label is removed — the bio opens immediately
- *   with a typographically expressive first sentence styled as a display
- *   heading. The rest of the content follows in body weight.
- *
- *   The "More about me" link is styled in mono to maintain the editorial
- *   system: mono = navigation/meta text, display = content headlines.
- *
- *   Container width="narrow" (max-w-prose) keeps the reading measure
- *   comfortable on wide viewports.
- */
 export function AboutTeaser() {
   const { aboutTeaser } = homeContent;
 
@@ -32,8 +18,6 @@ export function AboutTeaser() {
               {aboutTeaser.bio}
             </p>
           </div>
-
-          {/* Mono link — meta/navigation register */}
           <SiteTextLink href={aboutTeaser.linkHref} variant="inlineMono">
             {aboutTeaser.linkLabel}
             <span aria-hidden="true" className="transition-transform duration-150">

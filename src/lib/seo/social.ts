@@ -1,6 +1,5 @@
 import { OWNER_JOB_TITLE, SITE_NAME } from "@/lib/seo/site";
 
-/** Canonical social preview image (1200×630) for portfolio pages. */
 export const SITE_OG_IMAGE_PATH = "/images/og.jpg";
 
 export const SITE_OG_IMAGE = {

@@ -12,17 +12,10 @@ import { WorkHeaderMeta, WorkHeaderTags } from "@/components/work/work-metadata"
 import { buildWorkHeaderMetadata, buildWorkHeaderTags } from "@/lib/content/work-header-metadata";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-// ---------------------------------------------------------------------------
-// Static generation
-// ---------------------------------------------------------------------------
 
 export function generateStaticParams() {
   return getWorkSlugs().map((slug) => ({ slug }));
 }
-
-// ---------------------------------------------------------------------------
-// Per-slug metadata
-// ---------------------------------------------------------------------------
 
 export async function generateMetadata({
   params,
@@ -69,10 +62,6 @@ export async function generateMetadata({
     ...(frontmatter.draft ? { robots: { index: false, follow: false } } : {}),
   };
 }
-
-// ---------------------------------------------------------------------------
-// Adjacent published work navigation (same order as /work listing)
-// ---------------------------------------------------------------------------
 
 interface WorkProjectNavLinkProps {
   variant: "previous" | "next";
@@ -168,10 +157,6 @@ function WorkProjectAdjacentNav({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Cover image — full-bleed, above the fold
-// ---------------------------------------------------------------------------
-
 function WorkCover({ src, alt, aspect }: { src: string; alt: string; aspect: string }) {
   const ASPECT_RATIOS: Record<string, string> = {
     portrait: "4/5",
@@ -197,15 +182,6 @@ function WorkCover({ src, alt, aspect }: { src: string; alt: string; aspect: str
   );
 }
 
-// ---------------------------------------------------------------------------
-// MDX body — ensure result payoff image appears in ## Result when absent
-// ---------------------------------------------------------------------------
-
-/**
- * When `resultImage` is set but the MDX body never references that URL, inject
- * a <Figure> right after "## Result" so the detail page matches the /work card
- * hover payoff without duplicating frontmatter in every file.
- */
 function buildWorkMdxSource(
   content: string,
   resultImage: string | undefined,
@@ -229,10 +205,6 @@ function buildWorkMdxSource(
   return content.replace(/^## Result\s*\n+/m, `## Result\n\n${figureBlock}`);
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const work = getWorkBySlug(slug);
@@ -249,11 +221,9 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
 
   return (
     <main id="main-content">
-      {/* Hero — title, cover image, and meta strip in one block (mirrors case study pattern) */}
       <Section spacing="heroInternal">
         <Container>
           <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
-            {/* Title + tags | summary */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start lg:gap-8">
               <div className="flex min-w-0 flex-col gap-2 sm:gap-1">
                 <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
@@ -267,20 +237,17 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
               </p>
             </div>
 
-            {/* Cover image — inline with hero, above metadata strip */}
             <WorkCover
               src={frontmatter.coverImage}
               alt={`${frontmatter.title} cover`}
               aspect={frontmatter.coverAspect}
             />
 
-            {/* Metadata strip — expanded from frontmatter, below cover */}
             <WorkHeaderMeta items={headerMetadata} />
           </div>
         </Container>
       </Section>
 
-      {/* Optional MDX body — compact project narrative */}
       {hasIntro && (
         <Section spacing="card">
           <Container width="wide">
@@ -289,11 +256,9 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         </Section>
       )}
 
-      {/* Frontmatter gallery — primary visual content */}
       {frontmatter.gallery.length > 0 && (
         <Section>
           <Container width="wide">
-            {/* Selected screens label — editorial bridge between narrative and visuals */}
             <div className="border-border/40 mb-8 flex items-center gap-4 border-t pt-6">
               <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
                 Selected screens
@@ -308,7 +273,6 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         </Section>
       )}
 
-      {/* Previous / next project navigation */}
       {(prevWork != null || nextWork != null) && (
         <Section spacing="card" className="mb-16">
           <Container>

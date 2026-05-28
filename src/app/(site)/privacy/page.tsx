@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/privacy",
   },
-  // Privacy page does not need OG/Twitter cards — no social sharing intent.
 };
 
 export default function PrivacyPage() {
@@ -18,7 +17,6 @@ export default function PrivacyPage() {
 
   return (
     <main id="main-content">
-      {/* Hero */}
       <Section spacing="heroInternalCompact">
         <Container>
           <p className="text-muted-foreground mb-4 font-mono text-xs tracking-[0.15em] uppercase">
@@ -32,8 +30,6 @@ export default function PrivacyPage() {
           </p>
         </Container>
       </Section>
-
-      {/* Content sections */}
       <Section>
         <Container>
           <div className="flex flex-col gap-12">

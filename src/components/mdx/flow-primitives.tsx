@@ -1,24 +1,3 @@
-/**
- * Flow primitives — visual diagram components for MDX case studies.
- *
- * All components use a child-based API (no array/object props) so they work
- * reliably inside next-mdx-remote/rsc without complex JS prop serialisation.
- *
- * Wrapper components  (accept children):
- *   FlowChain     — linear chain with straight connectors; children = <FlowItem>
- *   FlowSplit     — N side-by-side columns; children = <FlowColumn>
- *   StateGrid     — responsive grid of state cards; children = <StateItem>
- *   PrincipleGrid — larger editorial cards; children = <PrincipleItem>
- *   BranchTree    — root node + branches; children = <Branch>
- *
- * Leaf components  (simple string/bool props, no children needed except Branch/FlowColumn):
- *   FlowItem      — one step inside FlowChain or Branch / FlowColumn
- *   FlowColumn    — one panel inside FlowSplit; children = <FlowItem>
- *   StateItem     — one card inside StateGrid
- *   PrincipleItem — one card inside PrincipleGrid
- *   Branch        — one branch inside BranchTree; children = <FlowItem>
- */
-
 import {
   Children,
   isValidElement,
@@ -111,10 +90,6 @@ import {
 
 import { cn } from "@/lib/utils";
 
-// ---------------------------------------------------------------------------
-// Tone system
-// ---------------------------------------------------------------------------
-
 export type Tone = "neutral" | "accent" | "positive" | "warning" | "negative";
 
 interface ToneStyles {
@@ -163,10 +138,6 @@ function toneStyles(tone: Tone = "neutral"): ToneStyles {
       };
   }
 }
-
-// ---------------------------------------------------------------------------
-// Icon resolution
-// ---------------------------------------------------------------------------
 
 type IconComponent = ComponentType<{ className?: string }>;
 
@@ -253,10 +224,6 @@ function resolveIcon(name?: string): IconComponent {
   return ICONS[name] ?? Circle;
 }
 
-// ---------------------------------------------------------------------------
-// Internal atoms
-// ---------------------------------------------------------------------------
-
 function IconBadge({
   icon,
   tone,
@@ -313,7 +280,6 @@ function FlowConnector({ orientation }: { orientation: "h" | "v" | "auto" }) {
     );
   }
 
-  // "auto" — vertical on mobile, horizontal on md+
   return (
     <div aria-hidden="true" className="relative flex items-center justify-center">
       <span className={cn(chip, "md:hidden")}>
@@ -325,10 +291,6 @@ function FlowConnector({ orientation }: { orientation: "h" | "v" | "auto" }) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// FlowItem — leaf node used inside FlowChain, Branch, FlowColumn
-// ---------------------------------------------------------------------------
 
 export interface FlowItemProps {
   icon: string;
@@ -381,10 +343,6 @@ function FlowItemCard({
   );
 }
 
-// ---------------------------------------------------------------------------
-// FlowChain — linear chain with connector chips between steps
-// ---------------------------------------------------------------------------
-
 interface FlowChainProps {
   children: ReactNode;
   direction?: "horizontal" | "vertical" | "auto";
@@ -392,7 +350,6 @@ interface FlowChainProps {
   className?: string;
 }
 
-/** Max cards rendered side-by-side in a horizontal FlowChain row. */
 const FLOW_CHAIN_COLS = 4;
 
 export function FlowChain({
@@ -409,7 +366,6 @@ export function FlowChain({
 
   const isVertical = direction === "vertical";
 
-  // Vertical direction: single flat list, no chunking.
   if (isVertical) {
     return (
       <div className={cn("my-8", className)}>
@@ -443,9 +399,6 @@ export function FlowChain({
     );
   }
 
-  // Horizontal / auto: chunk into rows of FLOW_CHAIN_COLS.
-  // On mobile each row still collapses to vertical (flex-col); on md+ it's
-  // a horizontal flex row. Between rows a downward connector is shown.
   const rows: (typeof items)[] = [];
   for (let i = 0; i < items.length; i += FLOW_CHAIN_COLS) {
     rows.push(items.slice(i, i + FLOW_CHAIN_COLS));
@@ -458,7 +411,6 @@ export function FlowChain({
 
         return (
           <Fragment key={rowIdx}>
-            {/* One horizontal row */}
             <ol
               role="list"
               className="flex flex-col items-stretch gap-3 md:flex-row md:items-stretch md:gap-2"
@@ -482,10 +434,8 @@ export function FlowChain({
                         index={globalIdx + 1}
                       />
                     </li>
-                    {/* Horizontal connector between cards within the row */}
                     {!isLastInRow && (
                       <li aria-hidden="true" className="flex items-center justify-center">
-                        {/* On mobile show ↓; on md+ show → */}
                         <FlowConnector orientation="auto" />
                       </li>
                     )}
@@ -494,7 +444,6 @@ export function FlowChain({
               })}
             </ol>
 
-            {/* Downward connector between rows */}
             {!isLastRow && (
               <div aria-hidden="true" className="flex justify-center">
                 <FlowConnector orientation="v" />
@@ -506,10 +455,6 @@ export function FlowChain({
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// FlowColumn — one panel inside FlowSplit; children = <FlowItem>
-// ---------------------------------------------------------------------------
 
 export interface FlowColumnProps {
   title: string;
@@ -524,10 +469,6 @@ export interface FlowColumnProps {
 export function FlowColumn(_: FlowColumnProps): ReactElement | null {
   return null;
 }
-
-// ---------------------------------------------------------------------------
-// FlowSplit — N columns side by side
-// ---------------------------------------------------------------------------
 
 interface FlowSplitProps {
   children: ReactNode;
@@ -616,10 +557,6 @@ export function FlowSplit({ children, className }: FlowSplitProps) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// StateItem — leaf node for StateGrid
-// ---------------------------------------------------------------------------
-
 export interface StateItemProps {
   icon: string;
   label: string;
@@ -632,10 +569,6 @@ export interface StateItemProps {
 export function StateItem(_: StateItemProps): ReactElement | null {
   return null;
 }
-
-// ---------------------------------------------------------------------------
-// StateGrid — responsive grid of state cards
-// ---------------------------------------------------------------------------
 
 interface StateGridProps {
   children: ReactNode;
@@ -691,10 +624,6 @@ export function StateGrid({ children, columns, className }: StateGridProps) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// PrincipleItem — leaf node for PrincipleGrid
-// ---------------------------------------------------------------------------
-
 export interface PrincipleItemProps {
   icon: string;
   title: string;
@@ -707,10 +636,6 @@ export interface PrincipleItemProps {
 export function PrincipleItem(_props: PrincipleItemProps): ReactElement | null {
   return null;
 }
-
-// ---------------------------------------------------------------------------
-// PrincipleGrid — larger editorial cards with numbered pills
-// ---------------------------------------------------------------------------
 
 interface PrincipleGridProps {
   children: ReactNode;
@@ -759,10 +684,6 @@ export function PrincipleGrid({ children, columns, className }: PrincipleGridPro
   );
 }
 
-// ---------------------------------------------------------------------------
-// Branch — one branch inside BranchTree; children = <FlowItem>
-// ---------------------------------------------------------------------------
-
 export interface BranchProps {
   title: string;
   tone?: Tone;
@@ -775,10 +696,6 @@ export function Branch(_: BranchProps): ReactElement | null {
   return null;
 }
 
-// ---------------------------------------------------------------------------
-// BranchTree — root node branching into N parallel vertical chains
-// ---------------------------------------------------------------------------
-
 interface BranchTreeProps {
   icon: string;
   label: string;
@@ -787,7 +704,6 @@ interface BranchTreeProps {
   className?: string;
 }
 
-/** Vertical drop from the shared bus into a branch column (column-track center). */
 function BranchColumnDrop({ className }: { className?: string }) {
   return (
     <div
@@ -799,7 +715,6 @@ function BranchColumnDrop({ className }: { className?: string }) {
   );
 }
 
-/** Mobile-only: simple vertical connector above a stacked branch. */
 function BranchMobileConnector() {
   return (
     <div aria-hidden="true" className="flex justify-center py-3">
@@ -867,9 +782,7 @@ export function BranchTree({ icon, label, hint, children, className }: BranchTre
 
   return (
     <div className={cn("my-12", className)}>
-      {/* Single grid: root, trunk, bus, and branch columns share column tracks */}
       <div className={branchGridClass}>
-        {/* Row 1 — root */}
         <div className="col-span-full flex justify-center" style={{ gridRow: 1 }}>
           <div className="border-primary bg-foreground text-background inline-flex max-w-lg items-center gap-3 rounded-full border py-2 pr-5 pl-2.5 sm:py-3 sm:pr-7 sm:pl-3.5">
             <IconBadge
@@ -883,7 +796,6 @@ export function BranchTree({ icon, label, hint, children, className }: BranchTre
           </div>
         </div>
 
-        {/* Row 2 — trunk (vertical, centered on the middle column boundary) */}
         {count > 1 && (
           <div
             aria-hidden="true"
@@ -897,7 +809,6 @@ export function BranchTree({ icon, label, hint, children, className }: BranchTre
           </div>
         )}
 
-        {/* Row 3 — bus from first branch center to last (not full grid width) */}
         {count > 1 && (
           <div
             aria-hidden="true"
@@ -909,7 +820,6 @@ export function BranchTree({ icon, label, hint, children, className }: BranchTre
           />
         )}
 
-        {/* Row 4 — desktop: one branch per column track */}
         <div className="contents hidden md:contents">
           {branches.map((branch, i) => {
             const bp = branch.props;
@@ -930,7 +840,6 @@ export function BranchTree({ icon, label, hint, children, className }: BranchTre
           })}
         </div>
 
-        {/* Mobile — stacked branches */}
         <div className="contents md:hidden">
           {branches.map((branch, i) => {
             const bp = branch.props;

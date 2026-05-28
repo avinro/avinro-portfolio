@@ -246,7 +246,6 @@ export function BlockbindUserFlowsGallery() {
             viewportHeightPx !== null ? { height: `${String(viewportHeightPx)}px` } : undefined
           }
         >
-          {/* items-start: each slide keeps its intrinsic height; default stretch would equalize all slides to the tallest diagram and break per-slide height measurement. */}
           <div className="flex touch-pan-y items-start">
             {FLOWS.map((flow, i) => {
               const inFullscreen = dialogOpen && dialogSlide === i;

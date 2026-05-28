@@ -1,32 +1,13 @@
 "use client";
 
-/**
- * MermaidDiagram — lazy-loaded, accessible Mermaid diagram renderer.
- *
- * Design decisions:
- * - Dynamically imports the `mermaid` library only when this component mounts,
- *   keeping ~1MB out of the server bundle and the initial JS payload.
- * - Reserves space with a fixed aspect-ratio skeleton while initialising to
- *   prevent Cumulative Layout Shift (CLS < 0.1 target from PRO context).
- * - Disables Mermaid's built-in animations when prefers-reduced-motion is set.
- * - The generated SVG gets role="img" + aria-label so screen readers receive
- *   a meaningful label instead of raw SVG markup.
- * - The raw diagram source is also exposed in a visually-hidden <pre> as a
- *   plain-text fallback for screen readers that do not handle SVG well.
- *
- * `source` prop is base64-encoded MDX source text (from remark-mermaid.ts).
- */
-
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface MermaidDiagramProps {
-  /** Base64-encoded Mermaid diagram source from the remark plugin. */
   source: string;
   className?: string;
 }
 
-// Extract the first comment from Mermaid source for use as aria-label.
 function extractLabel(src: string): string {
   const match = /%%\s*(.+)/.exec(src);
   return match ? match[1].trim() : "Diagram";
@@ -53,7 +34,6 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps) {
         mermaid.initialize({
           startOnLoad: false,
           theme: "neutral",
-          // Disable built-in animation when reduced-motion is requested.
           ...(prefersReducedMotion ? { flowchart: { useMaxWidth: true } } : {}),
           securityLevel: "strict",
         });
@@ -95,19 +75,16 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps) {
 
   return (
     <div ref={containerRef} className={cn("relative my-8", className)}>
-      {/* Visually-hidden plain-text fallback for screen readers */}
       <pre className="sr-only">{decoded}</pre>
 
       {svg ? (
         <div
           role="img"
           aria-label={label}
-          // Mermaid SVG is sanitised via securityLevel: "strict"
           dangerouslySetInnerHTML={{ __html: svg }}
           className="overflow-x-auto"
         />
       ) : (
-        // Skeleton with reserved aspect ratio — prevents CLS
         <div
           aria-busy="true"
           aria-label="Loading diagram…"

@@ -14,34 +14,6 @@ import { isNavSectionActive } from "@/lib/navigation/nav-active";
 
 import { cn } from "@/lib/utils";
 
-/*
- * SiteHeader — global navigation with scroll-driven pill morph + expanding mobile menu.
- *
- * Positioning:
- *   `fixed inset-x-0 top-0` — no space reserved in the layout flow.
- *   Raises to z-50 when the mobile menu is open to sit above MobileCtaBar (z-40).
- *
- * Morph states (mobile menu closed):
- *   At top  (scrollY ≤ 40): full-width bar, translucent.
- *   Scrolled (scrollY > 40): centered pill, max 72rem, 8px from top.
- *
- * Mobile menu:
- *   The glass container itself expands from h-14 → calc(100dvh − 16px) via a CSS
- *   height transition. When closed, the panel uses h-0 (not flex-1) so it cannot
- *   expand the bar past h-14 via flex min-height:auto. Links use tabIndex={-1}
- *   + aria-hidden when closed.
- *
- * Hamburger icon:
- *   Three absolute-positioned spans. Lines 1 & 3 translate to center and rotate
- *   ±45° to form an X; line 2 shrinks and fades.
- *
- * Keyboard / accessibility:
- *   Esc closes the menu.
- *   Viewport reaching md breakpoint closes the menu.
- *   Button carries aria-expanded + aria-controls; panel carries aria-hidden.
- *   Skip link is always the first focusable element.
- */
-
 const navLinks = [
   { label: "Work", href: "/work" },
   { label: "Case studies", href: "/case-studies" },
@@ -59,9 +31,6 @@ export function SiteHeader() {
   const glassRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
 
-  // Collapse the mobile menu without the 500ms height transition — used when opening
-  // Calendly so the sheet and menu never animate height at the same time (that race
-  // leaves tw-animate transforms on the top row after the sheet closes).
   const closeMenuInstantly = useCallback(() => {
     const glass = glassRef.current;
     if (glass) {
@@ -75,7 +44,6 @@ export function SiteHeader() {
     });
   }, []);
 
-  // When already on /, clicking the logo scrolls to top instead of navigating.
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isMenuOpen) setIsMenuOpen(false);
     if (pathname === "/") {
@@ -88,7 +56,6 @@ export function SiteHeader() {
     }
   };
 
-  // Scroll-driven pill morph — use Lenis scroll position when smooth scroll is active.
   useEffect(() => {
     const onScroll = () => {
       const scrollY = lenis ? lenis.scroll : window.scrollY;
@@ -110,7 +77,6 @@ export function SiteHeader() {
     };
   }, [lenis]);
 
-  // Close on Escape key
   useEffect(() => {
     if (!isMenuOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -122,7 +88,6 @@ export function SiteHeader() {
     };
   }, [isMenuOpen]);
 
-  // Close when viewport reaches the md breakpoint (≥768px)
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const onResize = () => {
@@ -134,7 +99,6 @@ export function SiteHeader() {
     };
   }, []);
 
-  // Lock page scroll while the mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
     return () => {
@@ -144,15 +108,12 @@ export function SiteHeader() {
 
   return (
     <header className={cn("fixed inset-x-0 top-0", isMenuOpen ? "z-50" : "z-40")}>
-      {/* Skip link — visually hidden until focused by keyboard */}
       <a
         href="#main-content"
         className="focus-ring bg-primary text-primary-foreground absolute top-4 left-4 z-50 -translate-y-16 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0"
       >
         Skip to main content
       </a>
-
-      {/* Scrim — dark blurred overlay behind the expanded menu, above page content */}
       <div
         aria-hidden="true"
         className={cn(
@@ -161,11 +122,6 @@ export function SiteHeader() {
           isMenuOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
-
-      {/* Glass container — expands to full screen on mobile when menu is open.
-          data-glass-surface is only applied when the glass effect is active so the
-          prefers-reduced-transparency rule in globals.css does not override the
-          transparent at-rest state. */}
       <div
         ref={glassRef}
         data-glass-surface={isScrolled || isMenuOpen ? "" : undefined}
@@ -189,10 +145,7 @@ export function SiteHeader() {
               : "mx-auto mt-0 h-14 max-h-14 min-h-0 w-full max-w-7xl rounded-none border-transparent bg-transparent px-4 sm:px-6 lg:px-8",
         )}
       >
-        {/* ── Top row — always visible ─────────────────────────────────── */}
         <div className="flex h-14 shrink-0 items-center justify-between">
-          {/* Wordmark — Link falls through on same-route (/) and when
-              handleLogoClick calls e.preventDefault() to scroll-to-top */}
           <Link
             href="/"
             onClick={handleLogoClick}
@@ -209,8 +162,6 @@ export function SiteHeader() {
               style={{ width: "auto" }}
             />
           </Link>
-
-          {/* Desktop nav + CTA — hidden below md */}
           <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => {
               const active = isNavSectionActive(pathname, link.href);
@@ -232,8 +183,6 @@ export function SiteHeader() {
               </Button>
             </ContactSheet>
           </nav>
-
-          {/* Hamburger / close button — mobile only */}
           <button
             type="button"
             onClick={() => {
@@ -244,9 +193,7 @@ export function SiteHeader() {
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             className="focus-ring relative flex h-[44px] w-[44px] items-center justify-center rounded-md md:hidden"
           >
-            {/* Three lines that morph into an X */}
             <span className="relative block h-[14px] w-5" aria-hidden="true">
-              {/* Line 1 — top → first diagonal */}
               <span
                 className={cn(
                   "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
@@ -254,7 +201,6 @@ export function SiteHeader() {
                   isMenuOpen ? "top-[6px] rotate-45" : "top-0 rotate-0",
                 )}
               />
-              {/* Line 2 — middle → disappears */}
               <span
                 className={cn(
                   "absolute top-[6px] left-0 h-0.5 w-full rounded-sm bg-current",
@@ -262,7 +208,6 @@ export function SiteHeader() {
                   isMenuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
                 )}
               />
-              {/* Line 3 — bottom → second diagonal */}
               <span
                 className={cn(
                   "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
@@ -273,8 +218,6 @@ export function SiteHeader() {
             </span>
           </button>
         </div>
-
-        {/* ── Mobile expanded content — clipped by overflow-hidden when closed ── */}
         <div
           id="mobile-nav-panel"
           className={cn(
@@ -283,7 +226,6 @@ export function SiteHeader() {
           )}
           aria-hidden={!isMenuOpen}
         >
-          {/* Nav links — centered, staggered entrance from bottom */}
           <nav
             aria-label="Mobile navigation"
             className={cn(
@@ -304,7 +246,6 @@ export function SiteHeader() {
                     setIsMenuOpen(false);
                   }}
                   className={cn(
-                    // Animate in after container expands; opacity-0 while hidden
                     isMenuOpen
                       ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
                       : "pointer-events-none [transform:none] [animation:none] opacity-0",
@@ -316,8 +257,6 @@ export function SiteHeader() {
               );
             })}
           </nav>
-
-          {/* Primary CTA — follows links with staggered entrance */}
           <div
             className={cn(
               "mt-auto shrink-0",

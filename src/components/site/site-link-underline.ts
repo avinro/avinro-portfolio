@@ -1,17 +1,11 @@
 import { cn } from "@/lib/utils";
 
-/** Shared motion tokens for underline micro-interactions (150–300ms band). */
 export const SITE_LINK_UNDERLINE_MOTION =
   "transition-transform duration-200 ease-out motion-reduce:transition-none";
 
 export const SITE_LINK_COLOR_MOTION =
   "transition-colors duration-200 ease-out motion-reduce:transition-none";
 
-/**
- * Absolute underline bar (child of a `relative` + `group` link).
- * `reveal`: hidden until hover or when `active`.
- * `proseAccent`: always full width; line opacity reinforces on hover (MDX body links).
- */
 export function siteUnderlineBarClassName(opts: {
   active: boolean;
   mode: "reveal" | "proseAccent";

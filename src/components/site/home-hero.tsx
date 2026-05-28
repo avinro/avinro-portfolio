@@ -13,12 +13,6 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import VariableProximity from "@/components/motion/variable-proximity";
 
-/*
- * CircularText is a client component driven by motion. Lazy-loaded so the
- * critical text path (headline, subheadline, CTA) renders first.
- * The loading fallback is an invisible circle placeholder that reserves
- * the correct layout footprint.
- */
 const CircularText = dynamic(
   () => import("@/components/motion/circular-text").then((m) => m.CircularText),
   {
@@ -29,22 +23,6 @@ const CircularText = dynamic(
   },
 );
 
-/*
- * HomeHero — rotation rebrand protagonist section.
- *
- * Layout:
- *   The hero is a single-column full-viewport section. The desktop CircularText
- *   is positioned relative to the real wide Container so it tracks the same
- *   max-width and gutters as the headline block. Hidden below md so small
- *   screens stay uncluttered.
- *
- * CTA rule: outline variant only here. Primary CTA lives in SiteHeader (md+)
- * and MobileCtaBar (<md) — never duplicated in-page.
- *
- * Motion guardrail: CircularText calls useReducedMotion() internally.
- * When the user prefers reduced motion, letters are static and hover
- * handlers are disabled — layout and content are unchanged.
- */
 export function HomeHero() {
   const { hero, aboutTeaser } = homeContent;
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -56,7 +34,6 @@ export function HomeHero() {
       spacing="hero"
       className="relative flex min-h-screen flex-col justify-center overflow-hidden pt-32"
     >
-      {/* Mobile — 24px from right edge, lower in the viewport */}
       <div className="animate-in fade-in fill-mode-both pointer-events-auto absolute top-[10vh] right-6 z-10 delay-700 duration-1000 md:hidden">
         <Link
           href={aboutTeaser.linkHref}
@@ -72,7 +49,6 @@ export function HomeHero() {
             setIsCircleHovered(false);
           }}
         >
-          {/* Wrapper sized to match the circle so the PFP overlay can be absolutely centered */}
           <div className="relative" style={{ width: 120, height: 120 }}>
             <CircularText
               text={isCircleHovered ? hero.circularTextHover : hero.circularText}
@@ -84,7 +60,6 @@ export function HomeHero() {
               aria-hidden="true"
               className="text-foreground/60"
             />
-            {/* PFP — 60% + 4px vs circle; outer ring stays 120px; image zooms slightly on hover */}
             <div
               aria-hidden="true"
               className="bg-muted pointer-events-none absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
@@ -104,7 +79,6 @@ export function HomeHero() {
       </div>
 
       <Container width="wide" className="relative">
-        {/* Desktop — anchored to the top-right corner of the hero Container */}
         <div className="animate-in fade-in fill-mode-both pointer-events-auto absolute top-0 right-0 z-10 hidden delay-700 duration-1000 md:block">
           <Link
             href={aboutTeaser.linkHref}
@@ -120,7 +94,6 @@ export function HomeHero() {
               setIsCircleHovered(false);
             }}
           >
-            {/* Wrapper sized to match the circle so the PFP overlay can be absolutely centered */}
             <div className="relative" style={{ width: 180, height: 180 }}>
               <CircularText
                 text={isCircleHovered ? hero.circularTextHover : hero.circularText}
@@ -132,7 +105,6 @@ export function HomeHero() {
                 aria-hidden="true"
                 className="text-foreground/60"
               />
-              {/* PFP — 60% + 4px vs circle; outer ring stays 180px; image zooms slightly on hover */}
               <div
                 aria-hidden="true"
                 className="bg-muted pointer-events-none absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
@@ -152,7 +124,6 @@ export function HomeHero() {
         </div>
 
         <div className="flex flex-col gap-3 sm:gap-4">
-          {/* Open to Work badge */}
           <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700">
             <Badge variant="outline" className="gap-1.5 text-xs">
               <span
@@ -162,15 +133,10 @@ export function HomeHero() {
               {hero.badgeText}
             </Badge>
           </div>
-
-          {/* Primary headline — VariableProximity thickens letters near cursor */}
           <h1
             ref={headlineRef}
             className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700"
             style={{
-              // Local clamp: tighter min (3.25rem) for mobile without touching
-              // the global --text-display-lg token used by other sections.
-              // At 375px: ~52px; at 1280px: capped at 7rem (112px).
               fontSize: "clamp(3.25rem, 14vw, 8rem)",
               lineHeight: 0.9,
               letterSpacing: "-0.03em",
@@ -190,13 +156,9 @@ export function HomeHero() {
               }}
             />
           </h1>
-
-          {/* Subheadline */}
           <p className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both text-muted-foreground max-w-xl text-base leading-snug delay-150 duration-700 sm:text-xl md:text-2xl">
             {hero.subheadline}
           </p>
-
-          {/* Hero CTAs */}
           <div className="animate-in fade-in fill-mode-both flex flex-wrap gap-3 delay-300 duration-700">
             <Button asChild variant="default" size="lg">
               <Link
@@ -223,7 +185,6 @@ export function HomeHero() {
           </div>
         </div>
       </Container>
-      {/* Scroll indicator — bounces to invite the first scroll gesture */}
       <div
         aria-hidden="true"
         className="animate-in fade-in fill-mode-both pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 delay-1000 duration-1000"

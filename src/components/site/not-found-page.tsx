@@ -92,10 +92,6 @@ function NotFoundHeading() {
   );
 }
 
-/**
- * 404 body — use inside layouts that already set minimal chrome (e.g. global
- * `not-found` with `SiteChrome minimalChrome`).
- */
 export function NotFoundPageContent() {
   return (
     <Section spacing="section" className="flex flex-1 flex-col">
@@ -115,7 +111,6 @@ export function NotFoundPageContent() {
   );
 }
 
-/** 404 with minimal chrome (no header / mobile bar / AI chat) for in-app `notFound()`. */
 export function NotFoundPage() {
   useActivateMinimalSiteChrome();
 

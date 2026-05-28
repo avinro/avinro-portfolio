@@ -15,22 +15,11 @@ export const metadata: Metadata = {
   },
 };
 
-/*
- * /work — visual explorations, concepts, and UI-led product work.
- *
- * This section is intentionally different from /case-studies:
- *   - Gallery-first (portrait cards, image-led).
- *   - No TOC, no KPI strips, no process narrative.
- *   - Featured items span the full row (dominant visual weight).
- *
- * A cross-link to /case-studies lets visitors who need narrative depth find it.
- */
 export default function WorkPage() {
   const works = getPublishedWorks();
 
   return (
     <main id="main-content">
-      {/* Page header */}
       <Section
         as="header"
         spacing="heroInternalCompact"
@@ -49,8 +38,6 @@ export default function WorkPage() {
             <p className="text-muted-foreground max-w-md text-base leading-relaxed sm:text-lg md:max-w-none">
               Visual explorations, UI systems, and product concepts.
             </p>
-
-            {/* Cross-link to /case-studies */}
             <p className="text-muted-foreground text-sm">
               Looking for detailed product case studies?{" "}
               <SiteTextLink href="/case-studies" variant="inlineMono" className="text-foreground">
@@ -60,8 +47,6 @@ export default function WorkPage() {
           </div>
         </Container>
       </Section>
-
-      {/* Gallery grid — featured cards span 2 cols, others span 1 */}
       <Section>
         <WorkGalleryGrid works={works} />
       </Section>

@@ -29,7 +29,6 @@ const siteTextLinkVariants = cva(
 
 export type SiteTextLinkProps = ComponentPropsWithoutRef<typeof Link> &
   VariantProps<typeof siteTextLinkVariants> & {
-    /** When true, underline stays visible and `aria-current="page"` is set. */
     active?: boolean;
   };
 

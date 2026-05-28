@@ -1,14 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getWorkBySlug, getWorkSlugs } from "@/lib/content/works";
 
-/*
- * Per-slug Open Graph image for work (visual exploration) pages.
- *
- * Renders title, category, year — visually similar to the case study OG image
- * but with "Work" instead of "Case Study" in the kicker so social previews
- * distinguish the two content types.
- */
-
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -39,7 +31,6 @@ export default async function WorkOGImage({ params }: { params: Promise<{ slug: 
         fontFamily: "system-ui, sans-serif",
       }}
     >
-      {/* Wordmark */}
       <span
         style={{
           fontSize: 16,
@@ -52,8 +43,6 @@ export default async function WorkOGImage({ params }: { params: Promise<{ slug: 
       >
         avinro.com · Work
       </span>
-
-      {/* Title */}
       <span
         style={{
           fontSize: 80,
@@ -67,8 +56,6 @@ export default async function WorkOGImage({ params }: { params: Promise<{ slug: 
       >
         {title}
       </span>
-
-      {/* Category · Year */}
       {(category || year) && (
         <span
           style={{
@@ -80,8 +67,6 @@ export default async function WorkOGImage({ params }: { params: Promise<{ slug: 
           {[category, year].filter(Boolean).join(" · ")}
         </span>
       )}
-
-      {/* Accent rule */}
       <div
         style={{
           position: "absolute",

@@ -13,23 +13,11 @@ export const metadata: Metadata = {
   },
 };
 
-/*
- * /case-studies — minimal page header + 2-column case study grid.
- *
- * Layout:
- *   - Section heroInternalCompact handles sticky-nav offset
- *     (pt-[7rem] mobile / pt-[10rem] md+).
- *   - Container (default max-w-6xl) aligns header to the site-wide gutter
- *     rhythm — same as About, Contact, and other internal pages.
- *   - CaseStudyGrid wraps its own Container, so <Section> here has no wrapper
- *     padding of its own and the grid aligns to the same max-w-6xl column.
- */
 export default function CaseStudiesPage() {
   const cases = getPublishedCaseStudies();
 
   return (
     <main id="main-content">
-      {/* Page header — centered, with a creative hook line below the h1 */}
       <Section
         as="header"
         spacing="heroInternalCompact"
@@ -51,8 +39,6 @@ export default function CaseStudiesPage() {
           </div>
         </Container>
       </Section>
-
-      {/* Case study grid — all cards share equal column width */}
       <Section>
         <CaseStudyGrid cases={cases} />
       </Section>

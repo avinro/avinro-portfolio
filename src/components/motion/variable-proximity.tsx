@@ -11,22 +11,6 @@ import {
 } from "react";
 import { motion } from "motion/react";
 
-/*
- * VariableProximity — per-letter font-variation-settings interpolation
- * driven by cursor proximity.
- *
- * Adapted from React Bits (MIT). Key differences from the original:
- *   - No hardcoded `font-family: "Roboto Flex"`. Consumers control the font
- *     via className or a parent element (use `font-display` for Google Sans Flex).
- *   - prefers-reduced-motion: renders a plain accessible span with no rAF loop.
- *   - aria-hidden on per-letter spans; <span className="sr-only"> provides
- *     the accessible text label (pattern already in the React Bits source).
- */
-
-// ---------------------------------------------------------------------------
-// Internal hooks
-// ---------------------------------------------------------------------------
-
 function useAnimationFrame(callback: () => void) {
   useEffect(() => {
     let frameId: number;
@@ -73,10 +57,6 @@ function useMousePositionRef(containerRef: RefObject<HTMLElement | null>) {
   return positionRef;
 }
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
   label: string;
   fromFontVariationSettings: string;
@@ -88,10 +68,6 @@ export interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> 
   onClick?: () => void;
   style?: CSSProperties;
 }
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((props, ref) => {
   const {
@@ -217,8 +193,6 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
                 }}
                 style={{
                   display: "inline-block",
-                  // Initial value from prop; animation frame updates the DOM
-                  // element directly via letterRefs, bypassing React renders.
                   fontVariationSettings: fromFontVariationSettings,
                 }}
                 aria-hidden="true"

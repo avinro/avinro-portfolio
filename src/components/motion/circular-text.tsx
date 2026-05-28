@@ -1,19 +1,5 @@
 "use client";
 
-/*
- * CircularText — port of the React Bits CircularText component.
- *
- * Adaptations from the original:
- *   - TypeScript strict props, no separate CSS file.
- *   - useReducedMotion(): skips spin and shuffle animations.
- *   - Optional textChangeTransition="shuffle": GSAP-timed stagger when `text`
- *     changes (scramble + settle per letter; no SplitText / Club plugins).
- *     Parent `text` is the single source of truth (e.g. hover vs idle). Each
- *     shuffle run animates from the current on-screen string (ref snapshot) to
- *     `text`, never from a stale "committed" snapshot that could lag behind
- *     rapid hover toggles (B→A interrupted must animate toward A, not snap to B).
- */
-
 import { useLayoutEffect, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { motion, useAnimation, useMotionValue, useReducedMotion } from "motion/react";
@@ -87,9 +73,7 @@ export function CircularText({
   const [shuffleChars, setShuffleChars] = useState(() => text);
   const [shuffleLayoutSlots, setShuffleLayoutSlots] = useState(() => Math.max(1, text.length));
   const committedTextRef = useRef(text);
-  /** Mirrors the last painted shuffle string so layout effects read committed output. */
   const displayCharsRef = useRef(shuffleChars);
-  /** Latest `text` prop for stale timeline onComplete / callbacks. */
   const textRef = useRef(text);
   const shuffleGenRef = useRef(0);
   const shuffleTlRef = useRef<gsap.core.Timeline | null>(null);
@@ -122,10 +106,8 @@ export function CircularText({
 
   const letters = Array.from(displayChars);
 
-  /* Spin restarts: use parent `text` during shuffle so per-letter setState does not retrigger Motion. */
   const spinSignature = textChangeTransition === "shuffle" && !reducedMotion ? text : displayChars;
 
-  /* Shuffle path: always animate from current on-screen string toward prop `text`. */
   useLayoutEffect(() => {
     if (textChangeTransition !== "shuffle" || reducedMotion) return;
 
@@ -181,7 +163,6 @@ export function CircularText({
       defaults: { duration: 0.001 },
       onComplete: () => {
         if (gen !== shuffleGenRef.current) return;
-        // Parent may have changed hover again; do not apply a finished run for an old target.
         if (textRef.current !== target) return;
         committedTextRef.current = target;
         setShuffleChars(target);

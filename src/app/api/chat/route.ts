@@ -17,12 +17,10 @@ function sanitizeMessage(text: string): string {
 }
 
 export async function POST(req: Request): Promise<Response> {
-  // Feature flag check
   if (process.env.NEXT_PUBLIC_AI_ENABLED !== "true") {
     return new Response("AI is disabled", { status: 403 });
   }
 
-  // API key check
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return new Response("Server misconfiguration: missing GEMINI_API_KEY", {
@@ -42,9 +40,8 @@ export async function POST(req: Request): Promise<Response> {
 
   const rawMessages = Array.isArray(body.messages) ? (body.messages as unknown[]) : [];
 
-  // Sanitize, validate, and truncate messages
   const safeMessages: ChatMessage[] = rawMessages
-    .slice(-10) // Keep last 10 messages only
+    .slice(-10)
     .filter((m): m is ChatMessage => {
       if (!m || typeof m !== "object") return false;
       const msg = m as Record<string, unknown>;
@@ -57,7 +54,6 @@ export async function POST(req: Request): Promise<Response> {
       content: sanitizeMessage(m.content.slice(0, 1000)),
     }));
 
-  // Validate: last message must be from user
   if (safeMessages.length === 0 || safeMessages[safeMessages.length - 1]?.role !== "user") {
     return new Response("Bad request: last message must be from user", {
       status: 400,

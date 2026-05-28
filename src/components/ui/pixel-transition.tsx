@@ -5,42 +5,16 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 
-/*
- * PixelTransition — two-image card reveal using a pixel-grid mask.
- *
- * Layer stack (bottom → top):
- *   z-0   Hover image    — always rendered below, revealed by the mask
- *   z-10  Pixel grid     — N×N cells, each a background-image slice of defaultImageSrc
- *   z-20  Gradient scrim — visible on mobile always; on desktop via hover/focus
- *   z-30  Children       — text overlay; same visibility rules as gradient
- *
- * Pixel mask technique:
- *   Each grid cell renders its portion of the default image using:
- *     background-image: url(defaultImageSrc)
- *     background-size:  N*100% N*100%          (tiles the image across the grid)
- *     background-position: col/(N-1)*100%  row/(N-1)*100%
- *   GSAP fades cells to opacity:0 randomly → default image disappears pixel-by-pixel,
- *   revealing the hover image below. No colored blocks, no white flash.
- *
- * Interaction model:
- *   Desktop (fine pointer): hover/focus-visible triggers GSAP stagger
- *   Mobile (coarse/no pointer): no animation, text/gradient always visible
- *   prefers-reduced-motion: GSAP animation skipped, instant opacity toggle
- */
-
 interface PixelTransitionProps {
   defaultImageSrc: string;
   hoverImageSrc: string;
   alt?: string;
   sizes?: string;
   priority?: boolean;
-  /** Number of rows and columns in the pixel grid. Keep between 5–7 for performance. */
   gridSize?: number;
-  /** Total duration of the pixel stagger reveal in seconds. */
   animationStepDuration?: number;
   className?: string;
   style?: React.CSSProperties;
-  /** Gradient + text overlay content rendered at z-20/z-30. */
   children?: React.ReactNode;
 }
 
@@ -61,8 +35,6 @@ export function PixelTransition({
   const isActiveRef = useRef(false);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Build the pixel grid cells once on mount or when grid size / image source changes.
-  // Uses object-cover semantics so images with non-16:9 ratios aren't stretched.
   useEffect(() => {
     const grid = pixelGridRef.current;
     const container = containerRef.current;
@@ -131,13 +103,11 @@ export function PixelTransition({
       const cells = Array.from(grid.children) as HTMLElement[];
       if (!cells.length) return;
 
-      // Kill any in-progress animation before starting the reverse.
       tlRef.current?.kill();
 
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       if (prefersReduced) {
-        // Instant toggle — still accessible, no motion.
         gsap.set(cells, { opacity: reveal ? 0 : 1 });
         isActiveRef.current = reveal;
         return;
@@ -160,12 +130,10 @@ export function PixelTransition({
     [animationStepDuration],
   );
 
-  // Attach pointer listeners only on fine-pointer (desktop) devices.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Use a media query to target fine-pointer devices only.
     const finePointer = window.matchMedia("(pointer: fine)");
     if (!finePointer.matches) return;
 
@@ -198,7 +166,6 @@ export function PixelTransition({
 
   return (
     <div ref={containerRef} className={cn("relative overflow-hidden", className)} style={style}>
-      {/* Layer 0 — hover image, always rendered below */}
       <Image
         src={hoverImageSrc}
         alt={alt}
@@ -209,16 +176,8 @@ export function PixelTransition({
         aria-hidden
       />
 
-      {/* Layer 1 — pixel grid mask over the hover image */}
       <div ref={pixelGridRef} aria-hidden className="pointer-events-none absolute inset-0 z-10" />
 
-      {/*
-       * Layer 2/3 — gradient + text children.
-       * Mobile: always visible (opacity-100 translate-y-0).
-       * Desktop (md+): hidden by default, revealed on hover/focus via
-       *   Tailwind group utilities applied by the parent Link's group class.
-       * The parent Link must carry `group` for the md: variants to work.
-       */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-20">
         {children}
       </div>

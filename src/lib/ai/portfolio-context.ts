@@ -6,11 +6,8 @@ import { aboutContent } from "@/lib/content/about";
 let _systemPrompt: string | null = null;
 
 function stripMdxComponents(raw: string): string {
-  // Remove frontmatter (--- ... ---)
   const afterFrontmatter = raw.replace(/^---[\s\S]*?---\n/, "");
-  // Remove self-closing JSX components: <Component />
   let result = afterFrontmatter.replace(/<[A-Z][a-zA-Z]*[^>]*\/>/g, "");
-  // Remove open/close JSX components: <Component>...</Component>
   result = result.replace(/<[A-Z][a-zA-Z]*[^>]*>[\s\S]*?<\/[A-Z][a-zA-Z]*>/g, "");
   return result.trim();
 }

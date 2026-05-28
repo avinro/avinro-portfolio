@@ -15,22 +15,6 @@ const INTRO_MD_MIN_WIDTH_PX = 768;
 const INTRO_TYPING_MS_PHRASE_1 = 2500;
 const INTRO_TYPING_MS_PHRASE_2 = 1500;
 
-// ---------------------------------------------------------------------------
-// IntroOpener
-//
-// Controlled full-viewport intro overlay. Mounted only by SiteIntroGate when
-// the current session has not yet seen the intro.
-//
-// Responsibilities:
-//   - Lock scroll while visible.
-//   - Type phrases via TextType.
-//   - Hold 1000ms after the final phrase, then slide up and call onComplete.
-//   - Esc key triggers a faster 300ms exit (WCAG escape-routes).
-//   - Respects prefers-reduced-motion (instant exit, immediate onComplete).
-//
-// Session management belongs to SiteIntroGate, not here.
-// ---------------------------------------------------------------------------
-
 interface IntroOpenerProps {
   onComplete: () => void;
 }
@@ -55,7 +39,6 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
     [introPhrases],
   );
 
-  // Lock scroll while the intro is visible.
   useEffect(() => {
     if (lenis) {
       lenis.stop();
@@ -72,7 +55,6 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
     };
   }, [lenis]);
 
-  // Focus the overlay so Esc is immediately reachable without tabbing.
   useEffect(() => {
     overlayRef.current?.focus();
   }, []);
@@ -102,7 +84,6 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
     });
   };
 
-  // Esc key — WCAG escape-routes compliance.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") triggerExit(true);
@@ -111,11 +92,9 @@ export function IntroOpener({ onComplete }: IntroOpenerProps) {
     return () => {
       document.removeEventListener("keydown", onKey);
     };
-    // triggerExit uses only refs — stable across renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Called by TextType when each phrase finishes typing.
   const handleSentenceComplete = (_sentence: string, index: number) => {
     const lastIndex = introPhrases.length - 1;
     if (index === lastIndex) {

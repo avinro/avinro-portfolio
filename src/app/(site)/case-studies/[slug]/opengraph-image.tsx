@@ -1,17 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getCaseStudyBySlug, getCaseStudySlugs } from "@/lib/content/case-studies";
 
-/*
- * Per-slug Open Graph image for case study pages.
- *
- * Renders title, client, year, and an accent rule following the same visual
- * language as the site-wide OG portrait card so all OG images feel
- * like a coherent system.
- *
- * runtime = "nodejs" uses Fluid Compute (recommended over Edge per Vercel
- * platform guidance). System fonts only to match the existing global handler.
- */
-
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -38,25 +27,22 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
         width: "100%",
         height: "100%",
         padding: "80px",
-        background: "#09090B", // zinc-950
+        background: "#09090B",
         fontFamily: "system-ui, sans-serif",
       }}
     >
-      {/* Wordmark */}
       <span
         style={{
           fontSize: 16,
           fontWeight: 500,
           letterSpacing: "0.1em",
-          color: "#71717A", // zinc-500
+          color: "#71717A",
           textTransform: "uppercase",
           marginBottom: 40,
         }}
       >
         avinro.com · Case Study
       </span>
-
-      {/* Case study title */}
       <span
         style={{
           fontSize: 80,
@@ -70,8 +56,6 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
       >
         {title}
       </span>
-
-      {/* Client · Year */}
       {(client || year) && (
         <span
           style={{
@@ -83,8 +67,6 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
           {[client, year].filter(Boolean).join(" · ")}
         </span>
       )}
-
-      {/* Accent rule */}
       <div
         style={{
           position: "absolute",
@@ -92,7 +74,7 @@ export default async function CaseStudyOGImage({ params }: { params: Promise<{ s
           left: 80,
           width: 48,
           height: 4,
-          background: "#2563EB", // blue-600 accent
+          background: "#2563EB",
           borderRadius: 2,
         }}
       />

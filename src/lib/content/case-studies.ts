@@ -1,28 +1,9 @@
-/**
- * Case studies content layer.
- *
- * Reads MDX files from content/case-studies/ at build time, validates
- * frontmatter with zod (hard build failure on invalid files), computes
- * reading time server-side, and exposes typed query helpers.
- *
- * Never imported by client components — this module uses Node.js `fs` APIs
- * which are not available in the browser bundle.
- */
-
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
 import { z } from "zod";
 
-// ---------------------------------------------------------------------------
-// Frontmatter schema
-// ---------------------------------------------------------------------------
-
-/**
- * Schema for a single KPI item in frontmatter.
- * Each item must have either `value` (plain stat) or `delta` (before/after).
- */
 const KpiSchema = z
   .object({
     value: z.string().min(1).optional(),
@@ -48,41 +29,27 @@ const CaseStudyFrontmatterSchema = z.object({
   coverImage: z.string().min(1),
   hoverImage: z.string().min(1).optional(),
   order: z.number().int().min(1),
-  // Listing layer extensions
   summary: z.string().min(1),
   tags: z.array(z.string()).min(1),
   gradient: z.string().min(1),
   draft: z.boolean().optional().default(false),
   featured: z.boolean().optional().default(false),
-  // Work grid card badge fields
   sector: z.string().min(1),
   softwareType: z.string().min(1),
-  // Optional outcome KPIs — rendered as a top-of-page stat strip and
-  // available to MDX body via the <Stats /> primitive.
   kpis: z.array(KpiSchema).max(6).optional(),
 });
 
 export type CaseStudyFrontmatter = z.infer<typeof CaseStudyFrontmatterSchema>;
 
-// ---------------------------------------------------------------------------
-// Full case study shape
-// ---------------------------------------------------------------------------
-
 export interface CaseStudy {
   frontmatter: CaseStudyFrontmatter;
-  /** Raw MDX body (without frontmatter). */
   content: string;
-  /** Words-per-minute estimated read time. */
   readingTime: {
     text: string;
     minutes: number;
     words: number;
   };
 }
-
-// ---------------------------------------------------------------------------
-// Internals
-// ---------------------------------------------------------------------------
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "case-studies");
 
@@ -93,8 +60,6 @@ function readAllCaseStudyFiles(): CaseStudy[] {
     const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
     const { data, content } = matter(raw);
 
-    // Validate with zod — throws with a descriptive message on failure,
-    // which propagates as a build error rather than a silent runtime gap.
     const result = CaseStudyFrontmatterSchema.safeParse(data);
     if (!result.success) {
       const issues = result.error.issues
@@ -117,7 +82,6 @@ function readAllCaseStudyFiles(): CaseStudy[] {
   });
 }
 
-// Memoized at module level — only evaluated once per server process / build.
 let _cache: CaseStudy[] | null = null;
 
 function getAll(): CaseStudy[] {
@@ -125,50 +89,27 @@ function getAll(): CaseStudy[] {
   return _cache;
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
-
-/** All case studies, including drafts, sorted by `order`. */
 export function getAllCaseStudies(): CaseStudy[] {
   return getAll();
 }
 
-/**
- * Published (non-draft) case studies sorted by `order`.
- * Use for public listings: home SelectedWork and /work page.
- */
 export function getPublishedCaseStudies(): CaseStudy[] {
   return getAll().filter((cs) => !cs.frontmatter.draft);
 }
 
-/** Slug-keyed lookup. Returns `undefined` for unknown slugs. */
 export function getCaseStudyBySlug(slug: string): CaseStudy | undefined {
   return getAll().find((cs) => cs.frontmatter.slug === slug);
 }
 
-/**
- * All slugs (including drafts) for use in `generateStaticParams`.
- * Draft pages are still built but carry `robots: noindex,nofollow`.
- */
 export function getCaseStudySlugs(): string[] {
   return getAll().map((cs) => cs.frontmatter.slug);
 }
-
-// ---------------------------------------------------------------------------
-// Sitemap-specific helpers — keep the CaseStudy shape clean for page use
-// ---------------------------------------------------------------------------
 
 export interface CaseStudySitemapEntry {
   slug: string;
   lastModified: Date;
 }
 
-/**
- * Published case studies with real file-system mtimes for sitemap entries.
- * Draft case studies are excluded (they carry noindex and must not appear in
- * the sitemap).
- */
 export function getPublishedCaseStudiesForSitemap(): CaseStudySitemapEntry[] {
   const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
 

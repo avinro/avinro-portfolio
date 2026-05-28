@@ -36,7 +36,6 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
     setOpen(next);
   };
 
-  // Pause Lenis while the sheet is open.
   useEffect(() => {
     if (!open || !lenis) return;
     lenis.stop();
@@ -74,7 +73,6 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
           className="flex h-full flex-col"
           style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
         >
-          {/* Header */}
           <div className="shrink-0 px-6 pb-8">
             <SheetHeader className="mt-8 gap-1">
               <SheetTitle>Have a project in mind?</SheetTitle>
@@ -86,10 +84,7 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
               Choose how you&apos;d like to reach out.
             </SheetDescription>
           </div>
-
-          {/* Choice cards */}
           <div className="flex flex-col gap-3 px-6 pb-6">
-            {/* Primary — Schedule a call */}
             <button
               type="button"
               onClick={handleSchedule}
@@ -108,8 +103,6 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
               </div>
               <ArrowRight className="size-4 shrink-0 opacity-70" aria-hidden="true" />
             </button>
-
-            {/* Secondary — Email */}
             <button
               type="button"
               onClick={handleEmail}

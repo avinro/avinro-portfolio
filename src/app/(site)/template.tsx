@@ -6,26 +6,6 @@ import { gsap } from "gsap";
 
 import { INTRO_JUST_COMPLETED_SESSION_KEY } from "@/lib/intro/constants";
 
-// ---------------------------------------------------------------------------
-// SiteTemplate — per-page enter animation.
-//
-// Next.js App Router's template.tsx unmounts and remounts on every navigation
-// (unlike layout.tsx which persists). This makes it the correct location for
-// soft page-enter animations.
-//
-// Guards:
-//   - Skipped when prefers-reduced-motion is set.
-//   - Skipped on the first mount immediately after the intro completes.
-//     SiteIntroGate sets avinro:intro-just-completed before mounting the site
-//     tree. Without this guard, template.tsx would animate the home page entry
-//     right after the intro exits, producing a jarring double-animation.
-//     The flag is consumed (removed) on the first read so it fires only once.
-//
-// Motion:
-//   - opacity 0 → 1, translateY 14px → 0, 350ms power2.out.
-//   - No exit animation — navigation must feel immediate.
-// ---------------------------------------------------------------------------
-
 export default function SiteTemplate({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,7 +15,6 @@ export default function SiteTemplate({ children }: { children: ReactNode }) {
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Consume the one-shot flag set by SiteIntroGate.
     const introJustCompleted = sessionStorage.getItem(INTRO_JUST_COMPLETED_SESSION_KEY);
     if (introJustCompleted) {
       sessionStorage.removeItem(INTRO_JUST_COMPLETED_SESSION_KEY);

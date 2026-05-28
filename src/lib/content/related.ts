@@ -25,7 +25,6 @@ export interface RelatedItem {
   slug: string;
   title: string;
   coverImage: string;
-  /** Short label shown above the title — "Case study" or "Work". */
   eyebrow: string;
   href: string;
   order: number;
@@ -65,6 +64,5 @@ export function getRelatedItems(currentSlug: string): RelatedItem[] {
       order: w.frontmatter.featuredOrder ?? w.frontmatter.order,
     }));
 
-  // Case studies fill the list first; works fill any remaining slots.
   return [...caseStudies, ...works].slice(0, MAX_ITEMS);
 }

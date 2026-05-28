@@ -1,10 +1,3 @@
-/*
- * Privacy page content — centralised copy.
- *
- * All user-facing strings live here so they can be updated without touching
- * the page component. Follows the same pattern as about.ts and contact.ts.
- */
-
 export const privacyContent = {
   meta: {
     title: "Privacy",

@@ -1,30 +1,14 @@
-/*
- * About page content — centralised copy.
- *
- * All text lives here so copy can be updated without touching component files.
- * Each field is explicitly typed so TypeScript catches missing keys when the
- * shape evolves.
- */
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export interface ExperienceEntry {
-  /** Date range string, e.g. "Mar 2023 – 2025", rendered in mono tabular-nums. */
   year: string;
   role: string;
   company: string;
-  /** 2–3 sentence outcome or context for the role. */
   outcome: string;
 }
 
 export interface EducationEntry {
-  /** Year range string, e.g. "2012–2018". Omit when description replaces the date slot. */
   years: string;
   degree: string;
   institution: string;
-  /** Optional prose description shown below degree/institution instead of the year slot. */
   description?: string;
 }
 
@@ -42,9 +26,7 @@ export interface ProcessStage {
 
 export interface AboutContent {
   hero: {
-    /** 3–5 sentence bio. Product Design Engineer is the primary identity. */
     bio: string[];
-    /** Hero portrait card image (path under public/). */
     portraitSrc: string;
   };
   experience: {
@@ -65,10 +47,6 @@ export interface AboutContent {
     stages: ProcessStage[];
   };
 }
-
-// ---------------------------------------------------------------------------
-// Content
-// ---------------------------------------------------------------------------
 
 export const aboutContent: AboutContent = {
   hero: {

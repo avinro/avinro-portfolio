@@ -5,22 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-/**
- * Unified item shape for the home "Selected work" section.
- * Merges featured case studies and featured works into one ordered list.
- */
 export interface SelectedWorkItem {
   kind: "case-study" | "work";
   slug: string;
   title: string;
   coverImage: string;
-  /** Payoff shot — shown on mobile static rows when set; falls back to coverImage. */
   resultImage?: string;
-  /** Effective sort order — uses featuredOrder when available, falls back to order. */
   order: number;
 }
 
@@ -34,12 +24,6 @@ interface FlowingWorkItemProps {
   isDesktopMotion: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Edge detection
-// Determines whether the cursor entered/left from the top or bottom edge of
-// the element — used to animate the marquee overlay in from the correct side.
-// ---------------------------------------------------------------------------
-
 function findClosestEdge(
   mouseX: number,
   mouseY: number,
@@ -50,10 +34,6 @@ function findClosestEdge(
   const bottomDist = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY - height, 2);
   return topDist < bottomDist ? "top" : "bottom";
 }
-
-// ---------------------------------------------------------------------------
-// Static / mobile fallback row
-// ---------------------------------------------------------------------------
 
 function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boolean }) {
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
@@ -71,7 +51,6 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
         <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
           {item.title}
         </span>
-        {/* Kind badge — helps visitors distinguish content types */}
         <span className="text-muted-foreground hidden font-mono text-[10px] tracking-widest uppercase sm:inline">
           {item.kind === "work" ? "Work" : "Case study"}
         </span>
@@ -91,14 +70,8 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
   );
 }
 
-// Module-level constants — defined outside the component to keep stable
-// references and satisfy react-hooks/exhaustive-deps.
-const MARQUEE_SPEED = 15; // seconds per content-width cycle
+const MARQUEE_SPEED = 15;
 const ENTER_EASE = { duration: 0.6, ease: "expo.out" };
-
-// ---------------------------------------------------------------------------
-// Desktop marquee item
-// ---------------------------------------------------------------------------
 
 function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProps) {
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
@@ -113,7 +86,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
 
   const [repetitions, setRepetitions] = useState(5);
 
-  // Calculate how many copies of marquee-part are needed to fill the viewport
   const calcRepetitions = useCallback(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector<HTMLElement>(".marquee-part");
@@ -124,7 +96,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     setRepetitions(Math.max(5, needed));
   }, []);
 
-  // Start the looping marquee animation
   const startMarquee = useCallback(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector<HTMLElement>(".marquee-part");
@@ -148,7 +119,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     };
   }, [isDesktopMotion, calcRepetitions]);
 
-  // Re-init marquee when repetitions settle after first calcRepetitions run
   useEffect(() => {
     if (!isDesktopMotion) return;
     const t = setTimeout(startMarquee, 60);
@@ -157,7 +127,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     };
   }, [isDesktopMotion, repetitions, startMarquee]);
 
-  // Cleanup marquee tween on unmount
   useEffect(() => {
     return () => {
       marqueeAnimRef.current?.kill();
@@ -212,7 +181,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
       className="relative flex-1 overflow-hidden text-center"
       style={{ borderTop: isFirst ? "none" : "1px solid oklch(0 0 0 / 12%)" }}
     >
-      {/* Primary interactive link — the accessible content */}
       <Link
         href={href}
         onMouseEnter={handleMouseEnter}
@@ -226,7 +194,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
         >
           {item.title}
         </span>
-        {/* Kind badge — tiny label so visitors can tell formats apart at a glance */}
         <span
           className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase"
           aria-hidden="true"
@@ -234,12 +201,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
           {item.kind === "work" ? "Work" : "Case study"}
         </span>
       </Link>
-
-      {/*
-       * Marquee overlay — decorative, aria-hidden so screen readers skip it.
-       * Starts translated off-screen (101%) and slides in on mouseenter.
-       * bg-background / text-foreground inverts the palette vs the base row.
-       */}
       <div
         ref={marqueeRef}
         aria-hidden="true"
@@ -258,7 +219,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
               >
                 {item.title}
               </span>
-              {/* Thumbnail pill inside the marquee */}
               <div className="relative mx-[2vw] h-[7vh] w-[200px] shrink-0 overflow-hidden rounded-[50px]">
                 <Image
                   src={item.coverImage}
@@ -278,12 +238,7 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
   );
 }
 
-// ---------------------------------------------------------------------------
-// FlowingWorkMenu — exported section
-// ---------------------------------------------------------------------------
-
 export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
-  // Lazy initializer reads media queries once on mount (client-only).
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
 
   useEffect(() => {

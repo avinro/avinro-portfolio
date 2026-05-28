@@ -13,7 +13,6 @@ const mdxInternalBodyLinkClassName = cn(
   "rounded-sm hover:text-accent/90",
 );
 
-/** Server-safe MDX `<Link>` with persistent underline + hover emphasis (matches site prose pattern). */
 export function MdxInternalBodyLink({
   className,
   children,

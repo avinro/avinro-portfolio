@@ -8,73 +8,19 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { homeContent } from "@/lib/content/home";
 import { Container } from "@/components/layout/container";
 
-/*
- * AboutCursorImages — sticky text with scroll-panning images.
- *
- * Behavior:
- *   The section is tall (300dvh) to give the user scroll runway.
- *   Inside, a sticky viewport-height wrapper keeps the bio text dead-center
- *   while 10 images slide across the screen at different vertical bands
- *   and stagger times.
- *
- *   Z-index alternation:
- *     Even indices  → z-0  (behind text at z-10)
- *     Odd indices   → z-20 (in front of text)
- *
- *   Each image has a [progressStart, progressEnd] scroll range and an
- *   [xStart → xEnd] translation in viewport-width units so images cross
- *   the full screen independently, entering and exiting on opposite sides.
- *
- *   Image sizing: widths and heights use CSS min(Nvw, Xpx) so images are
- *   proportionally large on narrow viewports (up to 60vw) and capped to the
- *   original desktop pixel sizes on wide ones — no JS breakpoint detection.
- *
- * prefers-reduced-motion: static collage rendered instead.
- *
- * Image source: homeContent.aboutImages (paths under public/about/lifestyle/).
- * Images that fail to load show a neutral bg placeholder via onError.
- */
-
-// ---------------------------------------------------------------------------
-// Image choreography config — single fluid set, no mobile/desktop split
-// ---------------------------------------------------------------------------
-
 interface ImageConfig {
-  /** Scroll progress window [0..1] that this image is active */
   range: [number, number];
-  /** translateX from → to in vw units (positive = right) */
   xFrom: number;
   xTo: number;
-  /** Vertical position relative to the sticky viewport */
   top: string;
-  /** Slight rotation for organic feel */
   rotate: string;
-  /** Width and height as CSS values (vw units for fluid scaling) */
   width: string;
   height: string;
-  /** z-index: 0 = behind text (z-10), 20 = in front */
   zIndex: number;
-  /** Hide below md breakpoint — keeps mobile to 7 images */
   hideOnMobile?: boolean;
 }
 
-// useScroll offset ["start end", "end start"] tracks the full visible life of
-// the section (400dvh = 300dvh section + 100dvh viewport):
-//   0.00–0.25  pre-sticky  (section enters from below)
-//   0.25–0.75  sticky      (section pinned at top)
-//   0.75–1.00  post-sticky (section exits above)
-//
-// 10 images interleaved in two groups of 5 (S=0.07 within each group,
-// offset by 0.035 between groups), span [0.05, 0.97].
-// Range width W=0.62 per image (wider = appears sooner, exits later).
-// ~5 images on screen simultaneously throughout most of the sticky phase.
-//
-// Z-index: odd indices → z-20 (in front of text), even → z-0 (behind).
-// Sizes use min(Nvw, Xpx) so images scale with the viewport on narrow screens
-// (mobile: up to 60vw) while being capped to the original desktop pixel sizes
-// on wide viewports — no JS breakpoint detection needed.
 const IMAGE_CONFIGS: ImageConfig[] = [
-  // --- group A (original 5) ---
   {
     range: [0.05, 0.67],
     xFrom: 130,
@@ -125,10 +71,6 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     height: "min(47vw, 317px)",
     zIndex: 0,
   },
-  // --- group B (new 5, interleaved at +0.035 offset from group A) ---
-  // Vertical positions chosen so same-direction images are far apart:
-  //   R→L in use: 8%, 15%, 28%  → group B adds 58%, 82%
-  //   L→R in use: 55%, 62%      → group B adds 5%, 32%, 45%
   {
     range: [0.08, 0.7],
     xFrom: -130,
@@ -184,10 +126,6 @@ const IMAGE_CONFIGS: ImageConfig[] = [
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Single animated image
-// ---------------------------------------------------------------------------
-
 interface ScrollPanImageProps {
   src: string;
   config: ImageConfig;
@@ -235,14 +173,7 @@ function ScrollPanImage({ src, config, scrollYProgress }: ScrollPanImageProps) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Reduced-motion static fallback
-// ---------------------------------------------------------------------------
-
 function StaticCollage() {
-  // Percentage widths relative to the 100dvh sticky container scale with
-  // the viewport. min() caps pixel size on desktop while keeping large
-  // proportions on mobile — largest ≈ min(55%, 400px).
   const POSITIONS: React.CSSProperties[] = [
     { top: "5%", left: "3%", width: "min(55%, 400px)", height: "min(22%, 290px)", rotate: "-4deg" },
     {
@@ -340,10 +271,6 @@ function StaticCollage() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main export
-// ---------------------------------------------------------------------------
-
 export function AboutCursorImages() {
   const { aboutTeaser } = homeContent;
   const sectionRef = useRef<HTMLElement>(null);
@@ -365,10 +292,8 @@ export function AboutCursorImages() {
       className="bg-background relative"
       style={{ height: "300dvh" }}
     >
-      {/* Sticky viewport — keeps text and images in view during the scroll */}
       <div className="sticky top-0 h-[100dvh] overflow-hidden">
         {reducedMotion ? (
-          // Reduced-motion: static collage behind text
           <>
             <StaticCollage />
             <div className="relative z-10 flex h-full items-center justify-center px-4">
@@ -377,7 +302,6 @@ export function AboutCursorImages() {
           </>
         ) : (
           <>
-            {/* Scroll-panning images */}
             <div className="pointer-events-none absolute inset-0">
               {homeContent.aboutImages.map((img, i) => (
                 <ScrollPanImage
@@ -389,7 +313,6 @@ export function AboutCursorImages() {
               ))}
             </div>
 
-            {/* Centered text — z-10 so images alternate in front/behind */}
             <div className="relative z-10 flex h-full items-center justify-center px-4">
               <TextContent aboutTeaser={aboutTeaser} />
             </div>
@@ -399,10 +322,6 @@ export function AboutCursorImages() {
     </section>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Bio text block — extracted for reuse in both paths
-// ---------------------------------------------------------------------------
 
 interface AboutTeaser {
   greeting: string;

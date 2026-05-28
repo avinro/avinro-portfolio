@@ -16,7 +16,6 @@ declare global {
   }
 }
 
-// Singleton promise — ensures widget.js is only ever injected once per page load.
 let scriptPromise: Promise<void> | null = null;
 
 const SCRIPT_URL = "https://assets.calendly.com/assets/external/widget.js";
@@ -27,7 +26,6 @@ export function loadCalendlyScript(): Promise<void> {
 
   scriptPromise = new Promise<void>((resolve, reject) => {
     if (typeof window === "undefined") {
-      // No-op in SSR; components calling this are client-only.
       reject(new Error("SSR"));
       return;
     }
@@ -48,8 +46,6 @@ export function loadCalendlyScript(): Promise<void> {
 
     script.onload = () => {
       clearTimeout(timeoutId);
-      // Calendly registers window.Calendly synchronously on load.
-      // One extra tick as a safety net for edge-case late registration.
       if (window.Calendly) {
         resolve();
       } else {

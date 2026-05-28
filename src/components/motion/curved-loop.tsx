@@ -1,39 +1,16 @@
 "use client";
 
-/*
- * CurvedLoop — port of the React Bits CurvedLoop component.
- *
- * Adaptations from the original:
- *   - TypeScript strict props, no PropTypes.
- *   - No separate CSS file — layout and typography via Tailwind and inline style.
- *   - useReducedMotion() from motion/react: when true the rAF animation loop is
- *     never started and the text is rendered statically on its SVG path. The
- *     curved shape and text content remain fully visible.
- *   - `interactive` defaults to false — drag is opt-in since pointer capture on
- *     a marquee conflicts with native touch scroll on mobile.
- *   - Container height is prop-driven (default 120px SVG viewBox) rather than
- *     100vh from the original CSS. Use inside a <Section> for rhythm.
- *   - Fill colour defaults to `currentColor` so the component inherits
- *     text-foreground / text-background from the parent.
- */
-
 import { useRef, useEffect, useState, useMemo, useId, useCallback } from "react";
 import { useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export interface CurvedLoopProps {
   marqueeText: string;
-  /** Pixels of vertical curve on the SVG path. Default 200. */
   curveAmount?: number;
-  /** Pixels per frame scrolled. Default 2. */
   speed?: number;
-  /** "left" or "right". Default "left". */
   direction?: "left" | "right";
-  /** Allow pointer drag to change offset. Default false. */
   interactive?: boolean;
-  /** Extra classes applied to the text element inside SVG. */
   className?: string;
-  /** Font size for the curved text. Default "5rem". */
   fontSize?: string;
 }
 
@@ -57,8 +34,6 @@ export function CurvedLoop({
   const textPathRef = useRef<SVGTextPathElement>(null);
   const [spacing, setSpacing] = useState(0);
   const [offset, setOffset] = useState(0);
-  // Track drag state via useState so cursor style is reactive without reading
-  // refs during render (which triggers react-hooks/refs lint error).
   const [isDragging, setIsDragging] = useState(false);
   const uid = useId();
   const pathId = `curve-${uid}`;

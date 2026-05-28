@@ -9,18 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-/*
- * Production guard explanation:
- *   force-dynamic — prevents static pre-rendering so no HTML is generated.
- *   notFound()    — called INSIDE the component (not at module level) so
- *                   Next.js can safely import the module during build for
- *                   configuration collection, while the page returns 404
- *                   at request time in production.
- * Add `Disallow: /dev` to robots.txt when F1-9 (SEO) is tackled.
- */
 export const dynamic = "force-dynamic";
-
-/* ─── Token catalogue ──────────────────────────────────────────────── */
 
 interface Swatch {
   label: string;
@@ -70,8 +59,6 @@ function SwatchGrid() {
   );
 }
 
-/* ─── Typography specimen ──────────────────────────────────────────── */
-
 const typeScale = [
   { label: "text-xs", cls: "text-xs", text: "Caption / metadata (12 px)" },
   { label: "text-sm", cls: "text-sm", text: "Small body / labels (14 px)" },
@@ -100,8 +87,6 @@ function TypographySpecimen() {
     </div>
   );
 }
-
-/* ─── Component state matrices ─────────────────────────────────────── */
 
 function ButtonMatrix() {
   return (
@@ -165,7 +150,6 @@ function BadgeMatrix() {
       <Badge variant="outline">Outline</Badge>
       <Badge variant="ghost">Ghost</Badge>
       <Badge variant="destructive">Destructive</Badge>
-      {/* Semantic — using custom bg until shadcn supports them natively */}
       <span className="bg-success text-success-foreground inline-flex h-5 items-center rounded-full px-2 text-xs font-medium">
         Success
       </span>
@@ -224,14 +208,6 @@ function SkeletonMatrix() {
   );
 }
 
-/* ─── Layout primitives (PRO-12) ───────────────────────────────────── */
-
-/*
- * Container / Section / Grid sample. Each sub-block uses the muted
- * surface so the boundaries of the primitives are visible without
- * altering them visually. The outer Section uses spacing="none"
- * because the parent dev page already controls vertical rhythm.
- */
 function LayoutPrimitivesMatrix() {
   return (
     <div className="flex flex-col gap-6">
@@ -295,8 +271,6 @@ function LayoutPrimitivesMatrix() {
   );
 }
 
-/* ─── Section wrapper ──────────────────────────────────────────────── */
-
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="flex flex-col gap-4">
@@ -309,8 +283,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-/* ─── Page ─────────────────────────────────────────────────────────── */
-
 export default function ComponentsPage() {
   if (process.env.NODE_ENV === "production") {
     notFound();
@@ -318,7 +290,6 @@ export default function ComponentsPage() {
 
   return (
     <div className="min-h-screen">
-      {/* ── Light mode ─────────────────────────────────────────────── */}
       <div className="px-4 py-12 sm:px-8">
         <header className="mb-10">
           <p className="text-muted-foreground mb-1 font-mono text-xs">PRO-7 · Design system</p>
@@ -340,8 +311,6 @@ export default function ComponentsPage() {
           <Section title="Layout primitives">{<LayoutPrimitivesMatrix />}</Section>
         </div>
       </div>
-
-      {/* ── Dark mode — scoped .dark wrapper, no provider needed ─────── */}
       <div className="dark bg-background text-foreground px-4 py-12 sm:px-8">
         <header className="mb-10">
           <p className="text-muted-foreground mb-1 font-mono text-xs">Dark mode</p>

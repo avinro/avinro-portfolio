@@ -21,17 +21,9 @@ import { CaseStudyBodyShell } from "@/components/case-study/case-study-body-shel
 import { RelatedRail } from "@/components/case-study/related-rail";
 import { getRelatedItems } from "@/lib/content/related";
 
-// ---------------------------------------------------------------------------
-// Static generation
-// ---------------------------------------------------------------------------
-
 export function generateStaticParams() {
   return getCaseStudySlugs().map((slug) => ({ slug }));
 }
-
-// ---------------------------------------------------------------------------
-// Per-slug metadata (canonical, OG, Twitter, robots)
-// ---------------------------------------------------------------------------
 
 export async function generateMetadata({
   params,
@@ -80,17 +72,9 @@ export async function generateMetadata({
   };
 }
 
-// ---------------------------------------------------------------------------
-// Reading time chip
-// ---------------------------------------------------------------------------
-
 function ReadingTimeChip({ text }: { text: string }) {
   return <span className="text-muted-foreground font-mono text-xs tabular-nums">{text}</span>;
 }
-
-// ---------------------------------------------------------------------------
-// Metadata strip (cover, client, role, year, read time)
-// ---------------------------------------------------------------------------
 
 interface CoverMetaProps {
   title: string;
@@ -113,7 +97,6 @@ function CoverMeta({
 }: CoverMetaProps) {
   return (
     <div className="flex flex-col gap-8">
-      {/* Cover image with reserved aspect ratio to prevent CLS */}
       <div className="relative aspect-[16/7] w-full overflow-hidden rounded-xl">
         <Image
           src={coverImage}
@@ -125,7 +108,6 @@ function CoverMeta({
         />
       </div>
 
-      {/* Metadata strip */}
       <div className="border-border/40 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-4">
         <div className="flex flex-col gap-1">
           <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
@@ -153,7 +135,6 @@ function CoverMeta({
         </div>
       </div>
 
-      {/* Coverage tags */}
       <div className="flex flex-wrap gap-2">
         {coverage.map((tag) => (
           <span
@@ -167,10 +148,6 @@ function CoverMeta({
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Next case study CTA
-// ---------------------------------------------------------------------------
 
 interface NextCaseCTAProps {
   nextTitle: string;
@@ -205,10 +182,6 @@ function NextCaseCTA({ nextTitle, nextSlug }: NextCaseCTAProps) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const cs = getCaseStudyBySlug(slug);
@@ -217,10 +190,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const { frontmatter, content, readingTime } = cs;
   const tocHeadings = extractTocHeadings(content);
 
-  // Related items for the right rail (other case studies first, then works).
   const relatedItems = getRelatedItems(slug);
 
-  // Determine the next published case study (wraps around).
   const published = getPublishedCaseStudies();
   const currentIdx = published.findIndex((p) => p.frontmatter.slug === slug);
   const nextCs =
@@ -230,12 +201,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <main id="main-content">
-      {/* JSON-LD structured data — only for published case studies (drafts are noindex) */}
       {!frontmatter.draft && <CreativeWorkJsonLd cs={cs} slug={slug} />}
-      {/* Hero section — cover + metadata strip */}
       <Section spacing="heroInternal">
         <Container width="caseStudy">
-          {/* Page h1 — lives here, not in MDX body (heading-hierarchy rule) */}
           <h1 className="font-display mb-8 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
             {frontmatter.title}
           </h1>
@@ -252,7 +220,6 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </Container>
       </Section>
 
-      {/* Outcome strip — top-level KPIs from frontmatter, visible before the body */}
       {Array.isArray(frontmatter.kpis) && frontmatter.kpis.length > 0 ? (
         <Section spacing="card">
           <Container width="caseStudy">
@@ -264,7 +231,6 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </Section>
       ) : null}
 
-      {/* MDX body — full width, max 1080px (TOC + content + optional rail) */}
       <Section>
         <CaseStudyBodyShell>
           <CaseStudyBody
@@ -273,14 +239,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           >
             <MDXRemote source={content} components={mdxComponents} options={mdxOptions} />
 
-            {/*
-             * Scroll-depth tracker — sentinels for 25/50/75/100% milestones.
-             * Placed inside the content column so depth milestones map to the
-             * article body, not the grid wrapper.
-             */}
             <CaseStudyScrollTracker slug={slug} />
 
-            {/* Next case study CTA */}
             {nextCs && (
               <NextCaseCTA
                 nextTitle={nextCs.frontmatter.title}

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 const QUERY = "(orientation: landscape) and (max-height: 500px)";
 
-/** True in short landscape viewports (keyboard + header compete for space). */
 export function useLandscapeCompactHeader(enabled: boolean): boolean {
   const [compact, setCompact] = useState(false);
 

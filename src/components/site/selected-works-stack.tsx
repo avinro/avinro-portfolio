@@ -11,17 +11,9 @@ import type { CaseStudy } from "@/lib/content/case-studies";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 interface SelectedWorksStackProps {
   cases: CaseStudy[];
 }
-
-// ---------------------------------------------------------------------------
-// Card content component
-// ---------------------------------------------------------------------------
 
 interface StackCardProps {
   cs: CaseStudy;
@@ -41,7 +33,6 @@ function StackCard({ cs, index, isFirst }: StackCardProps) {
       className="absolute inset-0 overflow-hidden"
       aria-label={`Project ${num}: ${frontmatter.title}`}
     >
-      {/* Cover image background */}
       <div className="absolute inset-0">
         <Image
           src={frontmatter.coverImage}
@@ -53,11 +44,8 @@ function StackCard({ cs, index, isFirst }: StackCardProps) {
           loading={isFirst ? undefined : "lazy"}
           aria-hidden="true"
         />
-        {/* Dark scrim — maintains text legibility over any cover image */}
         <div className="bg-foreground/60 absolute inset-0" aria-hidden="true" />
       </div>
-
-      {/* Card content */}
       <Link
         href={`/work/${frontmatter.slug}`}
         className="focus-ring-invert absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16"
@@ -66,28 +54,21 @@ function StackCard({ cs, index, isFirst }: StackCardProps) {
         data-cta-position="stack_card"
       >
         <div className="flex flex-col gap-4 sm:gap-6">
-          {/* Index + tags row */}
           <div className="flex items-center gap-4">
             <span className="text-background/60 font-mono text-sm tabular-nums sm:text-base">
               {num}
             </span>
             <span className="text-background/60 font-mono text-xs sm:text-sm">{tagLine}</span>
           </div>
-
-          {/* Title */}
           <h2
             className="font-display text-background leading-tight font-semibold tracking-tight text-balance"
             style={{ fontSize: "var(--text-display-sm)" }}
           >
             {frontmatter.title}
           </h2>
-
-          {/* Summary */}
           <p className="text-background/80 max-w-2xl text-base leading-relaxed sm:text-lg">
             {frontmatter.summary}
           </p>
-
-          {/* Gradient swatch + CTA row */}
           <div className="flex items-center gap-6">
             <div
               aria-hidden="true"
@@ -111,10 +92,6 @@ function StackCard({ cs, index, isFirst }: StackCardProps) {
     </article>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Static fallback — shown when prefers-reduced-motion is set
-// ---------------------------------------------------------------------------
 
 function StaticFallback({ cases }: SelectedWorksStackProps) {
   return (
@@ -154,10 +131,6 @@ function StaticFallback({ cases }: SelectedWorksStackProps) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main component
-// ---------------------------------------------------------------------------
-
 export function SelectedWorksStack({ cases }: SelectedWorksStackProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -169,10 +142,8 @@ export function SelectedWorksStack({ cases }: SelectedWorksStackProps) {
     const cards = section.querySelectorAll<HTMLElement>("[data-stack-card]");
     const ctx = gsap.context(() => {
       cards.forEach((card, i) => {
-        if (i === 0) return; // First card is always visible at start
+        if (i === 0) return;
 
-        // Each card enters from below, revealing over the previous card.
-        // start/end use functions so they recalculate on resize/refresh.
         ScrollTrigger.create({
           trigger: section,
           start: () =>
@@ -184,24 +155,20 @@ export function SelectedWorksStack({ cases }: SelectedWorksStackProps) {
           onUpdate: (self) => {
             const progress = self.progress;
 
-            // Incoming card: slides up from 100% to 0%
             gsap.set(card, { yPercent: (1 - progress) * 100 });
 
-            // Outgoing card (previous): scales down and moves slightly up
             const prevCard = cards[i - 1] as HTMLElement | undefined;
             if (prevCard) {
               gsap.set(prevCard, {
                 scale: 1 - progress * 0.05,
                 y: -progress * 8,
                 opacity: 1 - progress * 0.4,
-                // Only remove pointer events when card is behind another
                 pointerEvents: progress > 0.5 ? "none" : "auto",
               });
             }
           },
         });
 
-        // Set initial off-screen position for non-first cards
         gsap.set(card, { yPercent: 100 });
       });
     }, section);
@@ -211,7 +178,6 @@ export function SelectedWorksStack({ cases }: SelectedWorksStackProps) {
     };
   }, [cases.length]);
 
-  // Sync reducedMotion state with the system preference and listen for live changes.
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
@@ -224,8 +190,6 @@ export function SelectedWorksStack({ cases }: SelectedWorksStackProps) {
     };
   }, []);
 
-  // Initialize GSAP ScrollTrigger only when motion is allowed.
-  // Re-runs if reducedMotion or cases change so teardown/re-init is correct.
   useEffect(() => {
     if (reducedMotion) return;
     const cleanup = initScrollTrigger();

@@ -20,10 +20,6 @@ import type {
   WorkHeaderMetadataKind,
 } from "@/lib/content/work-header-metadata";
 
-/**
- * Fixed palette + icon per metadata row. Keys are stable so colors never
- * change between renders or projects.
- */
 export type WorkMetadataKind =
   | "type"
   | "industry"
@@ -68,7 +64,6 @@ const METADATA_ICON: Record<WorkMetadataVisualKind, LucideIcon> = {
   live: ExternalLink,
 };
 
-/** Muted accent tints: visible on light surfaces without competing with body copy. */
 const METADATA_ICON_TONE: Record<WorkMetadataVisualKind, string> = {
   type: "text-sky-600 dark:text-sky-400/95",
   industry: "text-violet-600 dark:text-violet-400/95",
@@ -84,10 +79,8 @@ const METADATA_ICON_TONE: Record<WorkMetadataVisualKind, string> = {
   live: "text-accent",
 };
 
-/** Shared value typography — 16px / 110% line height. */
 const METADATA_VALUE_CLASS = "font-display text-foreground text-base leading-[1.1] font-semibold";
 
-/** MDX may wrap multiline card children in <p>; reset body paragraph styles. */
 const METADATA_VALUE_MDX_CHILD =
   "[&>p]:text-foreground [&>p]:mb-0 [&>p]:text-base [&>p]:leading-[1.1] [&>p]:font-semibold [&>p]:sm:text-base [&>p]:lg:leading-[1.1]";
 
@@ -190,9 +183,6 @@ export interface WorkHeaderTagsProps {
   className?: string;
 }
 
-/**
- * Topic badges for the work hero — sits directly under the project title.
- */
 export function WorkHeaderTags({ labels, className }: WorkHeaderTagsProps) {
   if (labels.length === 0) return null;
 
@@ -209,10 +199,6 @@ export function WorkHeaderTags({ labels, className }: WorkHeaderTagsProps) {
   );
 }
 
-/**
- * Expanded metadata strip for work detail heroes.
- * Editorial layout — icon + label + value blocks without card chrome.
- */
 export function WorkHeaderMeta({ items, className }: WorkHeaderMetaProps) {
   if (items.length === 0) return null;
 
