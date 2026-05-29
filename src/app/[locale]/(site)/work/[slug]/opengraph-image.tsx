@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import { getWorkBySlug, getWorkSlugs } from "@/lib/content/works";
+import { localizeWorkCategory } from "@/lib/content/work-category";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
@@ -19,9 +21,10 @@ export default async function WorkOGImage({
 }) {
   const { locale, slug } = await params;
   const work = getWorkBySlug(slug, locale);
+  const t = await getTranslations({ locale, namespace: "work" });
 
   const title = work?.frontmatter.title ?? "Work";
-  const category = work?.frontmatter.category ?? "";
+  const category = work ? localizeWorkCategory(work.frontmatter.category, t) : "";
   const year = work?.frontmatter.year != null ? String(work.frontmatter.year) : "";
 
   return new ImageResponse(

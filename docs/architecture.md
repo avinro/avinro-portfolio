@@ -32,11 +32,15 @@ RootLayout (src/app/layout.tsx)
 
 ## First-visit intro gate
 
-`SiteIntroGate` runs a state machine: `checking → intro → ready`.
+`SiteIntroGate` runs a state machine: `intro → ready`.
 
-- On **first visit**: `sessionStorage` has no `avinro-intro-seen` key. `INTRO_BLOCK_FIRST_PAINT_SCRIPT` runs synchronously before body paint and adds `.avinro-intro-pending` to `<html>` to prevent flash. The intro overlay is shown; the site tree is not mounted until the intro completes.
+- On **first paint**: the locale layout renders `.avinro-intro-checking` on `<html>`, and CSS covers the site before hydration so the website cannot flash behind the intro.
+- On **homepage entry** (`/` or `/es`): `sessionStorage` has no `avinro-intro-seen` key. `SiteIntroGate` removes the checking cover in a layout effect and renders the intro overlay; the hydrated site tree is not mounted until the intro completes.
+- On **non-homepage entry**: `SiteIntroGate` marks `avinro:intro-seen` immediately so the intro remains suppressed for the rest of the tab session, even if the visitor later navigates home.
 - On **return visits**: key present → site tree mounts immediately with no intro.
-- When intro completes, `SiteIntroGate` sets `avinro:intro-just-completed` in `sessionStorage` before mounting the site tree.
+- When intro completes, `SiteIntroGate` sets `avinro:intro-just-completed` in `sessionStorage` before mounting the site tree. `SiteTemplate` consumes that flag and runs the page-enter animation with a 0.3 second delay.
+
+Full implementation notes live in [`docs/intro-page-transitions.md`](./intro-page-transitions.md).
 
 ## Per-route enter animation (`template.tsx`)
 
@@ -44,10 +48,11 @@ RootLayout (src/app/layout.tsx)
 
 Animation: `opacity 0→1, translateY 14px→0`, 350 ms `power2.out`.
 
-Two guards skip the animation:
+Reduced motion skips the animation:
 
 1. `prefers-reduced-motion: reduce` — instant mount, no tween.
-2. First mount after intro completes — `SiteIntroGate` sets the `avinro:intro-just-completed` session flag before mounting the tree. `SiteTemplate` consumes and removes it on first read. Without this guard the page would animate in immediately after the intro exits, producing a jarring double-animation.
+
+First mount after intro completes still animates, but with a 0.3 second delay so the intro exit finishes before the page reveal starts.
 
 ## Fonts (root layout)
 

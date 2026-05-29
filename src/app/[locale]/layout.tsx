@@ -9,7 +9,7 @@ import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { isLocale, routing } from "@/i18n/routing";
-import { INTRO_BLOCK_FIRST_PAINT_SCRIPT } from "@/lib/intro/block-first-paint";
+import { INTRO_CHECKING_HTML_CLASS } from "@/lib/intro/constants";
 import { OWNER_JOB_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo/site";
 import { SITE_OG_IMAGE, SITE_TWITTER_CARD } from "@/lib/seo/social";
 
@@ -82,14 +82,9 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${googleSansFlex.variable} ${manrope.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${googleSansFlex.variable} ${manrope.variable} ${geistMono.variable} ${INTRO_CHECKING_HTML_CLASS} h-full antialiased`}
     >
-      <head>
-        <script
-          id="intro-block-first-paint"
-          dangerouslySetInnerHTML={{ __html: INTRO_BLOCK_FIRST_PAINT_SCRIPT }}
-        />
-      </head>
+      <head />
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <PostHogProvider />

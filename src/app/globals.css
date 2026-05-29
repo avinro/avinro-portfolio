@@ -206,15 +206,15 @@
   }
 }
 
-html.avinro-intro-pending body {
+html.avinro-intro-checking body {
   overflow: hidden;
 }
 
-html.avinro-intro-pending body::before {
+html.avinro-intro-checking body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 100;
   background-color: var(--foreground);
   pointer-events: none;
 }
@@ -673,4 +673,61 @@ video {
   user-drag: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+/* Page-transition loader — bars use the site background color over the dark curtain. */
+.avinro-transition-loader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  width: 60px;
+  height: 50px;
+}
+
+.avinro-transition-loader span {
+  display: block;
+  width: 8px;
+  height: 100%;
+  background-color: var(--background);
+  transform-origin: center;
+  animation: avinro-transition-bar 0.8s infinite ease-in-out;
+}
+
+.avinro-transition-loader span:nth-child(1) {
+  animation-delay: -0.8s;
+}
+.avinro-transition-loader span:nth-child(2) {
+  animation-delay: -0.7s;
+}
+.avinro-transition-loader span:nth-child(3) {
+  animation-delay: -0.6s;
+}
+.avinro-transition-loader span:nth-child(4) {
+  animation-delay: -0.5s;
+}
+.avinro-transition-loader span:nth-child(5) {
+  animation-delay: -0.4s;
+}
+.avinro-transition-loader span:nth-child(6) {
+  animation-delay: -0.3s;
+}
+
+@keyframes avinro-transition-bar {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.05);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avinro-transition-loader span {
+    animation: none;
+    transform: scaleY(0.4);
+  }
 }

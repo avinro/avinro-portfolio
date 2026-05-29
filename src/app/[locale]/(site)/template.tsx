@@ -6,6 +6,8 @@ import { gsap } from "gsap";
 
 import { INTRO_JUST_COMPLETED_SESSION_KEY } from "@/lib/intro/constants";
 
+const INTRO_REVEAL_DELAY_SECONDS = 0.3;
+
 export default function SiteTemplate({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -18,13 +20,18 @@ export default function SiteTemplate({ children }: { children: ReactNode }) {
     const introJustCompleted = sessionStorage.getItem(INTRO_JUST_COMPLETED_SESSION_KEY);
     if (introJustCompleted) {
       sessionStorage.removeItem(INTRO_JUST_COMPLETED_SESSION_KEY);
-      return;
     }
 
     gsap.fromTo(
       el,
       { opacity: 0, y: 14 },
-      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+      {
+        opacity: 1,
+        y: 0,
+        delay: introJustCompleted ? INTRO_REVEAL_DELAY_SECONDS : 0,
+        duration: 0.35,
+        ease: "power2.out",
+      },
     );
   }, []);
 

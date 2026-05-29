@@ -7,6 +7,8 @@ import type { Work } from "@/lib/content/works";
 
 interface WorkGalleryCardProps {
   work: Work;
+  /** Localized category label (resolved via the work.categories.* catalog). */
+  categoryLabel: string;
   className?: string;
 }
 
@@ -73,7 +75,7 @@ function CardOverlay({
   );
 }
 
-export function WorkGalleryCard({ work, className }: WorkGalleryCardProps) {
+export function WorkGalleryCard({ work, categoryLabel, className }: WorkGalleryCardProps) {
   const { frontmatter } = work;
   const cardStyle = { aspectRatio: "16/9" };
 
@@ -83,7 +85,7 @@ export function WorkGalleryCard({ work, className }: WorkGalleryCardProps) {
       data-slot="work-gallery-card"
       data-work-slug={frontmatter.slug}
       className={cn("group focus-ring relative block cursor-pointer", className)}
-      aria-label={`${frontmatter.title} — ${frontmatter.category}`}
+      aria-label={`${frontmatter.title} — ${categoryLabel}`}
     >
       {frontmatter.resultImage ? (
         <PixelTransition
@@ -95,11 +97,7 @@ export function WorkGalleryCard({ work, className }: WorkGalleryCardProps) {
           className="bg-muted w-full rounded-xl"
           style={cardStyle}
         >
-          <CardOverlay
-            title={frontmatter.title}
-            category={frontmatter.category}
-            tags={frontmatter.tags}
-          />
+          <CardOverlay title={frontmatter.title} category={categoryLabel} tags={frontmatter.tags} />
         </PixelTransition>
       ) : (
         <div className="bg-muted relative w-full overflow-hidden rounded-xl" style={cardStyle}>
@@ -111,11 +109,7 @@ export function WorkGalleryCard({ work, className }: WorkGalleryCardProps) {
             priority={frontmatter.order === 1}
             className="object-cover"
           />
-          <CardOverlay
-            title={frontmatter.title}
-            category={frontmatter.category}
-            tags={frontmatter.tags}
-          />
+          <CardOverlay title={frontmatter.title} category={categoryLabel} tags={frontmatter.tags} />
         </div>
       )}
     </Link>

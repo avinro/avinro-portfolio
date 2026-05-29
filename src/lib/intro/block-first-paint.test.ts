@@ -1,19 +1,25 @@
 import { describe, expect, it } from "vitest";
 
-import { INTRO_PENDING_HTML_CLASS, INTRO_SEEN_SESSION_KEY } from "@/lib/intro/constants";
-import { INTRO_BLOCK_FIRST_PAINT_SCRIPT } from "@/lib/intro/block-first-paint";
+import {
+  INTRO_HOME_PATHS,
+  isIntroHomePath,
+  normalizeIntroPath,
+} from "@/lib/intro/block-first-paint";
 
-describe("INTRO_BLOCK_FIRST_PAINT_SCRIPT", () => {
-  it("references the intro-seen session key", () => {
-    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain(INTRO_SEEN_SESSION_KEY);
+describe("isIntroHomePath", () => {
+  it("includes localized home paths", () => {
+    expect(INTRO_HOME_PATHS).toEqual(["/", "/es"]);
   });
 
-  it("adds the pending html class when intro has not been seen", () => {
-    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain(INTRO_PENDING_HTML_CLASS);
+  it("normalizes trailing slashes", () => {
+    expect(normalizeIntroPath("/es/")).toBe("/es");
+    expect(normalizeIntroPath("////")).toBe("/");
   });
 
-  it("gates the intro on home-page entry paths", () => {
-    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain("window.location.pathname");
-    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain('"/es"');
+  it("only treats localized home routes as intro routes", () => {
+    expect(isIntroHomePath("/")).toBe(true);
+    expect(isIntroHomePath("/es")).toBe(true);
+    expect(isIntroHomePath("/work")).toBe(false);
+    expect(isIntroHomePath("/es/work")).toBe(false);
   });
 });

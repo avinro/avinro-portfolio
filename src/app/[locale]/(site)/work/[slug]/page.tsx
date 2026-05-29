@@ -13,6 +13,7 @@ import { workMdxComponents } from "@/components/work/work-mdx-components";
 import { WorkGalleryFigure } from "@/components/work/work-gallery-figure";
 import { WorkHeaderMeta, WorkHeaderTags } from "@/components/work/work-metadata";
 import { buildWorkHeaderMetadata, buildWorkHeaderTags } from "@/lib/content/work-header-metadata";
+import { localizeWorkCategory } from "@/lib/content/work-category";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
@@ -246,7 +247,11 @@ export default async function WorkPage({
     t("metadata.resultCaption"),
   );
   const hasIntro = mdxSource.trim().length > 0;
-  const headerMetadata = buildWorkHeaderMetadata(frontmatter, t("metadata.viewLive"));
+  const headerMetadata = buildWorkHeaderMetadata(
+    frontmatter,
+    t("metadata.viewLive"),
+    localizeWorkCategory(frontmatter.category, t),
+  );
   const headerTags = buildWorkHeaderTags(frontmatter.tags, frontmatter.tools);
 
   const metadataLabelMap = {

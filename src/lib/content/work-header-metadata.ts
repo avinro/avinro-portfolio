@@ -47,13 +47,14 @@ function normalizeValue(value: string | undefined): string | undefined {
 export function buildWorkHeaderMetadata(
   frontmatter: WorkFrontmatter,
   viewLiveLabel = "View live",
+  categoryLabel?: string,
 ): WorkHeaderMetadataItem[] {
   const { meta, year, category, client, externalLink } = frontmatter;
 
   const candidates: Partial<Record<WorkHeaderMetadataKind, WorkHeaderMetadataItem>> = {
     type: meta.type ? { kind: "type", value: meta.type } : undefined,
     client: client ? { kind: "client", value: client } : undefined,
-    category: { kind: "category", value: category },
+    category: { kind: "category", value: categoryLabel ?? category },
     industry: meta.industry ? { kind: "industry", value: meta.industry } : undefined,
     year: {
       kind: "year",

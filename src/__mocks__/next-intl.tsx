@@ -24,6 +24,8 @@ export function useTranslations(namespace?: string) {
   };
 
   translate.raw = (key: string) => readMessage(namespace ? `${namespace}.${key}` : key);
+  translate.has = (key: string) =>
+    typeof readMessage(namespace ? `${namespace}.${key}` : key) === "string";
 
   return translate;
 }

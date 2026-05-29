@@ -18,7 +18,8 @@
       "Bash(pkill -f \"npm run dev\")",
       "Bash(kill 15055)",
       "Bash(npx vitest *)",
-      "Bash(npx prettier *)"
+      "Bash(npx prettier *)",
+      "Bash(node -e \"const p=require\\('next-intl/package.json'\\); console.log\\('next-intl', p.version\\)\")"
     ]
   }
 }
