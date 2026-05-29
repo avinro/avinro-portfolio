@@ -45,7 +45,7 @@ export function LanguageSwitcher({
         className={cn(
           "focus-ring inline-flex items-center gap-1 rounded-sm leading-none transition-colors duration-200 ease-out motion-reduce:transition-none",
           "text-muted-foreground hover:text-foreground font-mono text-xs tracking-wider uppercase",
-          variant === "mobile" ? "py-2" : "py-0",
+          variant === "mobile" ? "py-2" : "pt-0 pb-0.5",
           className,
         )}
         style={style}
