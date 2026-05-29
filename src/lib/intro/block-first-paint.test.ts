@@ -11,4 +11,9 @@ describe("INTRO_BLOCK_FIRST_PAINT_SCRIPT", () => {
   it("adds the pending html class when intro has not been seen", () => {
     expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain(INTRO_PENDING_HTML_CLASS);
   });
+
+  it("gates the intro on home-page entry paths", () => {
+    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain("window.location.pathname");
+    expect(INTRO_BLOCK_FIRST_PAINT_SCRIPT).toContain('"/es"');
+  });
 });
