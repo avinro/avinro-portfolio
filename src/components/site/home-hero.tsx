@@ -139,7 +139,7 @@ export function HomeHero() {
             ref={headlineRef}
             className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700"
             style={{
-              fontSize: "clamp(3.25rem, 14vw, 8rem)",
+              fontSize: "clamp(3.25rem, calc(1.28rem + 8.4vw), 8rem)",
               lineHeight: 0.9,
               letterSpacing: "-0.03em",
             }}
@@ -175,7 +175,8 @@ export function HomeHero() {
             <Button asChild variant="outline" size="lg">
               <a
                 href={hero.downloadCtaHref}
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 data-cta-label={t("hero.downloadCta")}
                 data-cta-href={hero.downloadCtaHref}
                 data-cta-position="hero_download"
