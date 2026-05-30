@@ -60,14 +60,19 @@ Construí una plataforma de automatización de gastos lista para producción que
 
 <WorkMetadataGrid>
   <WorkMetadataCard kind="role">Founding Product Designer</WorkMetadataCard>
-  <WorkMetadataCard kind="timeline">3 meses (discovery, MVP, refinamiento de producto)</WorkMetadataCard>
+  <WorkMetadataCard kind="timeline">
+    3 meses (discovery, MVP, refinamiento de producto)
+  </WorkMetadataCard>
   <WorkMetadataCard kind="client">UMA (startup)</WorkMetadataCard>
   <WorkMetadataCard kind="platform">Web (mobile-first) + WhatsApp</WorkMetadataCard>
   <WorkMetadataCard kind="team">CEO/COO, CTO/CPO, Founding Product Designer (yo)</WorkMetadataCard>
   <WorkMetadataCard kind="scope">
-    Estrategia de producto, arquitectura UX, sistema de diseño, implementación frontend de producción
+    Estrategia de producto, arquitectura UX, sistema de diseño, implementación frontend de
+    producción
   </WorkMetadataCard>
-  <WorkMetadataCard kind="status">Listo para producción, sin financiación (no lanzado)</WorkMetadataCard>
+  <WorkMetadataCard kind="status">
+    Listo para producción, sin financiación (no lanzado)
+  </WorkMetadataCard>
 </WorkMetadataGrid>
 
 ## Resumen ejecutivo
@@ -136,20 +141,24 @@ La estrategia de producto se moldeó en torno a tres principios: **accesibilidad
 
 ## Decisiones clave
 
-| Decisión                                           | Por qué importaba                                                                                                                 | Trade-off                                                                                                       |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **WhatsApp + Web, no una app móvil**               | Los restaurantes tienen teléfonos, no apps a medida. WhatsApp ya está abierto. Accesibilidad = distribución.                     | La web en móvil es menos nativa, pero elimina la fricción de la app store.                                       |
-| **Diseño responsive mobile-first**                 | Los dueños de restaurantes usan el teléfono en la cocina, en el salón. El acceso desde desktop es secundario.                    | Más complejidad en el sistema de diseño (breakpoints, tablas responsive).                                        |
-| **Dashboard enfocado en KPIs, no gestión documental** | Comportamiento del dueño: comprobar si el negocio es rentable. No: gestionar colas de documentos.                            | Oculta metadatos importantes (estado de aprobación, número de documentos). Solo validado por conversaciones, no por investigación. |
-| **Categorización controlada por el usuario**       | Los restaurantes tienen estructuras de gasto únicas. Forzar categorías predefinidas rompe la adopción. La IA sugiere, los usuarios refinan y entrenan. | Más complejidad de UI (flujos de editar, eliminar, crear). Requiere etiquetado claro y valores por defecto.    |
-| **Interfaz de chat conversacional**                | Los dueños hacen preguntas en lenguaje natural ("¿Cuáles fueron mis gastos el mes pasado?"). La IA puede responder directamente. | No es imprescindible. Aportó deleite pero no valor central.                                                     |
-| **Exportación a formatos externos**                | Los contables y asesores financieros necesitan archivos de datos limpios para declarar impuestos. Esto fue un gran desbloqueo para la expansión B2B. | Requirió lógica adicional de parsing y formateo de datos.                                                       |
+| Decisión                                              | Por qué importaba                                                                                                                                      | Trade-off                                                                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **WhatsApp + Web, no una app móvil**                  | Los restaurantes tienen teléfonos, no apps a medida. WhatsApp ya está abierto. Accesibilidad = distribución.                                           | La web en móvil es menos nativa, pero elimina la fricción de la app store.                                                         |
+| **Diseño responsive mobile-first**                    | Los dueños de restaurantes usan el teléfono en la cocina, en el salón. El acceso desde desktop es secundario.                                          | Más complejidad en el sistema de diseño (breakpoints, tablas responsive).                                                          |
+| **Dashboard enfocado en KPIs, no gestión documental** | Comportamiento del dueño: comprobar si el negocio es rentable. No: gestionar colas de documentos.                                                      | Oculta metadatos importantes (estado de aprobación, número de documentos). Solo validado por conversaciones, no por investigación. |
+| **Categorización controlada por el usuario**          | Los restaurantes tienen estructuras de gasto únicas. Forzar categorías predefinidas rompe la adopción. La IA sugiere, los usuarios refinan y entrenan. | Más complejidad de UI (flujos de editar, eliminar, crear). Requiere etiquetado claro y valores por defecto.                        |
+| **Interfaz de chat conversacional**                   | Los dueños hacen preguntas en lenguaje natural ("¿Cuáles fueron mis gastos el mes pasado?"). La IA puede responder directamente.                       | No es imprescindible. Aportó deleite pero no valor central.                                                                        |
+| **Exportación a formatos externos**                   | Los contables y asesores financieros necesitan archivos de datos limpios para declarar impuestos. Esto fue un gran desbloqueo para la expansión B2B.   | Requirió lógica adicional de parsing y formateo de datos.                                                                          |
 
 ## Arquitectura UX
 
 El producto se estructuró en torno a recorridos complementarios entre WhatsApp y la web:
 
-<BranchTree icon="user" label="Dueño de restaurante" hint="Un usuario, cuatro cadencias, una verdad en Supabase">
+<BranchTree
+  icon="user"
+  label="Dueño de restaurante"
+  hint="Un usuario, cuatro cadencias, una verdad en Supabase"
+>
   <Branch title="Diario — subida por WhatsApp" tone="accent">
     <FlowItem icon="camera" label="Fotografiar el recibo" />
     <FlowItem icon="message-circle" label="Enviar a UMA por WhatsApp" />

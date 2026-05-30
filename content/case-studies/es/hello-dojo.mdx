@@ -251,16 +251,16 @@ El instinto inicial fue voice-first. Pero diseñar para el contexto de Ibiza —
 
 ## Decisiones clave
 
-| Decisión                                                               | Por qué importaba                                                                                                                                                                                                                            | Trade-off                                                                                                                                                         |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Tres modos de interacción (Voz, Chat, UI Flow)**                     | Los usuarios en clubes ruidosos no pueden usar la voz. Los usuarios con pérdida auditiva necesitan alternativas. Quienes quieren explorar todas las opciones necesitan UI. Soportar los tres modos mantuvo la app usable en todos los contextos preservando el posicionamiento agent-first. | Mayor complejidad: tres flujos distintos, tres tratamientos visuales, tres máquinas de estado. Más casos límite. Más pruebas necesarias.                          |
-| **Tool calls como tarjetas de UI en los modos Voz/Chat**               | La voz pura sin opciones visuales crea ambigüedad ("¿El sistema me entendió?"). Mostrar restaurantes, precios y disponibilidad como tarjetas manteniendo el flujo conversacional dio a los usuarios confianza y control.                    | Riesgo de dividir la atención entre voz/texto y UI. Requirió una jerarquía visual cuidadosa para mantener a Dojo y la conversación como protagonistas.            |
-| **Lógica de eventos conectados — sugerir viajes entre reservas automáticamente** | Los usuarios que reservaban cena y luego nightlife necesitaban viajes entre locales. En lugar de exigir dos solicitudes de viaje separadas, el sistema detectaba el patrón y sugería "Tu próxima reserva" como destino. Hizo que la app se sintiera inteligente. | Lógica de producto compleja que requirió coordinación estrecha con el CTO. Había que definirla desde el inicio; cambiarla a mitad de la construcción lo rompería todo. |
-| **El calendario como modelo organizativo, no las categorías de servicio** | En lugar de una pestaña de "Rideshare", una de "Restaurantes", una de "Yates" (como Uber, Resy o apps separadas), todas las reservas vivían en un solo calendario. Los eventos eran eventos. Los viajes conectaban eventos. Esto unificó la experiencia. | Se perdió algo de contexto específico por servicio. Una reserva de restaurante y una de yate se parecen, lo que puede confundir a nuevos usuarios. Requirió un etiquetado claro. |
-| **Mapa en tiempo real para rideshare, a pantalla completa con sheet debajo** | Los usuarios necesitaban ver la ubicación del conductor, la distancia, el ETA. El mapa a pantalla completa dio prominencia a estos datos. El sheet (colapsable) mostraba detalles de la reserva, opciones de comunicación y extras sin ocultar el mapa. | El mapa ocupa una porción significativa de pantalla. En móviles pequeños, cuesta ver los detalles. Requirió un diseño responsive cuidadoso.                        |
-| **Componente píldora en home — siempre muestra el próximo evento**     | Los usuarios necesitaban contexto rápido: "¿Cuál es mi próximo plan?" La píldora mostraba la próxima reserva (hora, local, ubicación). Cuando un viaje estaba en curso, la píldora cambiaba al estado del viaje. Mantuvo la pantalla de inicio enfocada. | Si el usuario tenía muchos eventos, la píldora solo mostraba el inmediato siguiente. Quienes querían ver todos los eventos tenían que ir al calendario. Trade-off: foco vs. visibilidad total. |
-| **Modo Chat con input persistente + historial desplazable**           | Los usuarios que preferían escribir sobre hablar necesitaban una experiencia de chat natural. Input de texto siempre visible abajo. Historial desplazable. Tarjetas de opciones renderizadas inline debajo de los mensajes de Dojo.        | El input de chat persistente ocupa espacio. En móviles pequeños, menos lugar para el historial de conversación.                                                  |
-| **UI Flow como navegación por pasos tradicional (como Uber/Resy, no guiada por el agente)** | Algunos usuarios querían explorar todos los restaurantes antes de reservar, no ser guiados por Dojo. El UI Flow lo proveía: seleccionar servicio → ingresar detalles → ver todas las opciones con filtros → reservar. Modelo mental familiar. | El UI Flow y el Modo Voz/Chat se ven visualmente distintos (intencional) pero es un cambio de modo, no una transición fluida. Los usuarios tienen que elegir explícitamente qué modo usar. |
+| Decisión                                                                                    | Por qué importaba                                                                                                                                                                                                                                                                           | Trade-off                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tres modos de interacción (Voz, Chat, UI Flow)**                                          | Los usuarios en clubes ruidosos no pueden usar la voz. Los usuarios con pérdida auditiva necesitan alternativas. Quienes quieren explorar todas las opciones necesitan UI. Soportar los tres modos mantuvo la app usable en todos los contextos preservando el posicionamiento agent-first. | Mayor complejidad: tres flujos distintos, tres tratamientos visuales, tres máquinas de estado. Más casos límite. Más pruebas necesarias.                                                       |
+| **Tool calls como tarjetas de UI en los modos Voz/Chat**                                    | La voz pura sin opciones visuales crea ambigüedad ("¿El sistema me entendió?"). Mostrar restaurantes, precios y disponibilidad como tarjetas manteniendo el flujo conversacional dio a los usuarios confianza y control.                                                                    | Riesgo de dividir la atención entre voz/texto y UI. Requirió una jerarquía visual cuidadosa para mantener a Dojo y la conversación como protagonistas.                                         |
+| **Lógica de eventos conectados — sugerir viajes entre reservas automáticamente**            | Los usuarios que reservaban cena y luego nightlife necesitaban viajes entre locales. En lugar de exigir dos solicitudes de viaje separadas, el sistema detectaba el patrón y sugería "Tu próxima reserva" como destino. Hizo que la app se sintiera inteligente.                            | Lógica de producto compleja que requirió coordinación estrecha con el CTO. Había que definirla desde el inicio; cambiarla a mitad de la construcción lo rompería todo.                         |
+| **El calendario como modelo organizativo, no las categorías de servicio**                   | En lugar de una pestaña de "Rideshare", una de "Restaurantes", una de "Yates" (como Uber, Resy o apps separadas), todas las reservas vivían en un solo calendario. Los eventos eran eventos. Los viajes conectaban eventos. Esto unificó la experiencia.                                    | Se perdió algo de contexto específico por servicio. Una reserva de restaurante y una de yate se parecen, lo que puede confundir a nuevos usuarios. Requirió un etiquetado claro.               |
+| **Mapa en tiempo real para rideshare, a pantalla completa con sheet debajo**                | Los usuarios necesitaban ver la ubicación del conductor, la distancia, el ETA. El mapa a pantalla completa dio prominencia a estos datos. El sheet (colapsable) mostraba detalles de la reserva, opciones de comunicación y extras sin ocultar el mapa.                                     | El mapa ocupa una porción significativa de pantalla. En móviles pequeños, cuesta ver los detalles. Requirió un diseño responsive cuidadoso.                                                    |
+| **Componente píldora en home — siempre muestra el próximo evento**                          | Los usuarios necesitaban contexto rápido: "¿Cuál es mi próximo plan?" La píldora mostraba la próxima reserva (hora, local, ubicación). Cuando un viaje estaba en curso, la píldora cambiaba al estado del viaje. Mantuvo la pantalla de inicio enfocada.                                    | Si el usuario tenía muchos eventos, la píldora solo mostraba el inmediato siguiente. Quienes querían ver todos los eventos tenían que ir al calendario. Trade-off: foco vs. visibilidad total. |
+| **Modo Chat con input persistente + historial desplazable**                                 | Los usuarios que preferían escribir sobre hablar necesitaban una experiencia de chat natural. Input de texto siempre visible abajo. Historial desplazable. Tarjetas de opciones renderizadas inline debajo de los mensajes de Dojo.                                                         | El input de chat persistente ocupa espacio. En móviles pequeños, menos lugar para el historial de conversación.                                                                                |
+| **UI Flow como navegación por pasos tradicional (como Uber/Resy, no guiada por el agente)** | Algunos usuarios querían explorar todos los restaurantes antes de reservar, no ser guiados por Dojo. El UI Flow lo proveía: seleccionar servicio → ingresar detalles → ver todas las opciones con filtros → reservar. Modelo mental familiar.                                               | El UI Flow y el Modo Voz/Chat se ven visualmente distintos (intencional) pero es un cambio de modo, no una transición fluida. Los usuarios tienen que elegir explícitamente qué modo usar.     |
 
 ## Exploración
 
@@ -283,24 +283,36 @@ La Customer App tenía cuatro sistemas interconectados: rideshare, reserva de ex
 >
   <Branch title="Sistema de rideshare" tone="accent">
     <FlowItem icon="car" label="El usuario pide un taxi por Voz/Chat/UI" />
-    <FlowItem icon="map-pin" label="El sistema muestra conductores disponibles en tiempo real en el mapa" />
+    <FlowItem
+      icon="map-pin"
+      label="El sistema muestra conductores disponibles en tiempo real en el mapa"
+    />
     <FlowItem icon="check-circle-2" label="El usuario confirma; se asigna conductor" />
     <FlowItem icon="radio" label="Seguimiento en tiempo real hasta que el viaje termina" />
   </Branch>
   <Branch title="Reserva de experiencias" tone="accent">
     <FlowItem icon="wine" label="El usuario pide una reserva (restaurante, yate, etc.)" />
-    <FlowItem icon="layout-grid" label="El sistema muestra locales disponibles que cumplen los criterios" />
+    <FlowItem
+      icon="layout-grid"
+      label="El sistema muestra locales disponibles que cumplen los criterios"
+    />
     <FlowItem icon="file-text" label="El usuario selecciona y confirma" />
     <FlowItem icon="credit-card" label="El sistema gestiona el pago" />
   </Branch>
   <Branch title="Sistema de calendario / eventos" tone="accent">
-    <FlowItem icon="calendar" label="Todas las reservas (viajes + experiencias) aparecen como eventos" />
+    <FlowItem
+      icon="calendar"
+      label="Todas las reservas (viajes + experiencias) aparecen como eventos"
+    />
     <FlowItem
       icon="alert-triangle"
       label="El sistema detecta eventos consecutivos en ubicaciones distintas"
     />
     <FlowItem icon="bell" label="Sugiere automáticamente viajes para conectarlos" />
-    <FlowItem icon="layout-grid" label="Fusiona las tarjetas en una variante Conectada al reservar un viaje" />
+    <FlowItem
+      icon="layout-grid"
+      label="Fusiona las tarjetas en una variante Conectada al reservar un viaje"
+    />
   </Branch>
   <Branch title="Modos de interacción" tone="accent">
     <FlowItem icon="mic" label="Modo Voz — mantén pulsado para hablar con opciones" />
