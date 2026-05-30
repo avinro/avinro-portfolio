@@ -5,6 +5,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 
+import { useTranslations } from "next-intl";
+
 import { cn } from "@/lib/utils";
 import { renderAllUserFlowConnectors } from "./blockbind-user-flow-connectors";
 import { blockbindUserFlowDiagrams } from "./blockbind-user-flow-diagrams";
@@ -45,6 +47,7 @@ function scheduleConnectorPaint(root: HTMLElement | null, portalRoot: HTMLElemen
  * BlockBind — interactive user-flow carousel (JS + SVG connectors) with fullscreen dialog.
  */
 export function BlockbindUserFlowsGallery() {
+  const t = useTranslations("work");
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -217,7 +220,7 @@ export function BlockbindUserFlowsGallery() {
                 emblaApi?.scrollPrev();
               }}
               disabled={!emblaApi?.canScrollPrev()}
-              aria-label="Previous flow"
+              aria-label={t("previousFlow")}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden />
             </button>
@@ -228,7 +231,7 @@ export function BlockbindUserFlowsGallery() {
                 emblaApi?.scrollNext();
               }}
               disabled={!emblaApi?.canScrollNext()}
-              aria-label="Next flow"
+              aria-label={t("nextFlow")}
             >
               <ChevronRight className="h-4 w-4" aria-hidden />
             </button>
@@ -246,7 +249,6 @@ export function BlockbindUserFlowsGallery() {
             viewportHeightPx !== null ? { height: `${String(viewportHeightPx)}px` } : undefined
           }
         >
-          {/* items-start: each slide keeps its intrinsic height; default stretch would equalize all slides to the tallest diagram and break per-slide height measurement. */}
           <div className="flex touch-pan-y items-start">
             {FLOWS.map((flow, i) => {
               const inFullscreen = dialogOpen && dialogSlide === i;
@@ -348,7 +350,7 @@ export function BlockbindUserFlowsGallery() {
               <DialogPrimitive.Close
                 type="button"
                 className="border-border/60 bg-muted/60 text-foreground hover:bg-muted focus-visible:ring-ring inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-1 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                aria-label="Close fullscreen"
+                aria-label={t("closeFullscreen")}
               >
                 <X className="h-4 w-4" aria-hidden />
                 Close

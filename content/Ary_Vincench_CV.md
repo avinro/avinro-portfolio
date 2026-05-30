@@ -1,6 +1,6 @@
 # Ary Vincench
 
-**Product Design Engineer**  
+**Product Designer**  
 Strategic UI/UX | Engineering-aware design systems | AI-assisted front-end execution
 Madrid, Spain
 
@@ -15,9 +15,11 @@ Product Designer with 9+ years of experience designing and shipping SaaS and mul
 
 I operate beyond design. I translate business vision into product decisions, define end-to-end experiences across multiple surfaces, and ensure what gets built is coherent, scalable, and production-ready.
 
-My role typically sits between Product Design Lead and Product Management:
+My role typically sits between product strategy, design, and technical implementation:
 
 – Define product structure, flows, and interaction logic
+
+– Translate business ideas into structured product direction and roadmap
 
 – Own UX/UI across systems, not just screens
 
@@ -25,22 +27,24 @@ My role typically sits between Product Design Lead and Product Management:
 
 – Work closely with engineering to close the gap between design and implementation
 
+– Use AI-assisted workflows to accelerate design-to-code execution and catch implementation gaps early
+
 I’m especially effective in zero-to-one and fast-moving environments where clarity, speed, and strong product thinking are critical.
 
 Core areas:
 
-- Product Strategy, Product Management, UX Architecture, Design Systems, Front-End Execution, Multi-Sided Platforms, SaaS.
+- Product Strategy, UX Architecture, Design Systems, Front-End Execution, AI-Assisted Workflows, Multi-Sided Platforms, SaaS.
 - Strong in zero-to-one and fast-moving environments.
 
 ---
 
 ## Work Experience
 
-### helloDojo — Product Design Engineer - Lead
+### helloDojo — Lead Product Designer
 
 **Madrid / Ibiza / Remote · Mar 2026 – Present**
 
-- Product Designer Engineer with end-to-end ownership across a multi-product ecosystem (Customer App, Vendor Portal, Driver App, and Fleet Manager).
+- Product Designer with end-to-end ownership across a multi-product ecosystem (Customer App, Vendor Portal, Driver App, and Fleet Manager).
 
 - I turn business vision into real product by defining user journeys, system logic, and operational flows.
 
@@ -50,7 +54,7 @@ Core areas:
 
 - Work close to implementation using AI-assisted development to reduce the gap between design and code, catch regressions early, and increase delivery speed.
 
-- Operating at the intersection of Product Design and Product Management, focused on building clear, scalable experiences that drive business impact.
+- Operating between strategy, product design, and technical implementation, focused on building clear, scalable experiences that reach production with quality.
 
 ####Product Designer
 **Madrid / Ibiza / Remote · Nov 2025 – Mar 2026**
@@ -60,7 +64,7 @@ Core areas:
 - Define core product areas including rides, bookings, availability, payments, and cross-surface workflows.
 - Direct the Design System initiative to improve consistency, scalability, and design-to-development speed.
 - Work close to implementation using AI-assisted front-end workflows to reduce design-code gaps and catch regressions early.
-- Operate at the intersection of Product Management and Product Design, focused on building clear, scalable experiences that drive product outcomes.
+- Operate between strategy, product design, and technical implementation, focused on building clear, scalable experiences that drive product outcomes.
 
 ### 110 Theory — Senior Product Designer
 

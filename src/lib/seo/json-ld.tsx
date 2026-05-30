@@ -3,10 +3,6 @@ import "server-only";
 import type { CaseStudy } from "@/lib/content/case-studies";
 import { SITE_URL, OWNER_NAME, OWNER_JOB_TITLE } from "@/lib/seo/site";
 
-// ---------------------------------------------------------------------------
-// Safe JSON serialization
-// ---------------------------------------------------------------------------
-
 /**
  * Serialise a JSON-LD payload to a string safe for dangerouslySetInnerHTML.
  *
@@ -28,10 +24,6 @@ function absoluteUrl(pathOrUrl: string): string {
   }
   return new URL(pathOrUrl, SITE_URL).toString();
 }
-
-// ---------------------------------------------------------------------------
-// PersonJsonLd
-// ---------------------------------------------------------------------------
 
 /**
  * Injects a JSON-LD Person schema for the portfolio owner.
@@ -55,10 +47,6 @@ export function PersonJsonLd() {
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
   );
 }
-
-// ---------------------------------------------------------------------------
-// CreativeWorkJsonLd
-// ---------------------------------------------------------------------------
 
 interface CreativeWorkJsonLdProps {
   cs: CaseStudy;
@@ -86,7 +74,6 @@ export function CreativeWorkJsonLd({ cs, slug }: CreativeWorkJsonLdProps) {
     description: frontmatter.outcome,
     url: pageUrl,
     image: imageUrl,
-    // dateCreated as ISO 8601 year — the most specific date available
     dateCreated: String(frontmatter.year),
     keywords: frontmatter.coverage.join(", "),
     creator: {

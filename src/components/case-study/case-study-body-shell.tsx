@@ -7,10 +7,6 @@ interface CaseStudyBodyShellProps {
   className?: string;
 }
 
-/**
- * Full-width horizontal shell for case study pages (hero h1, article grid).
- * Spans the viewport with standard gutters; inner content is capped at 1080px.
- */
 export function CaseStudyBodyShell({ children, className }: CaseStudyBodyShellProps) {
   return (
     <div

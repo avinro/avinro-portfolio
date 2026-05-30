@@ -129,7 +129,7 @@ describe("generateGeminiText — successful call", () => {
     const log = logs[0];
     expect(log.event).toBe("ai.call");
     expect(log.status).toBe("ok");
-    expect(log.model).toBe("gemini-2.0-flash-lite");
+    expect(log.model).toBe("gemini-3.1-flash-lite-preview");
     expect(log.promptId).toBe("test-prompt");
     expect(log.promptVersion).toBe("v1");
     expect(log.inputTokens).toBe(100);

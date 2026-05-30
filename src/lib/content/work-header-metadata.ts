@@ -44,13 +44,17 @@ function normalizeValue(value: string | undefined): string | undefined {
  * Builds the header metadata strip from frontmatter.
  * Skips empty values; no per-project branching.
  */
-export function buildWorkHeaderMetadata(frontmatter: WorkFrontmatter): WorkHeaderMetadataItem[] {
+export function buildWorkHeaderMetadata(
+  frontmatter: WorkFrontmatter,
+  viewLiveLabel = "View live",
+  categoryLabel?: string,
+): WorkHeaderMetadataItem[] {
   const { meta, year, category, client, externalLink } = frontmatter;
 
   const candidates: Partial<Record<WorkHeaderMetadataKind, WorkHeaderMetadataItem>> = {
     type: meta.type ? { kind: "type", value: meta.type } : undefined,
     client: client ? { kind: "client", value: client } : undefined,
-    category: { kind: "category", value: category },
+    category: { kind: "category", value: categoryLabel ?? category },
     industry: meta.industry ? { kind: "industry", value: meta.industry } : undefined,
     year: {
       kind: "year",
@@ -59,7 +63,7 @@ export function buildWorkHeaderMetadata(frontmatter: WorkFrontmatter): WorkHeade
     platform: meta.platform ? { kind: "platform", value: meta.platform } : undefined,
     status: meta.status ? { kind: "status", value: meta.status } : undefined,
     role: meta.role ? { kind: "role", value: meta.role } : undefined,
-    live: externalLink ? { kind: "live", value: "View live", href: externalLink } : undefined,
+    live: externalLink ? { kind: "live", value: viewLiveLabel, href: externalLink } : undefined,
   };
 
   return WORK_HEADER_METADATA_ORDER.flatMap((kind) => {

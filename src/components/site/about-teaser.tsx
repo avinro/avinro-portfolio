@@ -1,23 +1,12 @@
+import { useTranslations } from "next-intl";
+
 import { homeContent } from "@/lib/content/home";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 
-/*
- * AboutTeaser — short bio with a link to the full /about page.
- *
- * Design intent (PRO-13 visual refinement):
- *   The generic "About" heading label is removed — the bio opens immediately
- *   with a typographically expressive first sentence styled as a display
- *   heading. The rest of the content follows in body weight.
- *
- *   The "More about me" link is styled in mono to maintain the editorial
- *   system: mono = navigation/meta text, display = content headlines.
- *
- *   Container width="narrow" (max-w-prose) keeps the reading measure
- *   comfortable on wide viewports.
- */
 export function AboutTeaser() {
+  const t = useTranslations("home");
   const { aboutTeaser } = homeContent;
 
   return (
@@ -26,16 +15,14 @@ export function AboutTeaser() {
         <div className="max-w3xl mx-auto flex flex-col items-center gap-5 text-center">
           <div className="flex flex-col gap-3">
             <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
-              {aboutTeaser.greeting}
+              {t("aboutTeaser.greeting")}
             </p>
             <p className="font-display text-foreground text-2xl leading-snug font-semibold tracking-tight sm:text-3xl">
-              {aboutTeaser.bio}
+              {t("aboutTeaser.bio")}
             </p>
           </div>
-
-          {/* Mono link — meta/navigation register */}
           <SiteTextLink href={aboutTeaser.linkHref} variant="inlineMono">
-            {aboutTeaser.linkLabel}
+            {t("aboutTeaser.linkLabel")}
             <span aria-hidden="true" className="transition-transform duration-150">
               →
             </span>

@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
@@ -92,32 +92,33 @@ function NotFoundHeading() {
   );
 }
 
-/**
- * 404 body — use inside layouts that already set minimal chrome (e.g. global
- * `not-found` with `SiteChrome minimalChrome`).
- */
-export function NotFoundPageContent() {
+export function NotFoundPageContent({
+  kicker = "Page not found",
+  body = "This page doesn't exist or may have moved.",
+  cta = "Go to portfolio",
+}: {
+  kicker?: string;
+  body?: string;
+  cta?: string;
+}) {
   return (
     <Section spacing="section" className="flex flex-1 flex-col">
       <Container className="flex min-h-[60dvh] flex-col items-center justify-center gap-6 text-center">
         <p className="text-muted-foreground font-mono text-xs tracking-[0.15em] uppercase">
-          Page not found
+          {kicker}
         </p>
         <NotFoundHeading />
-        <p className="text-muted-foreground max-w-md text-base sm:text-lg">
-          This page doesn&apos;t exist or may have moved.
-        </p>
+        <p className="text-muted-foreground max-w-md text-base sm:text-lg">{body}</p>
         <Button asChild variant="outline" size="lg" className="min-h-[44px]">
-          <Link href="/">Go to portfolio</Link>
+          <Link href="/">{cta}</Link>
         </Button>
       </Container>
     </Section>
   );
 }
 
-/** 404 with minimal chrome (no header / mobile bar / AI chat) for in-app `notFound()`. */
-export function NotFoundPage() {
+export function NotFoundPage(props: Parameters<typeof NotFoundPageContent>[0]) {
   useActivateMinimalSiteChrome();
 
-  return <NotFoundPageContent />;
+  return <NotFoundPageContent {...props} />;
 }

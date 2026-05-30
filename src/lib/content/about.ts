@@ -1,30 +1,14 @@
-/*
- * About page content — centralised copy.
- *
- * All text lives here so copy can be updated without touching component files.
- * Each field is explicitly typed so TypeScript catches missing keys when the
- * shape evolves.
- */
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export interface ExperienceEntry {
-  /** Date range string, e.g. "Mar 2023 – 2025", rendered in mono tabular-nums. */
   year: string;
   role: string;
   company: string;
-  /** 2–3 sentence outcome or context for the role. */
   outcome: string;
 }
 
 export interface EducationEntry {
-  /** Year range string, e.g. "2012–2018". Omit when description replaces the date slot. */
   years: string;
   degree: string;
   institution: string;
-  /** Optional prose description shown below degree/institution instead of the year slot. */
   description?: string;
 }
 
@@ -42,9 +26,7 @@ export interface ProcessStage {
 
 export interface AboutContent {
   hero: {
-    /** 3–5 sentence bio. Product Design Engineer is the primary identity. */
     bio: string[];
-    /** Hero portrait card image (path under public/). */
     portraitSrc: string;
   };
   experience: {
@@ -66,15 +48,11 @@ export interface AboutContent {
   };
 }
 
-// ---------------------------------------------------------------------------
-// Content
-// ---------------------------------------------------------------------------
-
 export const aboutContent: AboutContent = {
   hero: {
     portraitSrc: "/images/about.jpg",
     bio: [
-      "I'm Ary — Product Design Engineer working at the intersection of strategy, design, and execution.",
+      "I'm Ary — Product Designer working at the intersection of strategy, design, and execution.",
       "I help teams turn unclear ideas into structured products they can actually ship. My work spans 0→1 products, multi-app ecosystems, and design systems built to last beyond the first release.",
       "I care deeply about the gap between concept and delivery — and I've spent the last several years closing it across different industries, team sizes, and constraints.",
     ],
@@ -85,7 +63,7 @@ export const aboutContent: AboutContent = {
     entries: [
       {
         year: "Nov 2025 – present",
-        role: "Product Design Engineer Lead",
+        role: "Lead Product Designer",
         company: "helloDojo",
         outcome:
           "Lead the end-to-end UX across a multi-surface ecosystem — customer, driver, vendor, and fleet portals. Built the design system from zero and pair design with AI-assisted front-end using Cursor and Claude to close the gap between Figma and production code.",

@@ -1,0 +1,333 @@
+---
+title: UMA Agent
+slug: uma
+client: UMA
+role: Founding Product Designer
+year: 2025
+coverage:
+  - estrategia de producto
+  - arquitectura ux
+  - sistema de diseño
+  - frontend
+outcome: Construí una plataforma de automatización de gastos lista para producción que convirtió recibos en papel de restaurantes en datos financieros estructurados, eliminando la fricción del registro manual y creando visibilidad diaria sobre los costes.
+coverImage: /case-studies/uma/cover.jpg
+hoverImage: /case-studies/uma/images/final-reflection.jpg
+order: 2
+featured: true
+sector: Tecnología para restaurantes
+softwareType: App web + WhatsApp
+
+summary: "Construí un SaaS de automatización de gastos listo para producción para dueños de restaurantes: captura de recibos por WhatsApp, extracción con IA y un dashboard web con visibilidad financiera en tiempo real. Diseñé y lancé el sistema de diseño completo y el 100% del frontend de producción en 3 meses."
+tags:
+  - Product strategy
+  - Design system
+  - React
+  - Tailwind
+  - AI-assisted dev
+  - SaaS
+gradient: from-lime-400 to-emerald-600
+kpis:
+  - value: "3 mo"
+    label: De discovery a listo para lanzar
+    sublabel: Construcción de producción end-to-end
+    sentiment: positive
+  - value: "20+"
+    label: Componentes del sistema de diseño
+    sublabel: Tokens, variantes, estados responsive
+    sentiment: positive
+  - value: "~5k"
+    label: Líneas de código de producción
+    sublabel: React + Tailwind, 100% by me
+    sentiment: positive
+  - value: "2"
+    label: Interfaces lanzadas
+    sublabel: Web app + WhatsApp
+    sentiment: positive
+---
+
+## Impacto en una línea
+
+Construí una plataforma de automatización de gastos lista para producción que convirtió recibos en papel de restaurantes en datos financieros estructurados, eliminando la fricción del registro manual y creando visibilidad diaria sobre los costes.
+
+<Figure
+  src="/case-studies/uma/images/one-line-impact.jpg"
+  alt="UMA — visión general del producto: captura por WhatsApp y dashboard web"
+  width={2880}
+  height={1620}
+/>
+
+## Resumen rápido
+
+<WorkMetadataGrid>
+  <WorkMetadataCard kind="role">Founding Product Designer</WorkMetadataCard>
+  <WorkMetadataCard kind="timeline">
+    3 meses (discovery, MVP, refinamiento de producto)
+  </WorkMetadataCard>
+  <WorkMetadataCard kind="client">UMA (startup)</WorkMetadataCard>
+  <WorkMetadataCard kind="platform">Web (mobile-first) + WhatsApp</WorkMetadataCard>
+  <WorkMetadataCard kind="team">CEO/COO, CTO/CPO, Founding Product Designer (yo)</WorkMetadataCard>
+  <WorkMetadataCard kind="scope">
+    Estrategia de producto, arquitectura UX, sistema de diseño, implementación frontend de
+    producción
+  </WorkMetadataCard>
+  <WorkMetadataCard kind="status">
+    Listo para producción, sin financiación (no lanzado)
+  </WorkMetadataCard>
+</WorkMetadataGrid>
+
+## Resumen ejecutivo
+
+UMA era una plataforma SaaS diseñada para ayudar a dueños de restaurantes y bares a automatizar el registro de gastos fotografiando recibos. En lugar de gestionar facturas en papel y entradas manuales, los usuarios podían subir recibos por WhatsApp o por la web app, y agentes de IA extraían los datos, categorizaban los gastos y proporcionaban visibilidad financiera en tiempo real mediante dashboards de KPIs e informes detallados.
+
+Mi rol fue founding product design engineer. Me hice cargo de la definición de producto y la estrategia de UX junto al CTO, diseñé el sistema de diseño completo y escribí código de frontend listo para producción usando React, Tailwind y flujos asistidos por IA. El producto se lanzó con funcionalidad end-to-end en ambas interfaces, pero la empresa no pudo conseguir financiación para lanzarlo.
+
+<Figure
+  src="/case-studies/uma/images/executive-summary.jpg"
+  alt="Concepto de doble interfaz de UMA — captura por WhatsApp y dashboard web"
+  width={2880}
+  height={1620}
+/>
+
+## Contexto
+
+A mediados de 2025, los dueños de restaurantes seguían dependiendo en gran medida de recibos en papel y del registro manual de gastos. Esto generaba fricción en las operaciones diarias y hacía casi imposible tener visibilidad en tiempo real sobre costes, flujo de caja o rentabilidad. Los contables y asesores financieros tenían dificultades para obtener datos limpios de sus clientes de restauración para las declaraciones de impuestos y la planificación financiera.
+
+La oportunidad era clara: automatizar la parte más dolorosa de la gestión de gastos —la captura de datos— usando tecnología que encajara en los flujos de trabajo existentes. La mayoría de los dueños de restaurantes ya usaban WhatsApp para la comunicación del negocio. Al encontrarlos ahí, podíamos eliminar la fricción de cambiar a una nueva app o visitar un portal web para subidas rutinarias.
+
+La empresa intentaba establecer una nueva categoría en el espacio de la gestión de gastos. A diferencia del software de contabilidad general (que requería una configuración extensa y estaba diseñado para contables, no para operadores), UMA se construyó específicamente para el vertical de restauración, con foco en la velocidad y la accesibilidad.
+
+<Figure
+  src="/case-studies/uma/images/context.jpg"
+  alt="Contexto de UMA — captura, extracción, insights y datos con calidad de exportación"
+  width={2880}
+  height={1620}
+/>
+
+## Planteamiento del problema
+
+Los dueños de restaurantes enfrentaban tres grandes retos operativos: **fricción en la captura de gastos**, **falta de visibilidad financiera en tiempo real** y **dificultad para colaborar con contables y asesores**. Registrar gastos manualmente mediante recibos, hojas de cálculo o herramientas desconectadas consumía tiempo y era propenso a errores, mientras que la mayor parte de la conciliación financiera solo ocurría mensual o trimestralmente, limitando la capacidad de reaccionar a los costes a medida que ocurrían.
+
+<UmaPainPoints />
+
+La estrategia de negocio se centró en validar el **product-market fit** dentro de la industria de la restauración demostrando que una **plataforma de gastos WhatsApp-first impulsada por IA** podía adquirir y retener con éxito a dueños de restaurantes. El producto necesitaba diferenciarse de las herramientas genéricas de gastos mediante una combinación de **extracción de recibos con IA**, **UX mobile-first** y **accesibilidad por WhatsApp**, creando a largo plazo un **moat defendible** mediante la integración en el flujo de trabajo y partnerships B2B con contables, asesores financieros y proveedores de POS.
+
+<UmaTransformation />
+
+El reto central no era solo automatizar la **captura de recibos**, sino transformar una visión amplia de negocio en una experiencia de producto escalable que equilibrara **simplicidad**, **claridad financiera** y **fiabilidad operativa**. La plataforma necesitaba hacer las subidas sin fricción mediante **WhatsApp**, convertir datos de imagen no estructurados en registros financieros precisos y mostrar insights significativos sin abrumar a los dueños de restaurantes con complejidad.
+
+<UmaDifferentiators />
+
+## Mi rol
+
+Me uní a UMA como **Founding Product Designer** con un **10% de equity**, liderando la definición de producto, la estrategia de UX y la ejecución de frontend en estrecha colaboración con el CTO. Mi rol cubrió todo el ciclo de vida del producto, desde definir la **arquitectura UX central** y validar los flujos financieros con dueños de restaurantes, hasta diseñar el **sistema de diseño** completo y construir todo el frontend de producción en **React + Tailwind** usando **Cursor** y **Figma MCP**. También contribuí a decisiones de estrategia de producto sobre suscripciones, dirección del roadmap, restricciones de implementación y estructuras de datos basadas en API para asegurar que la plataforma siguiera siendo escalable y alineada con las necesidades operativas reales.
+
+<Figure
+  src="/case-studies/uma/images/my-role.jpg"
+  alt="UMA — rol de founding product design engineer y restricciones operativas"
+  width={2880}
+  height={1620}
+/>
+
+## Estrategia de producto
+
+La estrategia de producto se moldeó en torno a tres principios: **accesibilidad sobre complejidad**, **profundidad bajo demanda** y **resolver problemas reales de restaurantes**. En lugar de obligar a los usuarios a aprender nuevos flujos de trabajo, UMA los encontraba donde ya estaban —**WhatsApp**— mientras que la plataforma web proporcionaba acceso más profundo a **insights financieros**, **análisis de tendencias** e **informes exportables**. Evitamos intencionalmente capas de gestión innecesarias y enfocamos la experiencia en torno a la única pregunta que de verdad les importa a los dueños de restaurantes: **"¿Estoy ganando dinero?"**
+
+<Figure
+  src="/case-studies/uma/images/product-strategy.jpg"
+  alt="Estrategia de producto de UMA — accesibilidad, profundidad bajo demanda y foco restaurant-first"
+  width={2880}
+  height={1620}
+/>
+
+## Decisiones clave
+
+| Decisión                                              | Por qué importaba                                                                                                                                      | Trade-off                                                                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **WhatsApp + Web, no una app móvil**                  | Los restaurantes tienen teléfonos, no apps a medida. WhatsApp ya está abierto. Accesibilidad = distribución.                                           | La web en móvil es menos nativa, pero elimina la fricción de la app store.                                                         |
+| **Diseño responsive mobile-first**                    | Los dueños de restaurantes usan el teléfono en la cocina, en el salón. El acceso desde desktop es secundario.                                          | Más complejidad en el sistema de diseño (breakpoints, tablas responsive).                                                          |
+| **Dashboard enfocado en KPIs, no gestión documental** | Comportamiento del dueño: comprobar si el negocio es rentable. No: gestionar colas de documentos.                                                      | Oculta metadatos importantes (estado de aprobación, número de documentos). Solo validado por conversaciones, no por investigación. |
+| **Categorización controlada por el usuario**          | Los restaurantes tienen estructuras de gasto únicas. Forzar categorías predefinidas rompe la adopción. La IA sugiere, los usuarios refinan y entrenan. | Más complejidad de UI (flujos de editar, eliminar, crear). Requiere etiquetado claro y valores por defecto.                        |
+| **Interfaz de chat conversacional**                   | Los dueños hacen preguntas en lenguaje natural ("¿Cuáles fueron mis gastos el mes pasado?"). La IA puede responder directamente.                       | No es imprescindible. Aportó deleite pero no valor central.                                                                        |
+| **Exportación a formatos externos**                   | Los contables y asesores financieros necesitan archivos de datos limpios para declarar impuestos. Esto fue un gran desbloqueo para la expansión B2B.   | Requirió lógica adicional de parsing y formateo de datos.                                                                          |
+
+## Arquitectura UX
+
+El producto se estructuró en torno a recorridos complementarios entre WhatsApp y la web:
+
+<BranchTree
+  icon="user"
+  label="Dueño de restaurante"
+  hint="Un usuario, cuatro cadencias, una verdad en Supabase"
+>
+  <Branch title="Diario — subida por WhatsApp" tone="accent">
+    <FlowItem icon="camera" label="Fotografiar el recibo" />
+    <FlowItem icon="message-circle" label="Enviar a UMA por WhatsApp" />
+    <FlowItem icon="sparkles" label="La IA extrae los datos" hint="Asíncrono — sin fricción" />
+    <FlowItem icon="bell" label="Resumen + enlace a la tabla de facturas" />
+  </Branch>
+  <Branch title="Semanal / mensual — revisión web" tone="accent">
+    <FlowItem icon="layout-dashboard" label="Abrir el dashboard" />
+    <FlowItem
+      icon="bar-chart-3"
+      label="Escanear los KPIs"
+      hint="Ingresos, gastos, beneficio neto, rentabilidad"
+    />
+    <FlowItem icon="pie-chart" label="Profundizar en el desglose por categoría" />
+    <FlowItem icon="file-text" label="Revisar facturas individuales" />
+    <FlowItem icon="edit-3" label="Editar o corregir la categorización" />
+    <FlowItem icon="message-square" label="Hacer preguntas por chat" />
+  </Branch>
+  <Branch title="Fin de mes — análisis" tone="accent">
+    <FlowItem icon="trending-up" label="Revisar tendencias de gasto a lo largo del tiempo" />
+    <FlowItem icon="alert-triangle" label="Identificar picos de coste" />
+    <FlowItem icon="download" label="Exportar para el contable o asesor" />
+  </Branch>
+  <Branch title="Continuo — entrenamiento del modelo" tone="accent">
+    <FlowItem icon="alert-triangle" label="La IA clasifica mal un gasto" tone="warning" />
+    <FlowItem icon="file-text" label="El dueño lo corrige en la tabla de facturas" />
+    <FlowItem icon="brain" label="El modelo aprende para futuras subidas" />
+  </Branch>
+</BranchTree>
+
+## Solución final
+
+### Flujo 1: Subida de recibos por WhatsApp
+
+**Problema:** la mayoría de los datos de gasto empiezan como un recibo físico o digital. Introducirlos manualmente en un sistema es lento y propenso a errores. Los dueños necesitan que esto sea tan fácil como hacer una foto.
+
+**Solución:** el dueño envía la foto del recibo al número de WhatsApp de UMA. La imagen va a un servicio de extracción. Un agente de IA la procesa, categoriza el gasto y devuelve un mensaje de confirmación con un resumen y un enlace a la tabla completa de facturas en la web app.
+
+El sistema funcionaba porque priorizaba la **velocidad y la simplicidad**. Las subidas de recibos ocurrían directamente por **WhatsApp**, eliminando fricción del proceso y dando a los usuarios **feedback inmediato** de que sus archivos se habían recibido. El procesamiento con IA ocurría de forma asíncrona en segundo plano, permitiendo a los dueños continuar su flujo de trabajo sin esperar, mientras un único hilo de conversación gestionaba tanto la **captura de gastos** como las **preguntas financieras**.
+
+<Figure
+  src="/case-studies/uma/images/receipt-upload.jpg"
+  alt="Flujo de subida de recibos por WhatsApp mostrando la cámara del teléfono, el icono de extracción con IA y el dashboard web"
+  width={2880}
+  height={1620}
+/>
+
+### Flujo 2: Dashboard + visión general de KPIs
+
+**Problema:** los dueños necesitan una respuesta rápida: _¿mi negocio está ganando dinero?_ La necesitan a diario. Pero también necesitan entender _en qué_ se está gastando el dinero.
+
+**Solución:** el dashboard muestra cuatro tarjetas de KPI (Ingresos totales, Gastos totales, Beneficio neto, Rentabilidad) en la parte superior. Debajo, un Desglose de gastos visualiza las cinco principales categorías de coste con barras codificadas por color. Un gráfico de Tendencias de gasto muestra la trayectoria de los gastos en los últimos seis meses.
+
+El dashboard funcionaba porque se enfocaba en la **claridad sobre la complejidad**. Métricas centrales como **ingresos**, **gastos** y **beneficio** respondían la pregunta de negocio más importante en segundos, mientras que la **codificación semántica por color** reducía la carga cognitiva y hacía la salud financiera instantáneamente comprensible. Los insights más detallados se revelaban progresivamente mediante una estructura clara de **drill-down**, y toda la experiencia se diseñó con un **layout mobile-first** que seguía siendo fácil de escanear y navegar en pantallas pequeñas.
+
+<Figure
+  src="/case-studies/uma/images/dashboard-overview.jpg"
+  alt="Dashboard de UMA mostrando tarjetas de KPI, desglose de gastos y tendencias de gasto"
+  width={2880}
+  height={1620}
+/>
+
+### Flujo 3: Tabla de facturas + control de categorización
+
+**Problema:** los dueños necesitan ver todos los recibos subidos en un solo lugar, verificar la precisión de la extracción, corregir errores y hacer seguimiento del estado de pago. También necesitan entrenar a la IA sobrescribiendo categorías incorrectas.
+
+**Solución:** una tabla buscable y filtrable muestra todas las facturas con columnas: Proveedor, Importe, Tipo (Factura, Recibo, Albarán, Extracto, etc.), Fecha de emisión, Fecha de vencimiento, Estado (Procesado, Requiere revisión), Pago (Pagado, Pendiente) y Acciones. Los usuarios pueden hacer clic en cualquier fila para ver detalles, editar la categoría o marcar como pagada.
+
+El sistema de gestión de gastos funcionaba porque combinaba **visibilidad**, **control** y **claridad operativa**. Cada gasto quedaba totalmente trazable mediante un **audit trail** completo, mientras que los usuarios podían corregir rápidamente los errores de la IA y mejorar la precisión de los datos con el tiempo. Funciones como el **seguimiento del estado de pago**, las **acciones de gestión masiva** y las **estructuras de datos listas para exportar** facilitaban a los dueños de restaurantes gestionar el flujo de caja y colaborar con asesores financieros sin trabajo manual adicional.
+
+<Figure
+  src="/case-studies/uma/images/invoice-table.jpg"
+  alt="Tabla de facturas de UMA con gestión documental e interacciones por modal"
+  width={2880}
+  height={1620}
+/>
+
+### Flujo 4: Informes + desglose anual
+
+**Problema:** los dueños necesitan entender los patrones de gasto a lo largo del tiempo. ¿Qué meses fueron rentables? ¿Dónde se dispararon los gastos? Necesitan estos datos en un formato que puedan estudiar y compartir con asesores.
+
+**Solución:** la sección de Informes muestra una tabla de Desglose anual con filas para cada categoría de gasto (Compras, Servicios externos, Gastos de personal, Gastos de gestión, Ingresos, Beneficio neto, Rentabilidad) y columnas para cada mes. Los usuarios pueden ver importes exactos y tendencias de un vistazo. Un toggle les permite alternar entre vistas de 6 y 12 meses. Un botón "Exportar datos" les permite descargar todo el conjunto de datos para los contables.
+
+El sistema de informes funcionaba porque proporcionaba **visibilidad financiera completa** en una única vista estructurada, haciendo que los ingresos, los gastos y los desgloses por categoría fueran fáciles de entender con el tiempo. Ver los datos a lo largo de periodos más largos ayudaba a los dueños a identificar **patrones estacionales**, **anomalías de coste** y tendencias operativas que de otro modo quedarían ocultas en hojas de cálculo o informes desconectados. La información también se diseñó para estar **lista para exportar** y presentarse en un **formato financiero profesional** familiar para contables y asesores, reforzando la confianza y haciendo que la plataforma se sintiera operativamente fiable en lugar de orientada al consumidor.
+
+<Figure
+  src="/case-studies/uma/images/reports.jpg"
+  alt="Informes de UMA mostrando la tabla de desglose anual y la vista de informes en móvil"
+  width={2880}
+  height={1620}
+/>
+
+## Design Engineering e implementación frontend
+
+**UMA** se convirtió en un momento decisivo en mi forma de trabajar como **Product Designer** con ownership directo de implementación. Me hice cargo de la **capa completa de implementación frontend**, combinando pensamiento de producto, sistemas de diseño y **flujos de ingeniería asistidos por IA** para lanzar **interfaces listas para producción**.
+
+El **sistema de diseño** se construyó desde cero para soportar una implementación escalable en entornos móvil, tablet y desktop. Los componentes se estructuraron intencionalmente para mapear directamente a la **arquitectura de React**, con **comportamientos reutilizables**, **estructuras de props alineadas** y **tokens de diseño sincronizados** exportados desde Figma a la configuración de Tailwind.
+
+Usando **Figma, Cursor, Claude y la integración con Figma MCP**, el flujo de trabajo evolucionó hacia un **pipeline de diseño a código** estrechamente conectado. Los componentes se diseñaban, se generaban en código React, se refinaban mediante prompting e implementación, se conectaban a **APIs reales** y se validaban en **dispositivos reales** en un bucle iterativo que redujo significativamente la brecha entre diseño y producción.
+
+Más allá de la ejecución de UI, el rol requirió **colaboración estrecha con el CTO** para alinear el comportamiento del frontend con el backend y la lógica de producto. Esto incluyó los **flujos de datos del dashboard**, los **estados de procesamiento de facturas**, el **comportamiento de categorización con IA**, los **requisitos de formato de exportación** y la **sincronización en tiempo real entre las subidas de WhatsApp y la aplicación web**.
+
+El **comportamiento responsive y la usabilidad** se trataron como requisitos centrales del sistema en lugar de ajustes posteriores al lanzamiento. Las interfaces de datos complejas se adaptaban dinámicamente entre breakpoints, incluyendo **transformaciones de tabla a tarjeta en móvil**, **visualizaciones de KPI simplificadas** y **estados de interacción completamente definidos** en todos los componentes.
+
+Debido a restricciones de plazos, el control de calidad se basó principalmente en **pruebas manuales** en **iOS Safari, Android Chrome y navegadores de desktop**. Sin embargo, la consistencia del sistema de componentes y la arquitectura compartida ayudaron a minimizar el riesgo de regresión durante todo el desarrollo.
+
+<Figure
+  src="/case-studies/uma/images/design-engineering.jpg"
+  alt="Flujo de diseño a código: Figma MCP a React a Supabase a UMA Agent, integrado en la aplicación web"
+  width={2880}
+  height={1620}
+/>
+
+## Colaboración
+
+**Colaboración y alineación de producto:**
+
+UMA fue construida por un **equipo pequeño y muy colaborativo**, lo que creó ciclos de iteración rápidos y una alineación estrecha entre producto, diseño e ingeniería. Trabajando directamente con el CTO, nos alineamos en **flujos de IA**, **estructuras de API**, **casos límite** y **restricciones de implementación** para asegurar que la UX coincidiera con la realidad técnica. Juntos revisábamos builds de staging, refinábamos comportamientos del sistema y aclarábamos cómo debía manejar la plataforma los recibos ambiguos, las subidas duplicadas y los conflictos de categorización.
+
+**Validación de negocio y de usuario:**
+
+La colaboración con el CEO, que además era **dueño de un restaurante**, proporcionó acceso directo al mercado objetivo y moldeó muchas de las decisiones de producto. A través de conversaciones con él y su red de colegas, validamos qué métricas financieras importaban más, cómo gestionaban operativamente los gastos los dueños de restaurantes y cuándo interactuaban realmente con herramientas financieras durante sus flujos de trabajo diarios. Esta validación ligera —no investigación de usuarios formal— confirmó que el registro manual de gastos era genuinamente doloroso y ayudó a definir los KPIs clave del dashboard, el posicionamiento del producto y la priorización de funcionalidades bajo restricciones de negocio reales.
+
+## Resultados e impacto
+
+En solo **tres meses**, UMA alcanzó un estado totalmente **listo para producción** con una aplicación web pulida, integración con WhatsApp y flujos de extracción de gastos impulsados por IA funcionando end-to-end. La plataforma incluía un **sistema de diseño** completo con componentes reutilizables, variantes responsive, tokens semánticos y documentación estructurada, mientras que la arquitectura de frontend constaba de aproximadamente **5.000 líneas de código React de producción** construido con Tailwind e integrado con flujos de datos reales del backend. La estrategia de producto, la UX y la ingeniería se mantuvieron estrechamente alineadas durante todo el desarrollo, y los flujos y KPIs se validaron directamente con dueños de restaurantes para asegurar que la plataforma resolviera problemas operativos reales.
+
+**Por qué nunca se lanzó:**
+
+A pesar de que el producto estaba técnicamente completo, la empresa no pudo conseguir la **inversión ángel** necesaria para continuar las operaciones y financiar las actividades de lanzamiento. Una oportunidad de negocio clave tampoco llegó a cerrarse, dejando al pequeño equipo de tres personas sin suficiente runway para sostener el desarrollo y la ejecución de go-to-market. El proyecto finalmente se detuvo no por fallos en la **calidad del producto**, la **UX** o la **ejecución de ingeniería**, sino porque el lado de negocio de la empresa no pudo conseguir el apoyo financiero necesario para continuar.
+
+**Qué demostró el proyecto:**
+
+UMA demostró que un equipo pequeño podía construir rápidamente una plataforma SaaS multi-interfaz diferenciada combinando **flujos de desarrollo asistidos por IA** con una base sólida de producto y diseño. El proyecto validó tanto la oportunidad de mercado como la efectividad del enfoque técnico, especialmente en torno a la combinación de **flujos de trabajo basados en WhatsApp** y **registro de gastos impulsado por IA**, que los competidores empezaron a adoptar poco después de detenerse el desarrollo. También probó que un tooling asistido por IA como **Cursor** y **Claude** podía usarse para producir sistemas de frontend escalables y de nivel producción sin sacrificar la precisión del diseño ni la calidad del código.
+
+<Figure
+  src="/case-studies/uma/images/results-and-impact.jpg"
+  alt="UMA — plataforma lista para producción: flujo de WhatsApp, dashboard de gastos y contexto del usuario final"
+  width={2880}
+  height={1620}
+/>
+
+## Qué mejoraría
+
+Una de las principales áreas de mejora era el **rendimiento de procesamiento**. Aunque el flujo de extracción con IA era funcional, el **retraso de 5–10 segundos** durante el procesamiento del recibo seguía siendo perceptible y afectaba la calidad percibida del producto. Una optimización adicional en torno a la velocidad de extracción y el rendimiento de carga del dashboard, especialmente en conexiones móviles lentas, habría mejorado la capacidad de respuesta general y la confianza en la plataforma.
+
+**Analítica y onboarding:**
+
+El producto se lanzó sin una capa adecuada de **analítica e instrumentación**, lo que limitó la visibilidad sobre el comportamiento real de los usuarios e hizo que las decisiones de roadmap dependieran en gran medida de supuestos en lugar de datos de uso. Al mismo tiempo, la experiencia de onboarding necesitaba más estructura para usuarios primerizos no familiarizados con la categorización de gastos o los flujos de seguimiento financiero. Subidas guiadas, sugerencias de categoría más inteligentes y momentos de valor temprano más claros probablemente habrían mejorado la adopción y la retención a largo plazo.
+
+**Validación de producto futura:**
+
+Varias iniciativas estratégicas quedaron sin validar al no llegar el producto al lanzamiento de mercado. Funcionalidades planeadas como las **integraciones con POS**, el **seguimiento de inventario** y un **modelo de suscripción basado en tokens** formaban parte del roadmap post-MVP, pero el equipo nunca tuvo la oportunidad de medir la demanda real de clientes, la sensibilidad al precio o la adopción de funcionalidades. Probar estos supuestos con usuarios activos habría ayudado a clarificar la dirección de producto a largo plazo y el modelo de negocio.
+
+## Reflexión final
+
+UMA demostró que puedo operar como **Product Designer**: alguien que se hace cargo de la estrategia de producto, la arquitectura UX y la implementación de producción en una sola persona.
+
+El proyecto me obligó a pensar en múltiples capas: ¿qué necesita realmente el dueño de un restaurante? ¿Cómo cambia WhatsApp la UX comparado con una app solo web? ¿Cómo estructuramos los datos para que sean a la vez útiles para el análisis y lo bastante limpios para exportar a los contables? ¿Qué componentes necesitamos construir una vez y reutilizar en todas las pantallas? ¿Cómo escribimos código React a partir de diseños de Figma usando IA sin perder calidad?
+
+Lo más importante: este fue el proyecto donde aprendí que **el diseño y el código no viven en mundos separados**. Usando Cursor + Figma MCP, podía diseñar en Figma, generar código a partir de ese diseño, iterar en ambos simultáneamente y lanzar una UI lista para producción que coincidía exactamente con el diseño. Sin brecha de handoff. Sin "se veía mejor en Figma". Sin estados perdidos ni regresiones de breakpoints responsive.
+
+Este cambio —de Diseñador que entrega a Código, a Product Designer que se hace cargo del continuo desde el pensamiento de producto hasta los píxeles lanzados— cambió cómo veo mi rol. UMA fue la prueba de concepto de que esta forma de trabajar de verdad funciona a escala de producción.
+
+El producto no se lanzó por razones de negocio, no de producto. Pero el trabajo creó la base —claridad de producto, sistema de diseño, código de producción, alineación de equipo— que habría hecho posible una iteración rápida si el negocio hubiera tenido la oportunidad.
+
+<Figure
+  src="/case-studies/uma/images/final-reflection.jpg"
+  alt="Reflexión final de UMA — de product designer a product design engineer"
+  width={2880}
+  height={1620}
+/>

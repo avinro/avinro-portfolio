@@ -1,0 +1,176 @@
+---
+title: PineApp
+slug: pineapp
+year: 2023
+category: Flow Improvement
+client: Baptist Health
+summary: "Diseñé el flujo Pre-Visit para PineApp de Baptist Health: una funcionalidad móvil que convirtió el prerregistro hospitalario en una experiencia digital clara."
+coverImage: /works/pineapp/cover.jpg
+resultImage: /works/pineapp/result.jpg
+coverAspect: landscape
+featured: true
+order: 2
+tools:
+  - Figma
+  - Prototyping
+  - Component design
+tags:
+  - Healthcare
+  - Mobile UI
+  - Design system
+  - Shipped
+meta:
+  type: Trabajo de agencia · 110 Theory para Baptist Health
+  industry: Salud / Salud móvil
+  platform: App móvil · iOS y Android
+  status: Lanzado a producción
+  role: Senior Product Designer — 110 Theory
+gallery: []
+---
+
+## Enfoque de diseño
+
+Antes de que existiera esta funcionalidad, los pacientes de Baptist Health tenían que completar los formularios de prerregistro manualmente en recepción: en papel, con estrés y cerca de la hora de su cita. El reto era llevar este proceso offline a la app de una forma que se sintiera simple, clara y confiable para adultos mayores con poca soltura con el smartphone, sin dejar de manejar una complejidad operativa real: varias citas el mismo día, distintos tipos de documento con diferentes estados y una confirmación final irreversible.
+
+La investigación con usuarios apuntó de forma consistente a adultos mayores, muchos jubilados, que usan el smartphone principalmente para llamadas y mensajes. Esto definió cuatro principios de diseño centrales:
+
+<div className="my-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+    <h3 className="mb-3 text-lg font-semibold">Revelación progresiva</h3>
+    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+      En lugar de recrear un formulario de papel dentro de la app, la experiencia revela la
+      información paso a paso. Los usuarios ven primero qué requiere atención y luego profundizan en
+      cada elemento solo cuando es necesario.
+    </div>
+  </div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <h3 className="mb-3 text-lg font-semibold">Visibilidad del estado</h3>
+  <div className="text-sm text-neutral-600 dark:text-neutral-400">
+    Cada elemento de la checklist lleva un estado claro: Sin iniciar, Requiere revisión o
+    Completado. El progreso es visible de un vistazo sin depender de instrucciones.
+  </div>
+</div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <h3 className="mb-3 text-lg font-semibold">Irreversible por diseño</h3>
+  <div className="text-sm text-neutral-600 dark:text-neutral-400">
+    Una vez enviados, los datos no podían ser modificados por el paciente dentro del flujo. La UI lo
+    deja explícito antes del paso final, reduciendo la confusión y los envíos accidentales.
+  </div>
+</div>
+
+  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+    <h3 className="mb-3 text-lg font-semibold">Claridad con varias citas</h3>
+    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+      Cuando los usuarios tenían varias citas el mismo día, el patrón de acordeón mostraba exactamente
+      a qué visitas aplicaban los formularios, eliminando la ambigüedad en un escenario estresante.
+    </div>
+  </div>
+</div>
+
+<Figure
+  src="/works/pineapp/design-direction.jpg"
+  alt="Enfoque de diseño de Pre-Visit — revelación progresiva, visibilidad del estado y patrones móviles de alto contraste"
+  aspect="landscape"
+/>
+
+---
+
+## Estructura UX
+
+El flujo se construyó en torno a un único objetivo: llegar al hospital con todo ya completado. El sistema de diseño aseguró consistencia en cuatro pasos clave —desde el punto de entrada hasta la finalización— usando color funcional (el verde de Baptist Health para las acciones, ámbar para estados de atención), tipografía de alto contraste optimizada para adultos mayores y un layout móvil cómodo para el pulgar en todo momento.
+
+<div className="my-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+    <div className="text-primary mb-4 text-5xl font-bold">1</div>
+    <h3 className="mb-2 text-lg font-semibold">Punto de entrada</h3>
+    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+      CTA en la tarjeta de la cita con una pista contextual para guiar a los usuarios
+    </div>
+  </div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <div className="text-primary mb-4 text-5xl font-bold">2</div>
+  <h3 className="mb-2 text-lg font-semibold">Varias citas</h3>
+  <div className="text-sm text-neutral-600 dark:text-neutral-400">
+    Pantalla dedicada para varias citas el mismo día
+  </div>
+</div>
+
+<div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+  <div className="text-primary mb-4 text-5xl font-bold">3</div>
+  <h3 className="mb-2 text-lg font-semibold">Prerregistro</h3>
+  <div className="text-sm text-neutral-600 dark:text-neutral-400">
+    Checklist central donde los usuarios envían los documentos requeridos en cualquier orden, con un
+    CTA fijo
+  </div>
+</div>
+
+  <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-800">
+    <div className="text-primary mb-4 text-5xl font-bold">4</div>
+    <h3 className="mb-2 text-lg font-semibold">Estado de éxito</h3>
+    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+      Pantalla de éxito con instrucciones de llegada y notificaciones push
+    </div>
+  </div>
+</div>
+
+<Figure
+  src="/works/pineapp/ux-structure-2.jpg"
+  alt="Estructura UX — sistema de componentes a través de estados de documento, acordeón, confirmación y éxito"
+  aspect="landscape"
+/>
+
+<Figure
+  src="/works/pineapp/ux-structure-1.jpg"
+  alt="Estructura UX — flujo de cuatro pasos desde la entrada en la tarjeta de la cita hasta el prerregistro y el éxito"
+  aspect="landscape"
+/>
+
+---
+
+## Rediseño de la tarjeta de Home
+
+La tarjeta de la cita en la pantalla de Home se rediseñó para exponer el punto de entrada de Pre-Visit sin alterar la UI existente.
+
+Un menú desplegable **Manage** consolidó las acciones secundarias —información de la cita, reprogramar, cancelar— liberando el área del CTA principal para **Pre-Register** y su pista contextual.
+
+Una vez completado el prerregistro, la tarjeta se actualizaba para mostrar una insignia de Confirmado, el estado del registro, enlaces de dirección y teléfono pulsables, y un botón **Review** que reemplazaba al CTA de Pre-Register.
+
+<Figure
+  src="/works/pineapp/home-card-redesign.jpg"
+  alt="Comparación de la tarjeta de cita en tres estados — original, lista para Pre-Visit y estado confirmado tras completarse"
+  width={2880}
+  height={1712}
+/>
+
+---
+
+## Resultado
+
+El flujo Pre-Visit se lanzó a producción y reemplazó un proceso manual y presencial por una experiencia digital mobile-first disponible para los pacientes de Baptist Health antes de sus visitas al hospital.
+
+### Qué demuestra este proyecto
+
+- **Traducción de procesos complejos:** convertir un flujo hospitalario offline en una experiencia móvil clara.
+- **Pensamiento de sistemas:** diseñar una arquitectura de componentes multi-estado que soporta distintos tipos de documento, cantidades de citas y niveles de confianza del usuario.
+- **UX consciente de la accesibilidad:** diseñar para baja alfabetización digital sin que el producto se sienta limitado para usuarios más capaces.
+- **Extensión del sistema de diseño:** trabajar dentro de un sistema establecido y extenderlo con componentes que se sienten nativos.
+- **Trabajo de producto lanzado:** entregar diseño listo para producción que llegó a usuarios reales.
+
+<Figure
+  src="/works/pineapp/result.jpg"
+  alt="Galería del producto final mostrando el flujo Pre-Visit completo en secuencia — lanzado a producción"
+  aspect="landscape"
+/>
+
+---
+
+## Reflexión
+
+Este proyecto me empujó a pensar con cuidado en la brecha entre el contexto real de un usuario y lo que una interfaz limpia suele asumir sobre él.
+
+Diseñar para pacientes de 60 y 70 años —muchos gestionando ansiedad por su salud junto a una tecnología poco familiar— significó que la claridad no era un extra. Era el requisito central.
+
+También mostró cómo una sola funcionalidad puede propagarse por todo un producto existente. El flujo Pre-Visit tocó la pantalla de Home, la tarjeta de la cita, el sistema de notificaciones, la lógica de confirmación, los componentes de documentos y el manejo de casos límite. Hacerlo bien exigió pensar en sistemas, no solo en pantallas.

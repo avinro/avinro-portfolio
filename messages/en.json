@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "siteDescription": "Product Designer building real products"
+  },
+  "nav": {
+    "work": "Work",
+    "caseStudies": "Case studies",
+    "about": "About",
+    "mainNavigation": "Main navigation",
+    "mobileNavigation": "Mobile navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skipToContent": "Skip to main content",
+    "home": "Avinro — home",
+    "privacy": "Privacy",
+    "footerNavigation": "Footer navigation",
+    "socialLinks": "Social links"
+  },
+  "home": {
+    "intro": {
+      "phrase1": {
+        "mobile": "Most ideas die\nbetween\nvision and execution.",
+        "desktop": "Most ideas die\nbetween vision and execution."
+      },
+      "phrase2": "I close that gap.",
+      "ariaLabel": "Intro"
+    },
+    "hero": {
+      "badgeText": "Open to Work",
+      "headline": "Product Design Engineer shipping vision into reality",
+      "subheadline": "I've shipped SaaS products for B2B and B2C teams - from 0->1 discovery to launch. Most projects fail between idea and execution; I help close that gap.",
+      "circularText": "Strategy & execution · Product design · ",
+      "circularTextHover": "Get to know me · My Background · ",
+      "circularAria": "About - get to know my background",
+      "primaryCta": "Explore my work",
+      "downloadCta": "Download CV"
+    },
+    "workDivider": {
+      "text": "SELECTED WORK · "
+    },
+    "selectedWork": {
+      "sectionTitle": "Selected work",
+      "body": "A selection of 0->1 products and multi-app systems. Each one started as an unclear idea - and ended up shipped."
+    },
+    "socialProof": {
+      "sectionTitle": "Testimonials"
+    },
+    "aboutTeaser": {
+      "sectionTitle": "About",
+      "greeting": "Hey, I'm Ary",
+      "bio": "Designer, builder, problem solver. Outside of work, probably traveling, working out, watching anime, or spending time with people I care about.",
+      "linkLabel": "More about me",
+      "aria": "About"
+    },
+    "finalCta": {
+      "heading": "Have something you're trying to build - but not sure how to structure or ship it?",
+      "linkLabel": "Let's talk"
+    },
+    "primaryCta": {
+      "label": "Let's talk",
+      "barAria": "Primary call to action"
+    }
+  },
+  "about": {
+    "title": "About",
+    "pageDescription": "Product Designer working at the intersection of strategy, design, and front-end implementation. Background, experience, tools, and design philosophy.",
+    "og": {
+      "title": "Avinro — Product Designer",
+      "description": "Product Designer working at the intersection of strategy, design, and front-end implementation."
+    },
+    "portraitAria": "Portrait of Ary",
+    "portraitAlt": "Ary — portrait",
+    "interestsAria": "Interests",
+    "interests": ["anime lover", "bad bunny fan", "video games", "crypto enthusiast"],
+    "hero": {
+      "headline": "Product Designer.",
+      "bio": [
+        "I'm Ary - Product Designer working at the intersection of strategy, design, and execution.",
+        "I help teams turn unclear ideas into structured products they can actually ship. My work spans 0->1 products, multi-app ecosystems, and design systems built to last beyond the first release.",
+        "I care deeply about the gap between concept and delivery - and I've spent the last several years closing it across different industries, team sizes, and constraints."
+      ]
+    },
+    "experience": {
+      "sectionTitle": "Experience",
+      "entries": [
+        {
+          "outcome": "Lead the end-to-end UX across a multi-surface ecosystem - customer, driver, vendor, and fleet portals. Built the design system from zero and pair design with AI-assisted front-end using Cursor and Claude to close the gap between Figma and production code."
+        },
+        {
+          "outcome": "Led mobile UX for the Baptist Health iOS and Android app and designed Smart TV interfaces deployed across hospital environments. Defined features alongside product and engineering, connecting UX decisions to operational KPIs and measurable outcomes."
+        },
+        {
+          "outcome": "Designed end-to-end UX and UI for digital product clients in an agency setting. Shipped responsive web and mobile work across multiple concurrent projects on tight iteration cycles."
+        },
+        {
+          "outcome": "Delivered UI/UX, motion graphics, and brand identity work for client accounts across multiple industries. Took projects from concept to production-ready visual systems."
+        },
+        {
+          "outcome": "Owned brand identity and motion design for institutional communications, visual campaigns, and editorial output over three years."
+        }
+      ]
+    },
+    "education": {
+      "sectionTitle": "Education",
+      "entries": [
+        {
+          "description": "Five-year programme covering the foundations of visual communication: typography, grid systems, colour theory, image, and design history. During my fifth year I specialised in UI/UX design - focusing on interaction principles, user-centred methods, and digital interface design."
+        }
+      ]
+    },
+    "tools": {
+      "sectionTitle": "Tools & methods"
+    },
+    "process": {
+      "sectionTitle": "My Process",
+      "intro": "My process moves between strategy, systems, and implementation until the product is clear enough to build.",
+      "stages": [
+        {
+          "title": "Discover",
+          "subtitle": "Audit, research, benchmarking",
+          "body": "I start by mapping the product landscape: what exists, where the interface breaks, and what users are trying to accomplish. For 0->1 work, I use research and AI-assisted synthesis to find the patterns before touching the canvas."
+        },
+        {
+          "title": "Define",
+          "subtitle": "Framing, IA, strategic flows",
+          "body": "I turn raw input into structure: jobs-to-be-done, information architecture, product constraints, and high-level flows. This is where product and systems thinking enter the design work, so the UI solves a specific pain point instead of decorating uncertainty."
+        },
+        {
+          "title": "Design",
+          "subtitle": "Lo-fi -> logic -> hi-fi",
+          "body": "I work from low fidelity into interaction logic before polishing the visual layer. Mobile-first by default: hierarchy, states, and edge cases have to hold up before desktop density or brand expression gets layered in."
+        },
+        {
+          "title": "Validate",
+          "subtitle": "Prototypes & usability",
+          "body": "I prototype the key flows and test them against real tasks, especially the moments where users can get stuck. The goal is to expose wrong assumptions early, not after engineering has already paid for them."
+        },
+        {
+          "title": "Deliver",
+          "subtitle": "Handoff, code, design QA",
+          "body": "I hand off organised tokens, documented states, and accessibility specs, then stay close during implementation. When useful, I build or review front-end with Cursor and Claude to close the gap between Figma intent and production quality."
+        }
+      ]
+    }
+  },
+  "work": {
+    "pageTitle": "Work",
+    "pageDescription": "UI explorations, visual systems, concepts, and product work from a product designer.",
+    "kicker": "Explore my work",
+    "headline": "Explorations,\nconcepts & UI.",
+    "intro": "Visual explorations, UI systems, and product concepts.",
+    "caseStudyPrompt": "Looking for detailed product case studies?",
+    "caseStudyLink": "View case studies",
+    "previousProject": "Previous project",
+    "nextProject": "Next project",
+    "selectedScreens": "Selected screens",
+    "galleryAria": "Visual work",
+    "previousFlow": "Previous flow",
+    "nextFlow": "Next flow",
+    "closeFullscreen": "Close fullscreen",
+    "metadata": {
+      "type": "Type",
+      "industry": "Industry",
+      "year": "Year",
+      "timeline": "Timeline",
+      "platform": "Platform",
+      "status": "Status",
+      "role": "Role",
+      "client": "Client",
+      "team": "Team",
+      "scope": "Scope",
+      "category": "Category",
+      "live": "Live",
+      "projectTopics": "Project topics",
+      "viewLive": "View live",
+      "resultCaption": "High-fidelity prototype — key screens aligned with the listing card hover state."
+    },
+    "categories": {
+      "UI exploration": "UI exploration",
+      "Concept": "Concept",
+      "Visual system": "Visual system",
+      "Mobile UI": "Mobile UI",
+      "Flow Improvement": "Flow Improvement",
+      "UX Redesign": "UX Redesign",
+      "Branding": "Branding",
+      "Microinteraction": "Microinteraction"
+    }
+  },
+  "caseStudies": {
+    "pageTitle": "Case Studies",
+    "pageDescription": "A selection of 0->1 products and multi-app systems, designed and shipped.",
+    "kicker": "Into my process",
+    "headline": "Problems solved,\nproducts shipped.",
+    "intro": "Real constraints, real teams, real outcomes.",
+    "gridAria": "Case studies",
+    "outcome": "Outcome",
+    "nextCaseStudy": "Next case study",
+    "coverMeta": {
+      "client": "Client",
+      "role": "Role",
+      "year": "Year",
+      "readTime": "Read time"
+    }
+  },
+  "contactSheet": {
+    "title": "Have a project in mind?",
+    "tagline": "Let's build it.",
+    "description": "Choose how you'd like to reach out.",
+    "scheduleCta": "Schedule a 30 min call",
+    "scheduleSubtext": "Free · no commitment",
+    "emailCta": "Send me an email"
+  },
+  "aiChat": {
+    "triggerAria": "Chat with Vivi about Ary's work",
+    "tooltip": "Hi, I'm Vivi, Ary's assistant. You can ask me anything about their work and experience.",
+    "sheetTitle": "Chat with Vivi",
+    "sheetDescription": "Ask about Ary's work, experience, and design expertise.",
+    "conversationAria": "Conversation with Vivi",
+    "suggestions": [
+      "What are Ary's strongest design skills?",
+      "Tell me about the helloDojo case study",
+      "What's Ary's experience with design systems?",
+      "What is Ary's design process?"
+    ],
+    "inputPlaceholder": "Ask Vivi about Ary's work…",
+    "inputAria": "Message input for Vivi",
+    "stopAria": "Stop message",
+    "sendAria": "Send message",
+    "errorMessage": "Vivi had trouble responding. Please try again.",
+    "retry": "Retry"
+  },
+  "toc": {
+    "onThisPage": "On this page",
+    "selectSection": "Select a section"
+  },
+  "related": {
+    "exploreMore": "Explore more"
+  },
+  "workMenu": {
+    "sectionLabel": "Selected work",
+    "work": "Work",
+    "caseStudy": "Case study",
+    "viewWork": "View work: {title}",
+    "viewCaseStudy": "View case study: {title}"
+  },
+  "mdx": {
+    "before": "Before",
+    "after": "After",
+    "changedFromTo": "{label}: changed from {before} to {after}",
+    "loadingDiagram": "Loading diagram…"
+  },
+  "testimonials": {
+    "carouselAria": "Client testimonials",
+    "cardAria": "Testimonial {index} of {total}: {name}"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy",
+      "description": "How avinro.com uses analytics to understand visitor engagement — privacy-first, cookieless, and no third-party ad tracking."
+    },
+    "hero": {
+      "kicker": "Privacy",
+      "heading": "Simple, honest, cookieless.",
+      "subheading": "This site uses privacy-first analytics to understand how visitors engage with the portfolio. No cookies, no ad tracking, no Google Analytics."
+    },
+    "sections": [
+      {
+        "heading": "Analytics",
+        "body": [
+          "This site uses PostHog in cookieless mode. PostHog tracks anonymous page views and interaction events (CTA clicks, case study scroll depth, contact form usage) to help improve the portfolio.",
+          "No cookies are set for analytics. A temporary, random session ID is generated in memory and discarded when you close the tab — it is never stored in localStorage, cookies, or any persistent storage.",
+          "Data is sent to PostHog's EU-region servers (eu.i.posthog.com) and subject to PostHog's own privacy policy."
+        ]
+      },
+      {
+        "heading": "What we track",
+        "body": [
+          "Page views — which pages you visit and in what order.",
+          "CTA clicks — which call-to-action buttons are clicked and on which page.",
+          "Case study scroll depth — how far into a case study you read (25%, 50%, 75%, 100% milestones).",
+          "Contact form engagement — whether you start or successfully submit the contact form.",
+          "No personal information (name, email, IP address) is collected or stored by the analytics system."
+        ]
+      },
+      {
+        "heading": "What we do not do",
+        "body": [
+          "No Google Analytics, Facebook Pixel, or any advertising network.",
+          "No cross-site tracking or fingerprinting.",
+          "No selling or sharing of data with third parties for marketing purposes.",
+          "No session recordings or heatmaps."
+        ]
+      },
+      {
+        "heading": "Contact",
+        "body": [
+          "If you have questions about this privacy policy, reach out at avinroart@gmail.com."
+        ]
+      }
+    ],
+    "lastUpdated": "Last updated: May 2026"
+  },
+  "notFound": {
+    "kicker": "404",
+    "body": "This page does not exist or has moved.",
+    "cta": "Back home"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "switchTo": "Switch to {locale}"
+  }
+}

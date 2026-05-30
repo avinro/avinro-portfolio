@@ -11,17 +11,6 @@ import {
   useAnimationFrame,
 } from "motion/react";
 
-/*
- * ScrollVelocity — horizontally scrolling marquee that accelerates/decelerates
- * with the page scroll velocity.
- *
- * Adapted from React Bits (MIT). Key differences:
- *   - `prefers-reduced-motion`: velocity multiplier clamped to 0 so text moves
- *     at a constant base speed with no scroll-driven acceleration.
- *   - `aria-hidden` is applied by the consumer wrapping element, not here.
- *   - No hardcoded typography — consumers pass className for font tokens.
- */
-
 interface VelocityMapping {
   input: [number, number];
   output: [number, number];
@@ -170,7 +159,6 @@ export function ScrollVelocity({
   parallaxStyle,
   scrollerStyle,
 }: ScrollVelocityProps) {
-  // Lazy initializer reads the media query once on mount (client-only).
   const [reducedMotion] = useState(
     () =>
       typeof window !== "undefined" &&

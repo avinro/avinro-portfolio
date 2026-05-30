@@ -4,6 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+Additional Claude-specific rule files:
+
+- `.claude/rules/intro-page-transitions.md` — homepage intro and page-transition contract. Follow it before touching the intro gate, locale layout, page template animation, or language-switch behavior.
+
 ---
 
 ## Commands

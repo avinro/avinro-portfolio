@@ -1,26 +1,9 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/*
- * UMA Problem Statement Diagrams
- *
- * Three interactive diagrams with enhanced visual hierarchy, semantic colors,
- * and responsive layout:
- *   1. UmaPainPoints     — pain → solution pairs + outcome (problem-to-solution flow)
- *   2. UmaTransformation — four-step flow + three pillar cards (transformation journey)
- *   3. UmaDifferentiators — six competitive differentiators (product moats)
- *
- * Animation CSS lives in globals.css (@keyframes uma-reveal / uma-bob / uma-shine).
- * Components apply `.uma-reveal` + `animationDelay` inline style for staggered entry.
- */
-
 function reveal(delayMs: number): { animationDelay: string } {
   return { animationDelay: String(delayMs) + "ms" };
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DIAGRAM 1 · Pain Points → Solutions → Outcome
-// ─────────────────────────────────────────────────────────────────────────────
 
 function PainCard({
   number,
@@ -93,7 +76,6 @@ function OutcomeCard({ delayMs }: { delayMs: number }) {
         "uma-reveal order-last flex flex-col items-center justify-center gap-4 rounded-2xl",
         "border-[1.5px] border-emerald-500/25 bg-gradient-to-br from-emerald-50/50 to-lime-50/30 px-8 py-10 text-center",
         "dark:border-emerald-500/15 dark:from-emerald-950/20 dark:to-lime-950/10",
-        // Desktop: pinned to column 4, spanning all 3 pain rows
         "md:order-none md:col-start-4 md:row-span-3 md:row-start-1",
       )}
       style={reveal(delayMs)}
@@ -132,13 +114,7 @@ function OutcomeCard({ delayMs }: { delayMs: number }) {
 export function UmaPainPoints() {
   return (
     <div className="my-12 sm:my-16">
-      {/*
-       * Mobile: flex-col — outcome pushed last via order-last.
-       * Desktop: 4-column grid — outcome explicitly at col 4, rows 1-3.
-       * Auto-placement skips col 4 for rows 2-3 because outcome is explicit.
-       */}
       <div className="flex flex-col gap-5 md:grid md:grid-cols-[1fr_48px_1fr_1fr] md:gap-5">
-        {/* Row 1 */}
         <PainCard
           number={1}
           title="Friction in capture"
@@ -147,11 +123,7 @@ export function UmaPainPoints() {
         />
         <ArrowConnectorH delayMs={180} />
         <SolCard number={1} title="OCR receipt" desc="extraction & auto-categorize" delayMs={200} />
-
-        {/* Outcome — col 4 rows 1-3 on desktop, last on mobile */}
         <OutcomeCard delayMs={260} />
-
-        {/* Row 2 */}
         <PainCard
           number={2}
           title="No real-time visibility"
@@ -165,8 +137,6 @@ export function UmaPainPoints() {
           desc="Expense tracking in real time"
           delayMs={320}
         />
-
-        {/* Row 3 */}
         <PainCard
           number={3}
           title="Sharing with advisors"
@@ -184,10 +154,6 @@ export function UmaPainPoints() {
     </div>
   );
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DIAGRAM 2 · Transformation Steps + Three Pillars
-// ─────────────────────────────────────────────────────────────────────────────
 
 function TransformationStep({
   number,
@@ -287,8 +253,6 @@ function Pillar({
 export function UmaTransformation() {
   return (
     <div className="my-12 space-y-14 sm:my-16 sm:space-y-16">
-      {/* Four-step flow — responsive */}
-      {/* Mobile: vertical stack with vertical connectors */}
       <div className="space-y-4 sm:hidden">
         <TransformationStep
           number={1}
@@ -322,8 +286,6 @@ export function UmaTransformation() {
           delayMs={360}
         />
       </div>
-
-      {/* Desktop: horizontal grid with horizontal connectors */}
       <div className="hidden grid-cols-[1fr_32px_1fr_32px_1fr_32px_1fr] items-center gap-2 sm:grid">
         <TransformationStep
           number={1}
@@ -357,13 +319,9 @@ export function UmaTransformation() {
           delayMs={360}
         />
       </div>
-
-      {/* Pillars label */}
       <div className="uma-reveal flex flex-col items-center" style={reveal(440)}>
         <h3 className="font-display text-lg font-bold sm:text-2xl">Three core pillars</h3>
       </div>
-
-      {/* Three pillar cards */}
       <div className="grid gap-6 sm:grid-cols-3">
         <Pillar
           number={1}
@@ -391,11 +349,6 @@ export function UmaTransformation() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DIAGRAM 3 · Six Differentiators
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Lucide-compatible SVG icon paths matching the HTML reference
 const Icons = {
   OCR: () => (
     <svg

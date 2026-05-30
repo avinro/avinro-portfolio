@@ -1,16 +1,3 @@
-/*
- * Testimonials content layer.
- *
- * Schema is designed to be compatible with an eventual Typeform integration
- * (firstName, lastName, company, role, quote, avatar).
- *
- * For now, testimonials are seeded manually here. Remote/database loading
- * would require backend changes and is explicitly out of scope for this phase.
- *
- * linkedInUrl: optional external profile link; keep host linkedin.com if URLs
- * ever move to a CMS (allowlist at integration time).
- */
-
 export interface Testimonial {
   id: string;
   firstName: string;
@@ -18,11 +5,8 @@ export interface Testimonial {
   company: string;
   role: string;
   quote: string;
-  /** Optional path to an avatar image in public/ */
   avatar?: string;
-  /** Public LinkedIn profile URL — name is linked when set */
   linkedInUrl?: string;
-  /** BCP 47 tag for quote language (e.g. es) for Language of Parts a11y */
   quoteLang?: string;
 }
 

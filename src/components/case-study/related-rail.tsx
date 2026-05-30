@@ -1,39 +1,27 @@
 import Image from "next/image";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
 import { cn } from "@/lib/utils";
 import type { RelatedItem } from "@/lib/content/related";
-
-/**
- * RelatedRail — sticky "Explore more" sidebar for case study pages.
- *
- * Renders only at xl+ (hidden below). Each item is a compact row card:
- *   [56×56 square thumbnail] [eyebrow / title (2-line max)]
- *
- * Placed as a third column to the right of the article content.
- * See CaseStudyBody for the grid layout that positions this aside.
- */
 
 interface RelatedRailProps {
   items: RelatedItem[];
   className?: string;
 }
 
-export function RelatedRail({ items, className }: RelatedRailProps) {
+export async function RelatedRail({ items, className }: RelatedRailProps) {
   if (items.length === 0) return null;
+
+  const t = await getTranslations("related");
 
   return (
     <aside
-      aria-label="Explore more"
-      className={cn(
-        // Hidden below xl — the rail only appears in the 3-column desktop layout.
-        "hidden xl:block",
-        "xl:sticky xl:top-24 xl:self-start",
-        className,
-      )}
+      aria-label={t("exploreMore")}
+      className={cn("hidden xl:block", "xl:sticky xl:top-24 xl:self-start", className)}
     >
       <p className="text-muted-foreground mb-4 font-mono text-xs tracking-widest uppercase">
-        Explore more
+        {t("exploreMore")}
       </p>
 
       <ul className="flex flex-col gap-3">
@@ -53,7 +41,6 @@ export function RelatedRail({ items, className }: RelatedRailProps) {
                 "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
               )}
             >
-              {/* Square thumbnail */}
               <div className="bg-muted relative size-14 shrink-0 overflow-hidden rounded-md">
                 <Image
                   src={item.coverImage}
@@ -64,8 +51,6 @@ export function RelatedRail({ items, className }: RelatedRailProps) {
                   aria-hidden
                 />
               </div>
-
-              {/* Text */}
               <div className="flex min-w-0 flex-col gap-0.5 pt-0.5">
                 <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
                   {item.eyebrow}

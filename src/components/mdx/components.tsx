@@ -1,30 +1,7 @@
-/**
- * MDX component map for case study pages.
- *
- * Maps HTML element names to styled React components so the MDX body renders
- * with the site's design tokens and mobile-first layout. All components are
- * server-compatible (no hooks, no 'use client') except MermaidDiagram, which
- * is injected here so next-mdx-remote can resolve the JSX element produced by
- * the remark-mermaid plugin.
- *
- * Heading hierarchy contract:
- *   h1 — NOT mapped here; the page template owns h1 (frontmatter title).
- *        If an author accidentally uses # in MDX, they get an unstyled <h1>
- *        which visually signals the mistake without breaking the build.
- *   h2 — section headings (## in MDX)
- *   h3 — sub-section headings (### in MDX)
- *
- * Named editorial primitives (also exported for use in page templates):
- *   Figure      — image or placeholder frame with optional caption
- *   Stats       — responsive grid of large display stat blocks
- *   BeforeAfter — two-up before/after comparison card
- *   Bar         — single horizontal proportion bar
- *   TextImageSplit — side-by-side title, text, and 4:3 image for editorial sections
- */
-
 import Image from "next/image";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
+import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 import { MdxInternalBodyLink } from "./mdx-internal-body-link";
 import { MermaidDiagram } from "./mermaid-diagram";
@@ -47,15 +24,10 @@ import {
   UmaDifferentiators,
 } from "@/components/case-study/uma-problem-diagrams";
 
-// ---------------------------------------------------------------------------
-// Heading components
-// ---------------------------------------------------------------------------
-
 function H2({ className, ...props }: ComponentPropsWithoutRef<"h2">) {
   return (
     <h2
       className={cn(
-        // scroll-mt-24 offsets the sticky nav so anchor links land in view.
         "font-display mt-12 mb-4 scroll-mt-24 text-2xl font-semibold tracking-tight sm:text-3xl",
         className,
       )}
@@ -68,7 +40,6 @@ function H3({ className, ...props }: ComponentPropsWithoutRef<"h3">) {
   return (
     <h3
       className={cn(
-        // scroll-mt-24 offsets the sticky nav so anchor links land in view.
         "font-display mt-8 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight sm:text-2xl",
         className,
       )}
@@ -77,15 +48,10 @@ function H3({ className, ...props }: ComponentPropsWithoutRef<"h3">) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Body text
-// ---------------------------------------------------------------------------
-
 function P({ className, ...props }: ComponentPropsWithoutRef<"p">) {
   return (
     <p
       className={cn(
-        // Paragraphs fill the full content column width and wrap naturally.
         "text-foreground/90 mb-5 text-base leading-relaxed sm:text-lg lg:leading-loose",
         className,
       )}
@@ -105,10 +71,6 @@ function Blockquote({ className, ...props }: ComponentPropsWithoutRef<"blockquot
     />
   );
 }
-
-// ---------------------------------------------------------------------------
-// Lists
-// ---------------------------------------------------------------------------
 
 function Ul({ className, ...props }: ComponentPropsWithoutRef<"ul">) {
   return (
@@ -138,10 +100,6 @@ function Li({ className, ...props }: ComponentPropsWithoutRef<"li">) {
   return <li className={cn("leading-relaxed", className)} {...props} />;
 }
 
-// ---------------------------------------------------------------------------
-// Links — internal use next/link; external links get rel="noreferrer"
-// ---------------------------------------------------------------------------
-
 function A({ href = "", className, children, ...props }: ComponentPropsWithoutRef<"a">) {
   const isExternal = href.startsWith("http");
 
@@ -169,13 +127,7 @@ function A({ href = "", className, children, ...props }: ComponentPropsWithoutRe
   );
 }
 
-// ---------------------------------------------------------------------------
-// Inline code and code blocks
-// ---------------------------------------------------------------------------
-
 function Code({ className, ...props }: ComponentPropsWithoutRef<"code">) {
-  // rehype-pretty-code adds data-language to <code> inside <pre>.
-  // Inline <code> (no parent <pre>) gets the muted pill style.
   return (
     <code
       className={cn(
@@ -198,10 +150,6 @@ function Pre({ className, ...props }: ComponentPropsWithoutRef<"pre">) {
     />
   );
 }
-
-// ---------------------------------------------------------------------------
-// Table — wrapped in a scrollable container for mobile
-// ---------------------------------------------------------------------------
 
 function Table({ className, ...props }: ComponentPropsWithoutRef<"table">) {
   return (
@@ -232,13 +180,7 @@ function Td({ className, ...props }: ComponentPropsWithoutRef<"td">) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Images — proxied through next/image for optimisation
-// ---------------------------------------------------------------------------
-
 function Img({ src, alt = "", width, height }: ComponentPropsWithoutRef<"img">) {
-  // Only render via next/image when src is a plain string path.
-  // Blob src values are not supported by next/image and should not appear in MDX.
   if (typeof src !== "string" || !src) return null;
 
   return (
@@ -256,17 +198,9 @@ function Img({ src, alt = "", width, height }: ComponentPropsWithoutRef<"img">) 
   );
 }
 
-// ---------------------------------------------------------------------------
-// Horizontal rule
-// ---------------------------------------------------------------------------
-
 function Hr({ className, ...props }: ComponentPropsWithoutRef<"hr">) {
   return <hr className={cn("border-border/40 my-10", className)} {...props} />;
 }
-
-// ---------------------------------------------------------------------------
-// Figure — real image (next/image) or designed placeholder when src is absent
-// ---------------------------------------------------------------------------
 
 interface FigureProps {
   src?: string;
@@ -303,8 +237,6 @@ export function Figure({
           className="w-full rounded-xl object-cover"
         />
       ) : (
-        // Placeholder frame — rendered when no src is available yet.
-        // Maintains aspect ratio so the layout doesn't collapse.
         <div
           className="bg-muted/60 border-border/40 flex aspect-video w-full items-center justify-center rounded-xl border border-dashed"
           aria-hidden="true"
@@ -342,15 +274,6 @@ export function Figure({
     </figure>
   );
 }
-
-// ---------------------------------------------------------------------------
-// TextImageSplit — side-by-side text and 4:3 image for editorial sections
-//
-// Usage:
-//   <TextImageSplit title="User problem" imagePosition="right" placeholderLabel="User problem" alt="...">
-//     Paragraph text…
-//   </TextImageSplit>
-// ---------------------------------------------------------------------------
 
 interface TextImageSplitProps {
   title?: string;
@@ -456,18 +379,6 @@ export function TextImageSplit({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Stats — responsive grid of large display stat blocks
-//
-// Usage:
-//   <Stats data={[
-//     { value: "214", label: "Components audited" },
-//     { delta: { from: "2 days", to: "4 hours" }, label: "QA time", sentiment: "positive" },
-//   ]} />
-//
-// Each item must have either `value` or `delta`.
-// ---------------------------------------------------------------------------
-
 export interface StatItem {
   value?: string;
   label: string;
@@ -482,7 +393,6 @@ interface StatsProps {
 }
 
 export function Stats({ data, className }: StatsProps) {
-  // Guard: data can be undefined when Stats is called from MDX without props.
   if (!data?.length) return null;
 
   return (
@@ -499,10 +409,6 @@ export function Stats({ data, className }: StatsProps) {
         >
           {item.delta ? (
             <dd className="flex items-baseline gap-1.5">
-              {/*
-               * delta.from: text-muted-foreground (no opacity) — muted-foreground/60
-               * failed WCAG AA contrast on bg-muted/30 at this font size.
-               */}
               <span className="font-display text-muted-foreground text-xl font-semibold tabular-nums sm:text-2xl">
                 {item.delta.from}
               </span>
@@ -512,7 +418,6 @@ export function Stats({ data, className }: StatsProps) {
               <span
                 className={cn(
                   "font-display text-xl font-semibold tabular-nums sm:text-2xl",
-                  // emerald-600 (not 500) provides sufficient contrast on bg-muted/30
                   item.sentiment === "positive" && "text-emerald-600 dark:text-emerald-400",
                   item.sentiment === "negative" && "text-destructive",
                   (!item.sentiment || item.sentiment === "neutral") && "text-foreground",
@@ -525,7 +430,6 @@ export function Stats({ data, className }: StatsProps) {
             <dd
               className={cn(
                 "font-display text-3xl font-semibold tabular-nums sm:text-4xl",
-                // emerald-600 (not 500) — emerald-500 failed WCAG AA on bg-muted/30
                 item.sentiment === "positive" && "text-emerald-600 dark:text-emerald-400",
                 item.sentiment === "negative" && "text-destructive",
                 (!item.sentiment || item.sentiment === "neutral") && "text-foreground",
@@ -538,8 +442,6 @@ export function Stats({ data, className }: StatsProps) {
             {item.label}
           </dt>
           {item.sublabel && (
-            // text-muted-foreground (no opacity) — muted-foreground/60 failed WCAG AA
-            // at text-xs on bg-muted/30.
             <span className="text-muted-foreground text-xs leading-snug">{item.sublabel}</span>
           )}
         </div>
@@ -547,18 +449,6 @@ export function Stats({ data, className }: StatsProps) {
     </dl>
   );
 }
-
-// ---------------------------------------------------------------------------
-// BeforeAfter — two-up comparison with semantic sentiment colouring
-//
-// Usage:
-//   <BeforeAfter
-//     label="Design QA time per sprint"
-//     from="2 days"
-//     to="4 hours"
-//     sentiment="positive"
-//   />
-// ---------------------------------------------------------------------------
 
 interface BeforeAfterProps {
   label: string;
@@ -570,13 +460,14 @@ interface BeforeAfterProps {
   className?: string;
 }
 
-export function BeforeAfter({
+export async function BeforeAfter({
   label,
   before,
   after,
   sentiment = "neutral",
   className,
 }: BeforeAfterProps) {
+  const t = await getTranslations("mdx");
   const afterColorClass =
     sentiment === "positive"
       ? "text-emerald-500 dark:text-emerald-400"
@@ -586,49 +477,38 @@ export function BeforeAfter({
 
   return (
     <div
-      // role="figure" gives the div an explicit ARIA role so aria-label is permitted.
-      // ARIA 1.2 prohibits aria-label on elements with implicit role="generic" (plain div).
       role="figure"
-      aria-label={`${label}: changed from ${before} to ${after}`}
+      aria-label={t("changedFromTo", { label, before, after })}
       className={cn("border-border/40 my-8 overflow-hidden rounded-xl border", className)}
     >
       <p className="text-muted-foreground border-border/40 border-b px-5 py-3 font-mono text-xs tracking-widest uppercase sm:px-6">
         {label}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr]">
-        {/* Before */}
         <div className="bg-muted/20 flex flex-col gap-1 px-5 py-6 sm:px-6">
-          {/*
-           * "Before" label: aria-hidden because the parent aria-label already
-           * describes the full before→after transition. The /50 opacity would
-           * also fail WCAG 1.4.3 contrast on bg-muted/20 at this font size.
-           */}
           <span
             aria-hidden="true"
             className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
           >
-            Before
+            {t("before")}
           </span>
           <span className="font-display text-muted-foreground text-3xl font-semibold tabular-nums sm:text-4xl">
             {before}
           </span>
         </div>
 
-        {/* Arrow divider */}
         <div className="bg-muted/20 sm:border-border/40 flex items-center justify-center px-3 sm:border-x">
           <span className="text-muted-foreground/30 text-2xl" aria-hidden="true">
             →
           </span>
         </div>
 
-        {/* After */}
         <div className="flex flex-col gap-1 px-5 py-6 sm:px-6">
-          {/* "After" label: aria-hidden for same reason as "Before" above. */}
           <span
             aria-hidden="true"
             className="text-muted-foreground/50 font-mono text-xs tracking-widest uppercase"
           >
-            After
+            {t("after")}
           </span>
           <span
             className={cn(
@@ -643,13 +523,6 @@ export function BeforeAfter({
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Bar — horizontal proportion bar with label and optional caption
-//
-// Usage:
-//   <Bar value={78} label="UI surface area covered by system components" />
-// ---------------------------------------------------------------------------
 
 interface BarProps {
   value: number;
@@ -669,11 +542,6 @@ export function Bar({ value, label, caption, className }: BarProps) {
           {clamped}%
         </span>
       </div>
-      {/*
-       * The bar track is decorative — the percentage and label are already
-       * conveyed by the visible text above. aria-hidden removes it from the
-       * a11y tree so assistive tech skips the visual-only fill element.
-       */}
       <div className="bg-muted/60 h-2.5 w-full overflow-hidden rounded-full" aria-hidden="true">
         <div
           className="bg-accent h-full rounded-full transition-none"
@@ -684,10 +552,6 @@ export function Bar({ value, label, caption, className }: BarProps) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Exported MDX component map
-// ---------------------------------------------------------------------------
 
 export const mdxComponents: MDXComponents = {
   h2: H2,
@@ -705,34 +569,24 @@ export const mdxComponents: MDXComponents = {
   td: Td,
   img: Img,
   hr: Hr,
-  // Named editorial primitives — exported above and registered here so
-  // MDX authors can use them without manual imports in each MDX file.
   Figure,
   Stats,
   BeforeAfter,
   Bar,
   TextImageSplit,
-  // Flow diagram primitives — visual replacements for narrative diagrams.
-  // See src/components/mdx/flow-primitives.tsx for full API and tone system.
-  // Wrapper components:
   FlowChain,
   FlowSplit,
   StateGrid,
   PrincipleGrid,
   BranchTree,
-  // Leaf / child components (nested inside wrappers in MDX):
   FlowItem,
   FlowColumn,
   StateItem,
   PrincipleItem,
   Branch,
-  // Injected by remark-mermaid plugin — resolved here so next-mdx-remote
-  // can find the component without a runtime import inside the MDX body.
   MermaidDiagram,
-  // Project snapshot metadata — icon + label + value cards for case study intros.
   WorkMetadataGrid,
   WorkMetadataCard,
-  // UMA case study diagrams — interactive visualizations for problem statement.
   UmaPainPoints,
   UmaTransformation,
   UmaDifferentiators,

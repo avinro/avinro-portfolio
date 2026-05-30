@@ -2,21 +2,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { GalleryItem } from "@/lib/content/works";
 
-/*
- * WorkGalleryFigure — full-width gallery image with optional caption.
- *
- * Used on /work/[slug] detail pages to render gallery items from frontmatter.
- * Different from the MDX <Figure> primitive: no prose width constraints, and
- * it accepts the GalleryItem shape directly.
- *
- * Aspect ratios:
- *   portrait  → 4/5   (default — tall, immersive)
- *   square    → 1/1
- *   landscape → 16/9
- *   wide      → 21/9  (panoramic — hero shots, spatial UI)
- *   natural   → no fixed frame; uses intrinsicWidth/intrinsicHeight for stable layout
- */
-
 const ASPECT_RATIOS = {
   portrait: "4/5",
   square: "1/1",

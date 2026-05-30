@@ -1,7 +1,3 @@
-/**
- * Minimal three-dot “thinking” indicator for the Vivi chat assistant.
- * Animation is defined globally in `globals.css` (`.vivi-thinking-dot`).
- */
 export function ViviThinkingIndicator() {
   return (
     <div

@@ -11,6 +11,7 @@ import {
   useMemo,
 } from "react";
 import DOMPurify from "dompurify";
+import { useTranslations } from "next-intl";
 import { BotMessageSquare, ArrowUp, Square, AlertCircle } from "lucide-react";
 import {
   Sheet,
@@ -30,14 +31,7 @@ import { useStickToBottom } from "@/hooks/use-stick-to-bottom";
 import { useVisualViewportInset } from "@/hooks/use-visual-viewport-inset";
 import { useLandscapeCompactHeader } from "@/hooks/use-landscape-compact-header";
 
-const SUGGESTION_CHIPS = [
-  "What are Ary's strongest design skills?",
-  "Tell me about the helloDojo case study",
-  "What's Ary's experience with design systems?",
-  "What is Ary's design process?",
-];
-
-const ALLOWED_TAGS = ["h3", "p", "ul", "li", "strong", "a"];
+const ALLOWED_TAGS = ["p", "ul", "li", "strong", "a"];
 const ALLOWED_ATTRS = ["href", "target", "rel"];
 
 function sanitizeHtml(html: string): string {
@@ -107,17 +101,18 @@ const MessageList = memo(function MessageList({ messages }: { messages: ChatMess
 });
 
 function ErrorState({ onRetry }: { onRetry: () => void }) {
+  const t = useTranslations("aiChat");
   return (
     <div className="border-destructive/50 bg-destructive/10 mr-auto flex max-w-[95%] items-start gap-2 rounded-lg border p-3">
       <AlertCircle className="text-destructive mt-0.5 size-4 shrink-0" />
       <div className="min-w-0 flex-1">
-        <p className="text-foreground/80 text-sm">Vivi had trouble responding. Please try again.</p>
+        <p className="text-foreground/80 text-sm">{t("errorMessage")}</p>
         <button
           onClick={onRetry}
           className="text-accent mt-2 inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-2 hover:opacity-80"
           type="button"
         >
-          Retry
+          {t("retry")}
         </button>
       </div>
     </div>
@@ -129,9 +124,11 @@ interface SuggestionChipsProps {
 }
 
 function SuggestionChips({ onSelect }: SuggestionChipsProps) {
+  const t = useTranslations("aiChat");
+  const chips = t.raw("suggestions") as string[];
   return (
     <div className="space-y-2">
-      {SUGGESTION_CHIPS.map((chip) => (
+      {chips.map((chip) => (
         <button
           key={chip}
           onClick={() => {
@@ -163,6 +160,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
   { value, onChange, onSubmit, disabled, isLoading, onStop },
   ref,
 ) {
+  const t = useTranslations("aiChat");
   const innerRef = useRef<HTMLTextAreaElement | null>(null);
 
   const setTextareaRef = useCallback(
@@ -202,7 +200,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
             onSubmit(syntheticEvent);
           }
         }}
-        placeholder="Ask Vivi about Ary's work…"
+        placeholder={t("inputPlaceholder")}
         rows={1}
         className={cn(
           "border-border bg-muted min-h-11 flex-1 resize-none rounded-xl border",
@@ -212,7 +210,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
           "max-h-[120px] overflow-y-auto",
         )}
         disabled={disabled}
-        aria-label="Message input for Vivi"
+        aria-label={t("inputAria")}
       />
       {isLoading ? (
         <button
@@ -224,7 +222,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
             "bg-destructive/20 text-destructive flex size-11 shrink-0 items-center justify-center rounded-full",
             "transition-opacity duration-150 hover:opacity-80",
           )}
-          aria-label="Stop message"
+          aria-label={t("stopAria")}
         >
           <Square className="size-3.5" aria-hidden />
         </button>
@@ -237,7 +235,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
             "disabled:cursor-not-allowed disabled:opacity-40",
             "transition-opacity duration-150",
           )}
-          aria-label="Send message"
+          aria-label={t("sendAria")}
         >
           <ArrowUp className="size-4" aria-hidden />
         </button>
@@ -249,6 +247,7 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
 const MOBILE_MAX_BREAKPOINT = 767.5;
 
 export function AiChat() {
+  const t = useTranslations("aiChat");
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -455,7 +454,7 @@ export function AiChat() {
                 "touch-manipulation select-none",
               )}
               aria-haspopup="dialog"
-              aria-label="Chat with Vivi about Ary's work"
+              aria-label={t("triggerAria")}
               type="button"
             >
               {!open && (
@@ -469,8 +468,7 @@ export function AiChat() {
           </SheetTrigger>
         </TooltipTrigger>
         <TooltipContent side="top" sideOffset={4} align="end" className="max-w-xs">
-          Hi, I&apos;m Vivi, Ary&apos;s assistant. You can ask me anything about their work and
-          experience.
+          {t("tooltip")}
         </TooltipContent>
       </Tooltip>
 
@@ -497,20 +495,16 @@ export function AiChat() {
           style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
         >
           <SheetTitle className={cn(compactHeader && "text-xl sm:text-2xl")}>
-            Chat with Vivi
+            {t("sheetTitle")}
           </SheetTitle>
-          {!compactHeader && (
-            <SheetDescription>
-              Ask about Ary&apos;s work, experience, and design expertise.
-            </SheetDescription>
-          )}
+          {!compactHeader && <SheetDescription>{t("sheetDescription")}</SheetDescription>}
         </SheetHeader>
 
         <div
           ref={scrollRef}
           onScroll={onScroll}
           role="log"
-          aria-label="Conversation with Vivi"
+          aria-label={t("conversationAria")}
           aria-busy={isLoading}
           className="bg-muted/70 min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto overscroll-y-contain px-4 py-4 sm:px-6 dark:bg-black/40"
         >

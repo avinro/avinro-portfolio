@@ -25,7 +25,6 @@ export interface RelatedItem {
   slug: string;
   title: string;
   coverImage: string;
-  /** Short label shown above the title — "Case study" or "Work". */
   eyebrow: string;
   href: string;
   order: number;
@@ -35,8 +34,8 @@ export interface RelatedItem {
  * Returns up to MAX_ITEMS related items for a given case study slug.
  * Returns an empty array when no related content is available.
  */
-export function getRelatedItems(currentSlug: string): RelatedItem[] {
-  const caseStudies = getPublishedCaseStudies()
+export function getRelatedItems(currentSlug: string, locale = "en"): RelatedItem[] {
+  const caseStudies = getPublishedCaseStudies(locale)
     .filter((cs) => cs.frontmatter.slug !== currentSlug)
     .sort((a, b) => a.frontmatter.order - b.frontmatter.order)
     .map<RelatedItem>((cs) => ({
@@ -49,7 +48,7 @@ export function getRelatedItems(currentSlug: string): RelatedItem[] {
       order: cs.frontmatter.order,
     }));
 
-  const works = getPublishedWorks()
+  const works = getPublishedWorks(locale)
     .sort((a, b) => {
       const aOrder = a.frontmatter.featuredOrder ?? a.frontmatter.order;
       const bOrder = b.frontmatter.featuredOrder ?? b.frontmatter.order;
@@ -65,6 +64,5 @@ export function getRelatedItems(currentSlug: string): RelatedItem[] {
       order: w.frontmatter.featuredOrder ?? w.frontmatter.order,
     }));
 
-  // Case studies fill the list first; works fill any remaining slots.
   return [...caseStudies, ...works].slice(0, MAX_ITEMS);
 }

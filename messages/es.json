@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "siteDescription": "Diseñador de Producto creando productos reales"
+  },
+  "nav": {
+    "work": "Trabajo",
+    "caseStudies": "Casos de estudio",
+    "about": "Sobre mí",
+    "mainNavigation": "Navegación principal",
+    "mobileNavigation": "Navegación móvil",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "skipToContent": "Saltar al contenido principal",
+    "home": "Avinro — inicio",
+    "privacy": "Privacidad",
+    "footerNavigation": "Navegación del pie de página",
+    "socialLinks": "Redes sociales"
+  },
+  "home": {
+    "intro": {
+      "phrase1": {
+        "mobile": "La mayoría de las ideas mueren\nentre\nla visión y la ejecución.",
+        "desktop": "La mayoría de las ideas mueren\nentre la visión y la ejecución."
+      },
+      "phrase2": "Yo cierro esa brecha.",
+      "ariaLabel": "Intro"
+    },
+    "hero": {
+      "badgeText": "Disponible para trabajar",
+      "headline": "Diseñador de Producto creando productos reales",
+      "subheadline": "He lanzado productos SaaS para equipos B2B y B2C, desde descubrimiento 0->1 hasta lanzamiento. Muchos proyectos fallan entre la idea y la ejecución; ayudo a cerrar esa brecha.",
+      "circularText": "Estrategia y ejecución · Diseño de producto · ",
+      "circularTextHover": "Conóceme · Mi trayectoria · ",
+      "circularAria": "Sobre mí - conoce mi trayectoria",
+      "primaryCta": "Explorar mi trabajo",
+      "downloadCta": "Descargar CV"
+    },
+    "workDivider": {
+      "text": "TRABAJO SELECCIONADO · "
+    },
+    "selectedWork": {
+      "sectionTitle": "Trabajo seleccionado",
+      "body": "Una selección de productos 0->1 y sistemas multi-app. Cada uno empezó como una idea poco clara y terminó lanzado."
+    },
+    "socialProof": {
+      "sectionTitle": "Testimonios"
+    },
+    "aboutTeaser": {
+      "sectionTitle": "Sobre mí",
+      "greeting": "Hola, soy Ary",
+      "bio": "Diseñador, builder y solucionador de problemas. Fuera del trabajo, probablemente viajando, entrenando, viendo anime o pasando tiempo con la gente que quiero.",
+      "linkLabel": "Más sobre mí",
+      "aria": "Sobre mí"
+    },
+    "finalCta": {
+      "heading": "¿Tienes algo que quieres construir, pero no sabes cómo estructurarlo o lanzarlo?",
+      "linkLabel": "Hablemos"
+    },
+    "primaryCta": {
+      "label": "Hablemos",
+      "barAria": "Llamada a la acción principal"
+    }
+  },
+  "about": {
+    "title": "Sobre mí",
+    "pageDescription": "Diseñador de Producto trabajando en la intersección de estrategia, diseño e implementación front-end. Trayectoria, experiencia, herramientas y filosofía de diseño.",
+    "og": {
+      "title": "Avinro — Diseñador de Producto",
+      "description": "Diseñador de Producto trabajando en la intersección de estrategia, diseño e implementación front-end."
+    },
+    "portraitAria": "Retrato de Ary",
+    "portraitAlt": "Ary — retrato",
+    "interestsAria": "Intereses",
+    "interests": ["amante del anime", "fan de bad bunny", "videojuegos", "entusiasta de cripto"],
+    "hero": {
+      "headline": "Diseñador de Producto.",
+      "bio": [
+        "Soy Ary, Diseñador de Producto trabajando en la intersección de estrategia, diseño y ejecución.",
+        "Ayudo a equipos a convertir ideas poco claras en productos estructurados que sí pueden lanzar. Mi trabajo abarca productos 0->1, ecosistemas multi-app y sistemas de diseño pensados para durar más allá del primer release.",
+        "Me importa profundamente la brecha entre concepto y entrega, y durante los últimos años me he dedicado a cerrarla en distintas industrias, tamaños de equipo y restricciones."
+      ]
+    },
+    "experience": {
+      "sectionTitle": "Experiencia",
+      "entries": [
+        {
+          "outcome": "Lidero la UX end-to-end de un ecosistema multi-superficie: portales de cliente, conductor, vendor y flota. Construí el sistema de diseño desde cero y combino diseño con front-end asistido por IA usando Cursor y Claude para cerrar la brecha entre Figma y producción."
+        },
+        {
+          "outcome": "Lideré la UX móvil para la app iOS y Android de Baptist Health y diseñé interfaces de Smart TV desplegadas en entornos hospitalarios. Definí funcionalidades junto a producto e ingeniería, conectando decisiones de UX con KPIs operativos y resultados medibles."
+        },
+        {
+          "outcome": "Diseñé UX y UI end-to-end para clientes de producto digital en un entorno de agencia. Lancé trabajo responsive web y móvil en varios proyectos concurrentes con ciclos de iteración ajustados."
+        },
+        {
+          "outcome": "Entregué UI/UX, motion graphics e identidad de marca para cuentas de clientes en múltiples industrias. Llevé proyectos desde concepto hasta sistemas visuales listos para producción."
+        },
+        {
+          "outcome": "Me encargué de identidad de marca y motion design para comunicaciones institucionales, campañas visuales y producción editorial durante tres años."
+        }
+      ]
+    },
+    "education": {
+      "sectionTitle": "Educación",
+      "entries": [
+        {
+          "description": "Programa de cinco años sobre fundamentos de comunicación visual: tipografía, retículas, teoría del color, imagen e historia del diseño. En quinto año me especialicé en UI/UX, con foco en principios de interacción, métodos centrados en usuarios y diseño de interfaces digitales."
+        }
+      ]
+    },
+    "tools": {
+      "sectionTitle": "Herramientas y métodos"
+    },
+    "process": {
+      "sectionTitle": "Mi proceso",
+      "intro": "Mi proceso se mueve entre estrategia, sistemas e implementación hasta que el producto está lo bastante claro para construirlo.",
+      "stages": [
+        {
+          "title": "Descubrir",
+          "subtitle": "Auditoría, investigación, benchmarking",
+          "body": "Empiezo mapeando el paisaje del producto: qué existe, dónde se rompe la interfaz y qué intentan lograr los usuarios. En trabajo 0->1 uso investigación y síntesis asistida por IA para encontrar patrones antes de tocar el canvas."
+        },
+        {
+          "title": "Definir",
+          "subtitle": "Enmarcado, IA, flujos estratégicos",
+          "body": "Convierto input crudo en estructura: jobs-to-be-done, arquitectura de información, restricciones de producto y flujos de alto nivel. Aquí entran pensamiento de producto y sistemas para que la UI resuelva un dolor concreto, no decore incertidumbre."
+        },
+        {
+          "title": "Diseñar",
+          "subtitle": "Lo-fi -> lógica -> hi-fi",
+          "body": "Trabajo desde baja fidelidad hacia la lógica de interacción antes de pulir la capa visual. Mobile-first por defecto: jerarquía, estados y edge cases tienen que sostenerse antes de sumar densidad desktop o expresión de marca."
+        },
+        {
+          "title": "Validar",
+          "subtitle": "Prototipos y usabilidad",
+          "body": "Prototipo los flujos clave y los pruebo contra tareas reales, especialmente en momentos donde los usuarios pueden atascarse. El objetivo es exponer supuestos equivocados temprano, no después de que ingeniería ya haya pagado el coste."
+        },
+        {
+          "title": "Entregar",
+          "subtitle": "Handoff, código, QA de diseño",
+          "body": "Entrego tokens organizados, estados documentados y especificaciones de accesibilidad, y me mantengo cerca durante implementación. Cuando aporta valor, construyo o reviso front-end con Cursor y Claude para cerrar la brecha entre intención en Figma y calidad en producción."
+        }
+      ]
+    }
+  },
+  "work": {
+    "pageTitle": "Trabajo",
+    "pageDescription": "Exploraciones UI, sistemas visuales, conceptos y trabajo de producto de un product designer.",
+    "kicker": "Explora mi trabajo",
+    "headline": "Exploraciones,\nconceptos y UI.",
+    "intro": "Exploraciones visuales, sistemas UI y conceptos de producto.",
+    "caseStudyPrompt": "¿Buscas casos de producto en detalle?",
+    "caseStudyLink": "Ver casos de estudio",
+    "previousProject": "Proyecto anterior",
+    "nextProject": "Siguiente proyecto",
+    "selectedScreens": "Pantallas seleccionadas",
+    "galleryAria": "Trabajo visual",
+    "previousFlow": "Flujo anterior",
+    "nextFlow": "Flujo siguiente",
+    "closeFullscreen": "Cerrar pantalla completa",
+    "metadata": {
+      "type": "Tipo",
+      "industry": "Industria",
+      "year": "Año",
+      "timeline": "Cronograma",
+      "platform": "Plataforma",
+      "status": "Estado",
+      "role": "Rol",
+      "client": "Cliente",
+      "team": "Equipo",
+      "scope": "Alcance",
+      "category": "Categoría",
+      "live": "En vivo",
+      "projectTopics": "Temas del proyecto",
+      "viewLive": "Ver en vivo",
+      "resultCaption": "Prototipo de alta fidelidad — pantallas clave alineadas con el estado hover de la tarjeta."
+    },
+    "categories": {
+      "UI exploration": "Exploración de UI",
+      "Concept": "Concepto",
+      "Visual system": "Sistema visual",
+      "Mobile UI": "UI móvil",
+      "Flow Improvement": "Mejora de flujo",
+      "UX Redesign": "Rediseño UX",
+      "Branding": "Branding",
+      "Microinteraction": "Microinteracción"
+    }
+  },
+  "caseStudies": {
+    "pageTitle": "Casos de estudio",
+    "pageDescription": "Una selección de productos 0->1 y sistemas multi-app, diseñados y lanzados.",
+    "kicker": "Dentro de mi proceso",
+    "headline": "Problemas resueltos,\nproductos lanzados.",
+    "intro": "Restricciones reales, equipos reales, resultados reales.",
+    "gridAria": "Casos de estudio",
+    "outcome": "Resultado",
+    "nextCaseStudy": "Siguiente caso de estudio",
+    "coverMeta": {
+      "client": "Cliente",
+      "role": "Rol",
+      "year": "Año",
+      "readTime": "Tiempo de lectura"
+    }
+  },
+  "contactSheet": {
+    "title": "¿Tienes un proyecto en mente?",
+    "tagline": "Construyámoslo.",
+    "description": "Elige cómo prefieres ponerte en contacto.",
+    "scheduleCta": "Agenda una llamada de 30 min",
+    "scheduleSubtext": "Gratis · sin compromiso",
+    "emailCta": "Envíame un correo"
+  },
+  "aiChat": {
+    "triggerAria": "Chatea con Vivi sobre el trabajo de Ary",
+    "tooltip": "Hola, soy Vivi, la asistente de Ary. Puedes preguntarme lo que quieras sobre su trabajo y experiencia.",
+    "sheetTitle": "Chatea con Vivi",
+    "sheetDescription": "Pregunta sobre el trabajo, la experiencia y la especialidad en diseño de Ary.",
+    "conversationAria": "Conversación con Vivi",
+    "suggestions": [
+      "¿Cuáles son las mayores fortalezas de diseño de Ary?",
+      "Cuéntame sobre el caso de estudio de helloDojo",
+      "¿Qué experiencia tiene Ary con sistemas de diseño?",
+      "¿Cómo es el proceso de diseño de Ary?"
+    ],
+    "inputPlaceholder": "Pregúntale a Vivi sobre el trabajo de Ary…",
+    "inputAria": "Campo de mensaje para Vivi",
+    "stopAria": "Detener mensaje",
+    "sendAria": "Enviar mensaje",
+    "errorMessage": "Vivi tuvo problemas para responder. Inténtalo de nuevo.",
+    "retry": "Reintentar"
+  },
+  "toc": {
+    "onThisPage": "En esta página",
+    "selectSection": "Selecciona una sección"
+  },
+  "related": {
+    "exploreMore": "Explora más"
+  },
+  "workMenu": {
+    "sectionLabel": "Trabajo seleccionado",
+    "work": "Trabajo",
+    "caseStudy": "Caso de estudio",
+    "viewWork": "Ver trabajo: {title}",
+    "viewCaseStudy": "Ver caso de estudio: {title}"
+  },
+  "mdx": {
+    "before": "Antes",
+    "after": "Después",
+    "changedFromTo": "{label}: cambió de {before} a {after}",
+    "loadingDiagram": "Cargando diagrama…"
+  },
+  "testimonials": {
+    "carouselAria": "Testimonios de clientes",
+    "cardAria": "Testimonio {index} de {total}: {name}"
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacidad",
+      "description": "Cómo avinro.com usa analítica para entender la interacción de los visitantes — centrada en la privacidad, sin cookies y sin rastreo publicitario de terceros."
+    },
+    "hero": {
+      "kicker": "Privacidad",
+      "heading": "Simple, honesta, sin cookies.",
+      "subheading": "Este sitio usa analítica centrada en la privacidad para entender cómo interactúan los visitantes con el portafolio. Sin cookies, sin rastreo publicitario, sin Google Analytics."
+    },
+    "sections": [
+      {
+        "heading": "Analítica",
+        "body": [
+          "Este sitio usa PostHog en modo sin cookies. PostHog registra vistas de página anónimas y eventos de interacción (clics en CTA, profundidad de lectura de casos de estudio, uso del formulario de contacto) para ayudar a mejorar el portafolio.",
+          "No se establecen cookies para la analítica. Se genera un ID de sesión temporal y aleatorio en memoria que se descarta al cerrar la pestaña; nunca se almacena en localStorage, cookies ni ningún almacenamiento persistente.",
+          "Los datos se envían a los servidores de PostHog en la región de la UE (eu.i.posthog.com) y están sujetos a la propia política de privacidad de PostHog."
+        ]
+      },
+      {
+        "heading": "Qué registramos",
+        "body": [
+          "Vistas de página — qué páginas visitas y en qué orden.",
+          "Clics en CTA — qué botones de llamada a la acción se pulsan y en qué página.",
+          "Profundidad de lectura de casos de estudio — hasta dónde lees un caso de estudio (hitos del 25 %, 50 %, 75 %, 100 %).",
+          "Interacción con el formulario de contacto — si inicias o envías correctamente el formulario de contacto.",
+          "El sistema de analítica no recopila ni almacena información personal (nombre, correo, dirección IP)."
+        ]
+      },
+      {
+        "heading": "Qué no hacemos",
+        "body": [
+          "Sin Google Analytics, Facebook Pixel ni ninguna red publicitaria.",
+          "Sin rastreo entre sitios ni fingerprinting.",
+          "Sin venta ni compartición de datos con terceros con fines de marketing.",
+          "Sin grabaciones de sesión ni mapas de calor."
+        ]
+      },
+      {
+        "heading": "Contacto",
+        "body": [
+          "Si tienes preguntas sobre esta política de privacidad, escríbeme a avinroart@gmail.com."
+        ]
+      }
+    ],
+    "lastUpdated": "Última actualización: Mayo de 2026"
+  },
+  "notFound": {
+    "kicker": "404",
+    "body": "Esta página no existe o se ha movido.",
+    "cta": "Volver al inicio"
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "switchTo": "Cambiar a {locale}"
+  }
+}

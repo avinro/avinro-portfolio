@@ -1,40 +1,16 @@
-/**
- * Works content layer — visual explorations, concepts, and UI-led project work.
- *
- * Reads MDX files from content/works/ at build time, validates frontmatter
- * with zod (hard build failure on invalid files), and exposes typed query helpers.
- *
- * Intentionally simpler than case-studies.ts: no TOC extraction, no KPI schema.
- * Gallery items are defined in frontmatter (not MDX body) to enforce the
- * visual-first format at the data layer.
- *
- * Never imported by client components — this module uses Node.js `fs` APIs
- * which are not available in the browser bundle.
- */
-
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
 import { z } from "zod";
 
-// ---------------------------------------------------------------------------
-// Frontmatter schema
-// ---------------------------------------------------------------------------
-
 const GalleryItemSchema = z
   .object({
     src: z.string().min(1),
     alt: z.string().min(1),
     caption: z.string().optional(),
-    /**
-     * Explicit aspect override per image — defaults to portrait (4:5).
-     * `natural` follows the image proportions (no fixed aspect-ratio frame); requires intrinsicWidth/intrinsicHeight.
-     */
     aspect: z.enum(["portrait", "square", "landscape", "wide", "natural"]).optional(),
-    /** Pixel width — required with intrinsicHeight when aspect is natural. */
     intrinsicWidth: z.number().int().positive().optional(),
-    /** Pixel height — required with intrinsicWidth when aspect is natural. */
     intrinsicHeight: z.number().int().positive().optional(),
   })
   .superRefine((data, ctx) => {
@@ -58,7 +34,6 @@ const GalleryItemSchema = z
 
 export type GalleryItem = z.infer<typeof GalleryItemSchema>;
 
-/** Optional project metadata surfaced in the work detail header (migrated from MDX cards). */
 const WorkProjectMetaSchema = z
   .object({
     type: z.string().min(1).optional(),
@@ -66,7 +41,6 @@ const WorkProjectMetaSchema = z
     platform: z.string().min(1).optional(),
     status: z.string().min(1).optional(),
     role: z.string().min(1).optional(),
-    /** Overrides numeric `year` when the project spans multiple years (e.g. "2022–2023"). */
     yearLabel: z.string().min(1).optional(),
   })
   .default({});
@@ -87,27 +61,17 @@ const WorkFrontmatterSchema = z.object({
     "Branding",
     "Microinteraction",
   ]),
-  /** One-liner shown under the thumbnail — mandatory for visual discovery. */
   summary: z.string().min(1).max(180),
   coverImage: z.string().min(1),
-  /** Payoff / result shot — revealed under the pixel grid on /work listing cards. */
   resultImage: z.string().min(1).optional(),
-  /** Cover aspect ratio — 4:5 portrait by default. */
   coverAspect: z.enum(["portrait", "square", "landscape"]).default("portrait"),
-  /** Gallery images rendered from frontmatter, not MDX, to enforce visual-first. */
   gallery: z.array(GalleryItemSchema).max(20).default([]),
   tools: z.array(z.string()).max(8).default([]),
   client: z.string().optional(),
-  /** Structured metadata for the detail page header — replaces inline MDX metadata cards. */
   meta: WorkProjectMetaSchema,
   externalLink: z.url().optional(),
   tags: z.array(z.string()).max(6).default([]),
-  /** Sort order within the /work listing page. */
   order: z.number().int(),
-  /**
-   * Optional override for home "Selected work" sort order.
-   * When absent, falls back to `order`.
-   */
   featuredOrder: z.number().int().optional(),
   featured: z.boolean().default(false),
   draft: z.boolean().default(false),
@@ -115,15 +79,9 @@ const WorkFrontmatterSchema = z.object({
 
 export type WorkFrontmatter = z.infer<typeof WorkFrontmatterSchema>;
 
-// ---------------------------------------------------------------------------
-// Full work shape
-// ---------------------------------------------------------------------------
-
 export interface Work {
   frontmatter: WorkFrontmatter;
-  /** Raw MDX body (without frontmatter). Short intro prose, no primitives. */
   content: string;
-  /** Words-per-minute estimated read time (used for meta, not displayed on page). */
   readingTime: {
     text: string;
     minutes: number;
@@ -131,18 +89,19 @@ export interface Work {
   };
 }
 
-// ---------------------------------------------------------------------------
-// Internals
-// ---------------------------------------------------------------------------
+const CONTENT_ROOT = path.join(process.cwd(), "content", "works");
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "works");
+function contentDir(locale: string): string {
+  return path.join(CONTENT_ROOT, locale);
+}
 
-function readAllWorkFiles(): Work[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+function readAllWorkFiles(locale: string): Work[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files.map((file) => {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+    const raw = fs.readFileSync(path.join(dir, file), "utf-8");
     const { data, content } = matter(raw);
 
     const result = WorkFrontmatterSchema.safeParse(data);
@@ -150,7 +109,7 @@ function readAllWorkFiles(): Work[] {
       const issues = result.error.issues
         .map((i) => `  ${i.path.join(".")}: ${i.message}`)
         .join("\n");
-      throw new Error(`Invalid frontmatter in content/works/${file}:\n${issues}`);
+      throw new Error(`Invalid frontmatter in content/works/${locale}/${file}:\n${issues}`);
     }
 
     const rt = readingTime(content);
@@ -167,34 +126,28 @@ function readAllWorkFiles(): Work[] {
   });
 }
 
-// Memoized at module level — only evaluated once per server process / build.
-let _cache: Work[] | null = null;
+const _cache = new Map<string, Work[]>();
 
-function getAll(): Work[] {
-  _cache ??= readAllWorkFiles().sort((a, b) => a.frontmatter.order - b.frontmatter.order);
-  return _cache;
+function getAll(locale = "en"): Work[] {
+  if (!_cache.has(locale)) {
+    _cache.set(
+      locale,
+      readAllWorkFiles(locale).sort((a, b) => a.frontmatter.order - b.frontmatter.order),
+    );
+  }
+  return _cache.get(locale) ?? [];
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
-
-/** All works, including drafts, sorted by `order`. */
-export function getAllWorks(): Work[] {
-  return getAll();
+export function getAllWorks(locale = "en"): Work[] {
+  return getAll(locale);
 }
 
-/**
- * Published (non-draft) works sorted by `order`.
- * Use for public listings: home SelectedWork and /work page.
- */
-export function getPublishedWorks(): Work[] {
-  return getAll().filter((w) => !w.frontmatter.draft);
+export function getPublishedWorks(locale = "en"): Work[] {
+  return getAll(locale).filter((w) => !w.frontmatter.draft);
 }
 
-/** Slug-keyed lookup. Returns `undefined` for unknown slugs. */
-export function getWorkBySlug(slug: string): Work | undefined {
-  return getAll().find((w) => w.frontmatter.slug === slug);
+export function getWorkBySlug(slug: string, locale = "en"): Work | undefined {
+  return getAll(locale).find((w) => w.frontmatter.slug === slug);
 }
 
 export interface PublishedWorkNeighbors {
@@ -202,13 +155,8 @@ export interface PublishedWorkNeighbors {
   next: Work | null;
 }
 
-/**
- * Linear prev/next among published works only, in the same `order` as
- * {@link getPublishedWorks} (matches `/work` listing). No wrap at ends.
- * Unknown slug or draft-only slug (not in published list) → both null.
- */
-export function getPublishedWorkNeighbors(slug: string): PublishedWorkNeighbors {
-  const published = getPublishedWorks();
+export function getPublishedWorkNeighbors(slug: string, locale = "en"): PublishedWorkNeighbors {
+  const published = getPublishedWorks(locale);
   const idx = published.findIndex((w) => w.frontmatter.slug === slug);
   if (idx === -1) return { prev: null, next: null };
   return {
@@ -217,38 +165,27 @@ export function getPublishedWorkNeighbors(slug: string): PublishedWorkNeighbors 
   };
 }
 
-/**
- * All slugs (including drafts) for use in `generateStaticParams`.
- * Draft pages are still built but carry `robots: noindex,nofollow`.
- */
-export function getWorkSlugs(): string[] {
-  return getAll().map((w) => w.frontmatter.slug);
+export function getWorkSlugs(locale = "en"): string[] {
+  return getAll(locale).map((w) => w.frontmatter.slug);
 }
-
-// ---------------------------------------------------------------------------
-// Sitemap-specific helpers
-// ---------------------------------------------------------------------------
 
 export interface WorkSitemapEntry {
   slug: string;
   lastModified: Date;
 }
 
-/**
- * Published works with real file-system mtimes for sitemap entries.
- * Drafts are excluded (they carry noindex and must not appear in the sitemap).
- */
-export function getPublishedWorksForSitemap(): WorkSitemapEntry[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith(".mdx"));
+export function getPublishedWorksForSitemap(locale = "en"): WorkSitemapEntry[] {
+  const dir = contentDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
 
   return files
     .map((file) => {
-      const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+      const raw = fs.readFileSync(path.join(dir, file), "utf-8");
       const { data } = matter(raw);
       const result = WorkFrontmatterSchema.safeParse(data);
       if (!result.success || result.data.draft) return null;
-      const mtime = fs.statSync(path.join(CONTENT_DIR, file)).mtime;
+      const mtime = fs.statSync(path.join(dir, file)).mtime;
       return { slug: result.data.slug, lastModified: mtime };
     })
     .filter((entry): entry is WorkSitemapEntry => entry !== null);

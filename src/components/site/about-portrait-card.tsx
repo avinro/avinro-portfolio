@@ -3,41 +3,19 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-
-/*
- * AboutPortraitCard — TiltedCard-style 3D tilt effect wrapping the portrait
- * image. Adapted from React Bits TiltedCard to TypeScript + Tailwind,
- * with no external CSS file.
- *
- * Behavior by device:
- *   Desktop (pointer: fine) → full 3D tilt + floating caption tooltip; badges on hover.
- *   Mobile / coarse pointer → static card; badges and caption always visible.
- *   prefers-reduced-motion  → tilt disabled; motion values stay at 0.
- *
- * 3D CSS properties that Tailwind does not expose as utilities are applied via
- * style={{}} inline:
- *   perspective          on the <figure>
- *   transformStyle       on the inner motion.div (preserve-3d)
- *   translateZ           on the badges overlay (floats in front of the card)
- *   willChange           on the tilt layer
- *
- * Badges live inside the preserve-3d container and use translateZ(40px) so
- * they participate in the tilt and visually float in front of the card surface.
- *
- * Portrait image is passed via `imageSrc` (path under public/).
- */
 
 const SPRING = { damping: 30, stiffness: 100, mass: 2 } as const;
 
 const CAPTION_SPRING = { stiffness: 350, damping: 30, mass: 1 } as const;
 
-const BADGES = ["anime lover", "bad bunny fan", "video games", "crypto enthusiast"] as const;
-
 function InterestBadges({ className }: { className?: string }) {
+  const t = useTranslations("about");
+  const badges = t.raw("interests") as string[];
   return (
     <>
-      {BADGES.map((badge) => (
+      {badges.map((badge) => (
         <span
           key={badge}
           className={cn(
@@ -53,19 +31,17 @@ function InterestBadges({ className }: { className?: string }) {
 }
 
 export interface AboutPortraitCardProps {
-  /** Public URL path to the portrait image (e.g. /images/about.jpg). */
   imageSrc: string;
 }
 
 export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
+  const t = useTranslations("about");
   const figureRef = useRef<HTMLElement>(null);
   const [lastY, setLastY] = useState(0);
 
-  // Tooltip cursor tracking
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
 
-  // 3D rotation springs
   const rotateX = useSpring(useMotionValue(0), SPRING);
   const rotateY = useSpring(useMotionValue(0), SPRING);
   const scale = useSpring(1, SPRING);
@@ -86,7 +62,6 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
     rotateX.set((offsetY / (rect.height / 2)) * -amplitude);
     rotateY.set((offsetX / (rect.width / 2)) * amplitude);
 
-    // Offset 20px to the right so the tooltip doesn't sit on the cursor tip.
     cursorX.set(e.clientX - rect.left + 20);
     cursorY.set(e.clientY - rect.top);
 
@@ -115,17 +90,13 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
     <figure
       ref={figureRef}
       data-testid="portrait-card"
-      aria-label="Portrait of Ary"
+      aria-label={t("portraitAria")}
       className="relative flex w-full items-center justify-center"
       style={{ perspective: "800px" }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/*
-       * 3D tilt layer — preserve-3d enables children to use translateZ
-       * and truly float in front of the card surface during tilt.
-       */}
       <motion.div
         className="relative w-full rounded-xl"
         style={{
@@ -136,30 +107,22 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
           willChange: "transform",
         }}
       >
-        {/* Card surface — portrait */}
         <div className="border-border/40 bg-muted relative aspect-[3/4] w-full overflow-hidden rounded-xl border">
           <Image
             src={imageSrc}
-            alt="Ary — portrait"
+            alt={t("portraitAlt")}
             fill
             sizes="(max-width: 768px) 100vw, 320px"
             className="object-cover"
             priority
           />
         </div>
-
-        {/* Mobile — badges always visible (no hover on touch) */}
         <div
-          aria-label="Interests"
+          aria-label={t("interestsAria")}
           className="absolute bottom-4 left-0 z-10 flex w-full flex-wrap justify-start gap-2 px-4 md:hidden"
         >
           <InterestBadges />
         </div>
-
-        {/*
-         * Desktop — badges float in 3D and fade in on hover.
-         * translateZ(40px) lifts them in front of the card during tilt.
-         */}
         <motion.div
           aria-hidden="true"
           className="absolute bottom-4 left-0 z-10 hidden w-full flex-wrap justify-start gap-2 px-4 md:flex"
@@ -168,13 +131,9 @@ export function AboutPortraitCard({ imageSrc }: AboutPortraitCardProps) {
           <InterestBadges />
         </motion.div>
       </motion.div>
-
-      {/* Mobile — static caption (no cursor to follow on touch) */}
       <figcaption className="absolute top-4 right-4 z-10 rounded bg-white px-2.5 py-1 font-mono text-[10px] text-[#2d2d2d] shadow-sm md:hidden">
         Hi! What&apos;s up?
       </figcaption>
-
-      {/* Desktop — floating cursor tooltip */}
       <motion.figcaption
         aria-hidden="true"
         className="pointer-events-none absolute top-0 left-0 z-10 hidden rounded bg-white px-2.5 py-1 font-mono text-[10px] text-[#2d2d2d] md:block"

@@ -1,24 +1,3 @@
-/**
- * Restricted MDX component map for work (visual explorations) pages.
- *
- * Intentionally omits case-study-specific primitives so authors cannot
- * accidentally add narrative complexity to the visual-first format:
- *   - No Stats / KPI blocks
- *   - No FlowChain / FlowSplit / StateGrid / PrincipleGrid / BranchTree
- *   - No MermaidDiagram
- *   - No BeforeAfter / Bar
- *
- * What is allowed: prose typography including structured headings (h2–h4),
- * blockquotes, dividers, links, inline code, simple images, the
- * <Figure> component for contextual screen placement.
- * Legacy <WorkMetadataGrid> / <WorkMetadataCard> remain registered for backwards
- * compatibility but project metadata now lives in frontmatter (`meta`) and renders
- * in the page header via {@link WorkHeaderMeta}.
- * BlockBind: <BlockbindUserFlowsGallery />. DomainPlug: <DomainPlugFlowsDiagramGallery />.
- * The frontmatter gallery is still available for works that prefer a
- * visual-only format with no inline images.
- */
-
 import Image from "next/image";
 import { MdxInternalBodyLink } from "@/components/mdx/mdx-internal-body-link";
 import type { ComponentPropsWithoutRef } from "react";
@@ -176,11 +155,8 @@ interface InlineFigureProps {
   src: string;
   alt: string;
   caption?: string;
-  /** Aspect ratio of the image container. Defaults to landscape (16/9). */
   aspect?: "portrait" | "square" | "landscape" | "wide";
-  /** Intrinsic width for non-standard aspect ratios (e.g. tall flowcharts). Use with height. */
   width?: number | string;
-  /** Intrinsic height for non-standard aspect ratios. Use with width. */
   height?: number | string;
   className?: string;
   priority?: boolean;
@@ -206,13 +182,9 @@ function InlineFigure({
   const intrinsicWidth = parseFigureDimension(width);
   const intrinsicHeight = parseFigureDimension(height);
 
-  // SVG diagrams: render natively so the viewBox controls proportions.
-  // Never use Next.js Image or image-oriented containers (no aspect-ratio,
-  // no overflow:hidden, no object-fit) — the browser scales SVG by width alone.
   if (src.toLowerCase().endsWith(".svg")) {
     return (
       <figure className={cn("my-8 w-full min-w-0", className)} data-slot="work-svg-diagram">
-        {/* Inline padding so gutters are never dropped (Tailwind resets / flex min-width). Safe-area aware on notched phones. */}
         <div
           className="box-border w-full min-w-0"
           style={{
@@ -323,9 +295,7 @@ export const workMdxComponents: MDXComponents = {
   strong: Strong,
   em: Em,
   img: Img,
-  // JSX component — use as <Figure src="..." alt="..." aspect="landscape" /> in MDX
   Figure: InlineFigure,
-  // Project metadata grid — <WorkMetadataGrid><WorkMetadataCard kind="type">…</WorkMetadataCard></WorkMetadataGrid>
   WorkMetadataGrid,
   WorkMetadataCard,
   BlockbindUserFlowsGallery,

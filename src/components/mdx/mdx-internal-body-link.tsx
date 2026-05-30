@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import type { ComponentPropsWithoutRef } from "react";
 
 import {
@@ -13,7 +13,6 @@ const mdxInternalBodyLinkClassName = cn(
   "rounded-sm hover:text-accent/90",
 );
 
-/** Server-safe MDX `<Link>` with persistent underline + hover emphasis (matches site prose pattern). */
 export function MdxInternalBodyLink({
   className,
   children,

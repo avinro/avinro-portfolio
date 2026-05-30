@@ -52,20 +52,14 @@ function SheetContent({
         data-slot="sheet-content"
         data-variant={variant}
         className={cn(
-          // Position — right side, full viewport height
           "fixed inset-y-0 right-0 z-50 h-dvh w-full sm:max-w-[480px] lg:max-w-[560px]",
-          // Surface
           "bg-background sm:border-border sm:border-l",
           variant === "chat" && "min-h-0 overflow-hidden sm:shadow-2xl",
-          // Shape — square on mobile (full screen), rounded left edge on sm+
           "rounded-none sm:rounded-l-2xl",
-          // Layout — flex column so the Calendly region can flex-1
           "flex flex-col",
-          // Slide in/out from the right
           "data-[state=open]:animate-in data-[state=open]:slide-in-from-right",
           "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
           "motion-reduce:transition-none motion-reduce:data-[state=closed]:animate-none motion-reduce:data-[state=open]:animate-none",
-          // Timing — enter 300ms, exit 200ms for responsiveness
           "data-[state=closed]:duration-200 data-[state=open]:duration-300",
           "ease-out focus:outline-none",
           className,

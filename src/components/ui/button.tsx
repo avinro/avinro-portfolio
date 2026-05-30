@@ -46,7 +46,6 @@ const ShineSpan = () => <span aria-hidden="true" className="btn-shine" />;
 
 const ShinyText = ({ children }: { children: React.ReactNode }) => (
   <span className="btn-shiny-text-wrap">
-    {/* In-flow copy reserves size; absolute layers cross-fade without inline layout doubling. */}
     <span aria-hidden="true" className="btn-shiny-text-measure">
       {children}
     </span>
@@ -96,7 +95,6 @@ function Button({
   };
 
   if (asChild) {
-    // Inject shine span into the wrapped child so it renders inside the <a> / Link
     const child = React.Children.only(
       children as React.ReactElement<{ children?: React.ReactNode }>,
     );

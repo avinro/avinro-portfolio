@@ -1,13 +1,28 @@
-import { INTRO_PENDING_HTML_CLASS, INTRO_SEEN_SESSION_KEY } from "@/lib/intro/constants";
+import { routing } from "@/i18n/routing";
+import { INTRO_CHECKING_HTML_CLASS } from "@/lib/intro/constants";
 
 /**
- * Inline script for the root layout <head>.
- * Runs synchronously before body paint so the homepage never flashes on first visit.
+ * Pathnames that count as the home page (the domain root). The intro is an entry
+ * experience: it only plays when the session's initial landing page is one of these.
+ * With `localePrefix: "as-needed"` the default locale is unprefixed (`/`); other
+ * locales are prefixed (e.g. `/es`).
  */
-export const INTRO_BLOCK_FIRST_PAINT_SCRIPT = `(function(){try{if(!sessionStorage.getItem(${JSON.stringify(INTRO_SEEN_SESSION_KEY)})){document.documentElement.classList.add(${JSON.stringify(INTRO_PENDING_HTML_CLASS)});}}catch(e){}})();`;
+export const INTRO_HOME_PATHS = [
+  "/",
+  ...routing.locales
+    .filter((locale) => locale !== routing.defaultLocale)
+    .map((locale) => `/${locale}`),
+];
 
-/** Clears the first-paint cover once the site is allowed to show. */
-export function clearIntroPendingMark(): void {
+export function normalizeIntroPath(pathname: string): string {
+  return pathname.replace(/\/+$/, "") || "/";
+}
+
+export function isIntroHomePath(pathname: string): boolean {
+  return INTRO_HOME_PATHS.includes(normalizeIntroPath(pathname));
+}
+
+export function clearIntroCheckingMark(): void {
   if (typeof document === "undefined") return;
-  document.documentElement.classList.remove(INTRO_PENDING_HTML_CLASS);
+  document.documentElement.classList.remove(INTRO_CHECKING_HTML_CLASS);
 }

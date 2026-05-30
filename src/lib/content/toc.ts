@@ -15,31 +15,16 @@
 
 import GithubSlugger from "github-slugger";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export interface TocHeading {
   id: string;
   text: string;
   depth: 2;
 }
 
-// ---------------------------------------------------------------------------
-// Regex patterns
-// ---------------------------------------------------------------------------
-
-// Strips fenced code blocks before scanning so that # inside ``` blocks is
-// not misidentified as a heading (e.g. `# some comment` in a bash snippet).
 const CODE_FENCE_RE = /^```[\s\S]*?^```/gm;
 
-// Matches ATX headings of depth 2–6. Group 1: hashes, Group 2: heading text.
-// Depth 1 is excluded — the page template owns <h1> and MDX authors must not
-// use # at the top level.
 const HEADING_RE = /^(#{2,6})\s+(.+?)(?:\s+#+)?\s*$/gm;
 
-// Strips inline markdown (bold, italic, inline code, links) from heading text
-// so the TOC displays clean labels.
 const INLINE_MARKUP_RE = /`[^`]*`|\[([^\]]+)\]\([^)]+\)|\*{1,3}([^*]+)\*{1,3}|_{1,3}([^_]+)_{1,3}/g;
 
 function stripInlineMarkup(text: string): string {
@@ -52,16 +37,11 @@ function stripInlineMarkup(text: string): string {
         boldItalic?: string,
         underscoreItalic?: string,
       ): string => {
-        // Prefer the captured text content over the raw markdown.
         return linkText ?? boldItalic ?? underscoreItalic ?? "";
       },
     )
     .trim();
 }
-
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
 
 /**
  * Returns TOC entries for all H2 headings found in `content`.
@@ -75,7 +55,6 @@ function stripInlineMarkup(text: string): string {
 export function extractTocHeadings(content: string): TocHeading[] {
   const slugger = new GithubSlugger();
 
-  // Strip code fences to avoid false positives.
   const stripped = content.replace(CODE_FENCE_RE, "");
 
   const h2Entries: TocHeading[] = [];
@@ -85,8 +64,6 @@ export function extractTocHeadings(content: string): TocHeading[] {
     const rawText = match[2];
     const depth = hashes.length;
     const cleanText = stripInlineMarkup(rawText);
-    // Slug every heading in order so the slugger's duplicate counter stays
-    // aligned with rehype-slug's output.
     const id = slugger.slug(cleanText);
 
     if (depth === 2) {

@@ -13,23 +13,9 @@ import {
 } from "react";
 import { gsap } from "gsap";
 
-// ---------------------------------------------------------------------------
-// TextType — typewriter effect component
-//
-// TypeScript port of React Bits TextType (JS original).
-// Key changes from the source:
-//   - Full TypeScript prop types
-//   - No separate CSS file — Tailwind utilities only
-//   - Internal prefers-reduced-motion gate: when the user has requested
-//     reduced motion the component renders all phrases immediately as static
-//     text and skips every GSAP tween and setTimeout typing loop.
-//   - gsap.killTweensOf cleanup on unmount (original leaks the cursor tween)
-// ---------------------------------------------------------------------------
-
 export interface TextTypeProps {
   text: string | string[];
   as?: ElementType;
-  /** Milliseconds between typed characters; pass an array for per-phrase speeds. */
   typingSpeed?: number | number[];
   initialDelay?: number;
   pauseDuration?: number;
@@ -188,9 +174,8 @@ export const TextType = forwardRef<HTMLElement, TextTypeProps>(
             }
             setCurrentTextIndex((prev) => (prev + 1) % textArray.length);
             setCurrentCharIndex(0);
-            timeout = setTimeout(() => {
-              // intentional no-op — just waits for pauseDuration
-            }, pauseDuration);
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            timeout = setTimeout(() => {}, pauseDuration);
           } else {
             timeout = setTimeout(() => {
               setDisplayedText((prev) => prev.slice(0, -1));

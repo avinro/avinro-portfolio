@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { gsap } from "gsap";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-/**
- * Unified item shape for the home "Selected work" section.
- * Merges featured case studies and featured works into one ordered list.
- */
 export interface SelectedWorkItem {
   kind: "case-study" | "work";
   slug: string;
   title: string;
   coverImage: string;
-  /** Payoff shot — shown on mobile static rows when set; falls back to coverImage. */
   resultImage?: string;
-  /** Effective sort order — uses featuredOrder when available, falls back to order. */
   order: number;
 }
 
@@ -34,12 +25,6 @@ interface FlowingWorkItemProps {
   isDesktopMotion: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Edge detection
-// Determines whether the cursor entered/left from the top or bottom edge of
-// the element — used to animate the marquee overlay in from the correct side.
-// ---------------------------------------------------------------------------
-
 function findClosestEdge(
   mouseX: number,
   mouseY: number,
@@ -51,14 +36,13 @@ function findClosestEdge(
   return topDist < bottomDist ? "top" : "bottom";
 }
 
-// ---------------------------------------------------------------------------
-// Static / mobile fallback row
-// ---------------------------------------------------------------------------
-
 function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boolean }) {
+  const t = useTranslations("workMenu");
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
   const ariaLabel =
-    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
+    item.kind === "work"
+      ? t("viewWork", { title: item.title })
+      : t("viewCaseStudy", { title: item.title });
 
   return (
     <Link
@@ -71,9 +55,8 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
         <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
           {item.title}
         </span>
-        {/* Kind badge — helps visitors distinguish content types */}
         <span className="text-muted-foreground hidden font-mono text-[10px] tracking-widest uppercase sm:inline">
-          {item.kind === "work" ? "Work" : "Case study"}
+          {item.kind === "work" ? t("work") : t("caseStudy")}
         </span>
       </div>
       <div className="relative ml-auto h-14 max-w-36 min-w-0 flex-1 overflow-hidden rounded-full sm:ml-0 sm:size-14 sm:max-w-none sm:flex-none sm:shrink-0 sm:rounded-md">
@@ -91,19 +74,16 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
   );
 }
 
-// Module-level constants — defined outside the component to keep stable
-// references and satisfy react-hooks/exhaustive-deps.
-const MARQUEE_SPEED = 15; // seconds per content-width cycle
+const MARQUEE_SPEED = 15;
 const ENTER_EASE = { duration: 0.6, ease: "expo.out" };
 
-// ---------------------------------------------------------------------------
-// Desktop marquee item
-// ---------------------------------------------------------------------------
-
 function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProps) {
+  const t = useTranslations("workMenu");
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
   const ariaLabel =
-    item.kind === "work" ? `View work: ${item.title}` : `View case study: ${item.title}`;
+    item.kind === "work"
+      ? t("viewWork", { title: item.title })
+      : t("viewCaseStudy", { title: item.title });
 
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -113,7 +93,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
 
   const [repetitions, setRepetitions] = useState(5);
 
-  // Calculate how many copies of marquee-part are needed to fill the viewport
   const calcRepetitions = useCallback(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector<HTMLElement>(".marquee-part");
@@ -124,7 +103,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     setRepetitions(Math.max(5, needed));
   }, []);
 
-  // Start the looping marquee animation
   const startMarquee = useCallback(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector<HTMLElement>(".marquee-part");
@@ -148,7 +126,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     };
   }, [isDesktopMotion, calcRepetitions]);
 
-  // Re-init marquee when repetitions settle after first calcRepetitions run
   useEffect(() => {
     if (!isDesktopMotion) return;
     const t = setTimeout(startMarquee, 60);
@@ -157,7 +134,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
     };
   }, [isDesktopMotion, repetitions, startMarquee]);
 
-  // Cleanup marquee tween on unmount
   useEffect(() => {
     return () => {
       marqueeAnimRef.current?.kill();
@@ -212,7 +188,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
       className="relative flex-1 overflow-hidden text-center"
       style={{ borderTop: isFirst ? "none" : "1px solid oklch(0 0 0 / 12%)" }}
     >
-      {/* Primary interactive link — the accessible content */}
       <Link
         href={href}
         onMouseEnter={handleMouseEnter}
@@ -226,20 +201,13 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
         >
           {item.title}
         </span>
-        {/* Kind badge — tiny label so visitors can tell formats apart at a glance */}
         <span
           className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase"
           aria-hidden="true"
         >
-          {item.kind === "work" ? "Work" : "Case study"}
+          {item.kind === "work" ? t("work") : t("caseStudy")}
         </span>
       </Link>
-
-      {/*
-       * Marquee overlay — decorative, aria-hidden so screen readers skip it.
-       * Starts translated off-screen (101%) and slides in on mouseenter.
-       * bg-background / text-foreground inverts the palette vs the base row.
-       */}
       <div
         ref={marqueeRef}
         aria-hidden="true"
@@ -258,7 +226,6 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
               >
                 {item.title}
               </span>
-              {/* Thumbnail pill inside the marquee */}
               <div className="relative mx-[2vw] h-[7vh] w-[200px] shrink-0 overflow-hidden rounded-[50px]">
                 <Image
                   src={item.coverImage}
@@ -278,12 +245,8 @@ function FlowingWorkItem({ item, isFirst, isDesktopMotion }: FlowingWorkItemProp
   );
 }
 
-// ---------------------------------------------------------------------------
-// FlowingWorkMenu — exported section
-// ---------------------------------------------------------------------------
-
 export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
-  // Lazy initializer reads media queries once on mount (client-only).
+  const t = useTranslations("workMenu");
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
 
   useEffect(() => {
@@ -306,11 +269,11 @@ export function FlowingWorkMenu({ items }: FlowingWorkMenuProps) {
   return (
     <section
       data-slot="flowing-work-menu"
-      aria-label="Selected work"
+      aria-label={t("sectionLabel")}
       className="bg-background text-foreground relative h-[calc(var(--item-count)*20vh)] min-h-[60vh] md:h-[calc(var(--item-count)*25vh)]"
       style={{ "--item-count": items.length } as React.CSSProperties}
     >
-      <nav className="flex h-full flex-col" aria-label="Selected work">
+      <nav className="flex h-full flex-col" aria-label={t("sectionLabel")}>
         {items.map((item, i) =>
           isDesktopMotion ? (
             <FlowingWorkItem
