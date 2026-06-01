@@ -9,7 +9,6 @@ const CLOSE_DURATION = 0.3;
 const OPEN_DURATION = 0.32;
 /** Minimum time (ms) the curtains stay fully closed so the loader is always seen. */
 const MIN_CLOSED_MS = 700;
-const CURTAIN_COLOR = "#1c2020";
 
 /**
  * Full-screen bars transition for in-site, page-to-page navigation.
@@ -143,15 +142,10 @@ export function PageTransition() {
         pointerEvents: active ? "auto" : "none",
       }}
     >
-      <div
-        ref={topRef}
-        className="absolute inset-x-0 top-0 h-[calc(50vh+1px)]"
-        style={{ backgroundColor: CURTAIN_COLOR }}
-      />
+      <div ref={topRef} className="bg-foreground absolute inset-x-0 top-0 h-[calc(50vh+1px)]" />
       <div
         ref={bottomRef}
-        className="absolute inset-x-0 bottom-0 h-[calc(50vh+1px)]"
-        style={{ backgroundColor: CURTAIN_COLOR }}
+        className="bg-foreground absolute inset-x-0 bottom-0 h-[calc(50vh+1px)]"
       />
       <div
         ref={loaderRef}

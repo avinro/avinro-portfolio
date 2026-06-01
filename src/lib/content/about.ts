@@ -52,7 +52,7 @@ export const aboutContent: AboutContent = {
   hero: {
     portraitSrc: "/images/about.jpg",
     bio: [
-      "I'm Ary — Product Designer working at the intersection of strategy, design, and execution.",
+      "I'm Ary — Product Design Engineer working at the intersection of strategy, design, and execution.",
       "I help teams turn unclear ideas into structured products they can actually ship. My work spans 0→1 products, multi-app ecosystems, and design systems built to last beyond the first release.",
       "I care deeply about the gap between concept and delivery — and I've spent the last several years closing it across different industries, team sizes, and constraints.",
     ],
@@ -63,7 +63,7 @@ export const aboutContent: AboutContent = {
     entries: [
       {
         year: "Nov 2025 – present",
-        role: "Lead Product Designer",
+        role: "Product Design Engineer - Lead",
         company: "helloDojo",
         outcome:
           "Lead the end-to-end UX across a multi-surface ecosystem — customer, driver, vendor, and fleet portals. Built the design system from zero and pair design with AI-assisted front-end using Cursor and Claude to close the gap between Figma and production code.",

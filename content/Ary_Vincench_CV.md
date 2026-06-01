@@ -1,6 +1,6 @@
 # Ary Vincench
 
-**Product Designer**  
+**Product Design Engineer**  
 Strategic UI/UX | Engineering-aware design systems | AI-assisted front-end execution
 Madrid, Spain
 
@@ -11,40 +11,21 @@ Madrid, Spain
 
 ## Professional Profile
 
-Product Designer with 9+ years of experience designing and shipping SaaS and multi-sided platforms.
+Product Design Engineer with 9+ years of experience in design and 5+ years building SaaS and multi-sided platforms from zero to production. I sit at the intersection of product strategy, interaction design, and front-end implementation — defining user journeys, owning design systems end-to-end, and closing the gap between Figma and code using AI-assisted workflows (Cursor, Claude, Codex).
 
-I operate beyond design. I translate business vision into product decisions, define end-to-end experiences across multiple surfaces, and ensure what gets built is coherent, scalable, and production-ready.
+Strong in zero-to-one environments and fast-moving product teams where design and engineering need to move as one.
 
-My role typically sits between product strategy, design, and technical implementation:
-
-– Define product structure, flows, and interaction logic
-
-– Translate business ideas into structured product direction and roadmap
-
-– Own UX/UI across systems, not just screens
-
-– Anticipate edge cases and operational constraints
-
-– Work closely with engineering to close the gap between design and implementation
-
-– Use AI-assisted workflows to accelerate design-to-code execution and catch implementation gaps early
-
-I’m especially effective in zero-to-one and fast-moving environments where clarity, speed, and strong product thinking are critical.
-
-Core areas:
-
-- Product Strategy, UX Architecture, Design Systems, Front-End Execution, AI-Assisted Workflows, Multi-Sided Platforms, SaaS.
-- Strong in zero-to-one and fast-moving environments.
+Core areas: Product Strategy, UX Architecture, Interaction Design, Design Systems, Front-End Execution, AI-Assisted Workflows, Multi-Sided Platforms, SaaS.
 
 ---
 
 ## Work Experience
 
-### helloDojo — Lead Product Designer
+### helloDojo — Product Design Engineer - Lead
 
 **Madrid / Ibiza / Remote · Mar 2026 – Present**
 
-- Product Designer with end-to-end ownership across a multi-product ecosystem (Customer App, Vendor Portal, Driver App, and Fleet Manager).
+- Product Designer Engineer with end-to-end ownership across a multi-product ecosystem (Customer App, Vendor Portal, Driver App, and Fleet Manager).
 
 - I turn business vision into real product by defining user journeys, system logic, and operational flows.
 
@@ -54,7 +35,7 @@ Core areas:
 
 - Work close to implementation using AI-assisted development to reduce the gap between design and code, catch regressions early, and increase delivery speed.
 
-- Operating between strategy, product design, and technical implementation, focused on building clear, scalable experiences that reach production with quality.
+- Took on product-management responsibilities — roadmap, prioritization, and product direction — on top of design and front-end ownership, driving clear, scalable experiences with real business impact.
 
 ####Product Designer
 **Madrid / Ibiza / Remote · Nov 2025 – Mar 2026**
@@ -64,7 +45,7 @@ Core areas:
 - Define core product areas including rides, bookings, availability, payments, and cross-surface workflows.
 - Direct the Design System initiative to improve consistency, scalability, and design-to-development speed.
 - Work close to implementation using AI-assisted front-end workflows to reduce design-code gaps and catch regressions early.
-- Operate between strategy, product design, and technical implementation, focused on building clear, scalable experiences that drive product outcomes.
+- Took on product-management responsibilities (product direction and prioritization) alongside design, focused on building clear, scalable experiences that drive product outcomes.
 
 ### 110 Theory — Senior Product Designer
 

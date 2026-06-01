@@ -15,7 +15,7 @@ describe("Container", () => {
     const html = renderToStaticMarkup(<Container>child</Container>);
     expect(html).toContain('data-slot="container"');
     expect(html).toContain('data-width="default"');
-    expect(html).toContain("max-w-6xl");
+    expect(html).toContain("max-w-[1440px]");
     expect(html).toContain("mx-auto");
   });
 
@@ -23,14 +23,14 @@ describe("Container", () => {
     const html = renderToStaticMarkup(<Container width="narrow">x</Container>);
     expect(html).toContain('data-width="narrow"');
     expect(html).toContain("max-w-prose");
-    expect(html).not.toContain("max-w-6xl");
+    expect(html).not.toContain("max-w-[1440px]");
   });
 
   it("applies width=caseStudy", () => {
     const html = renderToStaticMarkup(<Container width="caseStudy">x</Container>);
     expect(html).toContain('data-width="caseStudy"');
-    expect(html).toContain("max-w-[1420px]");
-    expect(html).not.toContain("max-w-6xl");
+    expect(html).toContain("max-w-[1440px]");
+    expect(html).not.toContain("max-w-prose");
   });
 
   it("applies width=full", () => {

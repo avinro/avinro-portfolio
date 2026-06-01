@@ -145,7 +145,7 @@ export function SiteHeader() {
                   "supports-[backdrop-filter]:backdrop-blur-md supports-[backdrop-filter]:backdrop-saturate-150",
                   "md:supports-[backdrop-filter]:backdrop-blur-xl",
                 ]
-              : "mx-auto mt-0 h-14 max-h-14 min-h-0 w-full max-w-7xl rounded-none border-transparent bg-transparent px-4 sm:px-6 lg:px-8",
+              : "mx-auto mt-0 h-14 max-h-14 min-h-0 w-full max-w-[1440px] rounded-none border-transparent bg-transparent px-4 sm:px-6 lg:px-8",
         )}
       >
         <div className="flex h-14 shrink-0 items-center justify-between">
