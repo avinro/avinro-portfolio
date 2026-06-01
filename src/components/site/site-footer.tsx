@@ -38,7 +38,7 @@ export function SiteFooter() {
       data-curtain-footer
       className="border-background/10 bg-foreground text-background pointer-events-none fixed inset-x-0 bottom-0 z-0 flex h-[calc(100dvh-72px)] flex-col border-t"
     >
-      <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
+      <div className="pointer-events-auto mx-auto flex h-full w-full max-w-[1440px] flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
         <section
           aria-labelledby="footer-cta-title"
           className="flex flex-1 flex-col justify-center gap-8 py-12"

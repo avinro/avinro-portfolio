@@ -219,10 +219,10 @@ function LayoutPrimitivesMatrix() {
           width=narrow (max-w-prose)
         </Container>
         <Container width="default" className="bg-muted rounded-md p-2 text-xs">
-          width=default (max-w-6xl)
+          width=default (max-w-[1440px])
         </Container>
         <Container width="wide" className="bg-muted rounded-md p-2 text-xs">
-          width=wide (max-w-7xl)
+          width=wide (max-w-[1440px])
         </Container>
         <Container width="full" className="bg-muted rounded-md p-2 text-xs">
           width=full (max-w-none)
