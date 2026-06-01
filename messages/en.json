@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteDescription": "Product Designer building real products"
+    "siteDescription": "Product Design Engineer shipping vision into reality"
   },
   "nav": {
     "work": "Work",
@@ -63,19 +63,19 @@
   },
   "about": {
     "title": "About",
-    "pageDescription": "Product Designer working at the intersection of strategy, design, and front-end implementation. Background, experience, tools, and design philosophy.",
+    "pageDescription": "Product Design Engineer working at the intersection of strategy, design, and front-end implementation. Background, experience, tools, and design philosophy.",
     "og": {
-      "title": "Avinro — Product Designer",
-      "description": "Product Designer working at the intersection of strategy, design, and front-end implementation."
+      "title": "Avinro — Product Design Engineer",
+      "description": "Product Design Engineer working at the intersection of strategy, design, and front-end implementation."
     },
     "portraitAria": "Portrait of Ary",
     "portraitAlt": "Ary — portrait",
     "interestsAria": "Interests",
     "interests": ["anime lover", "bad bunny fan", "video games", "crypto enthusiast"],
     "hero": {
-      "headline": "Product Designer.",
+      "headline": "Product Design Engineer.",
       "bio": [
-        "I'm Ary - Product Designer working at the intersection of strategy, design, and execution.",
+        "I'm Ary - Product Design Engineer working at the intersection of strategy, design, and execution.",
         "I help teams turn unclear ideas into structured products they can actually ship. My work spans 0->1 products, multi-app ecosystems, and design systems built to last beyond the first release.",
         "I care deeply about the gap between concept and delivery - and I've spent the last several years closing it across different industries, team sizes, and constraints."
       ]

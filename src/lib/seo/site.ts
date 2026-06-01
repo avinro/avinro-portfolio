@@ -1,7 +1,7 @@
 export const SITE_URL = "https://avinro.com";
 export const SITE_NAME = "Avinro";
 export const OWNER_NAME = "Ary (Avinro)";
-export const OWNER_JOB_TITLE = "Product Designer";
+export const OWNER_JOB_TITLE = "Product Design Engineer";
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/avinro",
