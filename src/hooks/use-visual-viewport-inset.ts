@@ -5,6 +5,13 @@ import { useEffect, useState } from "react";
 export interface VisualViewportState {
   keyboardInset: number;
   viewportHeight: number;
+  /**
+   * Distance the visual viewport top is offset from the layout viewport top.
+   * On iOS Safari this grows when the keyboard opens and the page scrolls the
+   * focused field into view; a `position: fixed` overlay must compensate for it
+   * or it detaches from the visible area and exposes the page behind it.
+   */
+  offsetTop: number;
 }
 
 /**
@@ -15,6 +22,7 @@ export function useVisualViewportInset(enabled: boolean): VisualViewportState {
   const [state, setState] = useState<VisualViewportState>({
     keyboardInset: 0,
     viewportHeight: typeof window !== "undefined" ? window.innerHeight : 0,
+    offsetTop: 0,
   });
 
   useEffect(() => {
@@ -23,7 +31,7 @@ export function useVisualViewportInset(enabled: boolean): VisualViewportState {
     const vv = window.visualViewport;
     if (!vv) {
       const onResize = () => {
-        setState({ keyboardInset: 0, viewportHeight: window.innerHeight });
+        setState({ keyboardInset: 0, viewportHeight: window.innerHeight, offsetTop: 0 });
       };
       onResize();
       window.addEventListener("resize", onResize);
@@ -37,6 +45,7 @@ export function useVisualViewportInset(enabled: boolean): VisualViewportState {
       setState({
         keyboardInset: insetBottom,
         viewportHeight: vv.height,
+        offsetTop: Math.max(0, vv.offsetTop),
       });
     };
 
