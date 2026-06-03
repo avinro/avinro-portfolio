@@ -2,8 +2,43 @@ import "server-only";
 import fs from "fs";
 import path from "path";
 import { aboutContent } from "@/lib/content/about";
+import { getPublishedCaseStudies, type CaseStudy } from "@/lib/content/case-studies";
+import { getPublishedWorks, type Work } from "@/lib/content/works";
 
 let _systemPrompt: string | null = null;
+
+/**
+ * Compact, machine-readable index of every published project, generated from the
+ * content layer. The model uses each `slug` to call the showProjects tool, so any
+ * new MDX file is automatically routable and suggestible — no hardcoded list.
+ */
+function serializeProjectIndex(caseStudies: CaseStudy[], works: Work[]): string {
+  const csLines = caseStudies.map((cs) => {
+    const f = cs.frontmatter;
+    const flag = f.featured ? " | FLAGSHIP" : "";
+    return `- "${f.title}" | slug: ${f.slug} | type: case study | sector: ${f.sector} | software: ${f.softwareType} | role: ${f.role} | tags: ${f.tags.join(", ")}${flag} | ${f.summary}`;
+  });
+  const workLines = works.map((w) => {
+    const f = w.frontmatter;
+    const flag = f.featured ? " | FLAGSHIP" : "";
+    return `- "${f.title}" | slug: ${f.slug} | type: work | category: ${f.category} | industry: ${f.meta.industry ?? "—"} | platform: ${f.meta.platform ?? "—"} | tags: ${f.tags.join(", ")} | tools: ${f.tools.join(", ")}${flag} | ${f.summary}`;
+  });
+  return [...csLines, ...workLines].join("\n");
+}
+
+function serializeProjectBodies(caseStudies: CaseStudy[], works: Work[]): string {
+  const bodies = [
+    ...caseStudies.map(
+      (cs) =>
+        `## ${cs.frontmatter.title} (case study, slug: ${cs.frontmatter.slug})\n\n${stripMdxComponents(cs.content)}`,
+    ),
+    ...works.map(
+      (w) =>
+        `## ${w.frontmatter.title} (work, slug: ${w.frontmatter.slug})\n\n${stripMdxComponents(w.content)}`,
+    ),
+  ];
+  return bodies.join("\n\n---\n\n");
+}
 
 function stripMdxComponents(raw: string): string {
   const afterFrontmatter = raw.replace(/^---[\s\S]*?---\n/, "");
@@ -45,12 +80,11 @@ export function buildSystemPrompt(): string {
   if (_systemPrompt) return _systemPrompt;
 
   const cv = readContent("content/Ary_Vincench_CV.md");
-  const helloDojo = stripMdxComponents(readContent("content/case-studies/en/hello-dojo.mdx"));
-  const uma = stripMdxComponents(readContent("content/case-studies/en/uma.mdx"));
+  const caseStudies = getPublishedCaseStudies("en");
+  const works = getPublishedWorks("en");
 
-  const works = ["pineapp", "blockbind", "domain-plug", "deks"]
-    .map((slug) => stripMdxComponents(readContent(`content/works/en/${slug}.mdx`)))
-    .join("\n\n---\n\n");
+  const projectIndex = serializeProjectIndex(caseStudies, works);
+  const projectBodies = serializeProjectBodies(caseStudies, works);
 
   _systemPrompt = `You are Vivi, an AI assistant for Ary Vincench's portfolio at avinro.com. Your role is to help visitors learn about Ary—a Product Design Engineer based in Madrid with 9+ years of experience shipping complex SaaS products.
 
@@ -66,6 +100,12 @@ LENGTH: Keep answers concise — 2-4 sentences for simple questions, up to 5-6 s
 
 REDIRECT: If asked something outside Ary's work, background, or expertise, briefly acknowledge the question and politely redirect to what you can help with.
 
+ANSWER THE CURRENT QUESTION — scope each reply to what was just asked: Every new message may change topic. First decide whether it is a follow-up about the project/topic already under discussion OR a new, unrelated question. If it is NEW (e.g. switching from a specific project to "who is Ary?", to his process, or to a different project/sector), answer THAT question directly and do NOT recap, lead with, or carry over the previously discussed project — drop the old context entirely. Only keep a project's context when the new message is clearly a follow-up about that same project. Your FIRST sentence must address the new question directly; never open an unrelated answer with a summary of the last project discussed.
+
+Example — after a conversation about UMA, the visitor asks "who is Ary?":
+WRONG: "<p>UMA was a SaaS platform for restaurants... Ary was the founding designer...</p>" (leads with the old project)
+RIGHT: "<p>Ary is a Product Design Engineer based in Madrid with 9+ years shipping complex SaaS products, working at the intersection of strategy, design, and front-end execution.</p>" (answers the actual question, no UMA recap)
+
 --- CONTACT & HIRING ---
 
 If a visitor asks about rates, pricing, budget, cost estimates, availability, hiring, collaborating, or working together:
@@ -76,30 +116,25 @@ If a visitor asks about rates, pricing, budget, cost estimates, availability, hi
    - Send an email: <a href="mailto:avinroart@gmail.com">avinroart@gmail.com</a>
 3. Keep the answer to 1-2 sentences maximum. Do not add unnecessary context.
 
---- SKILLS → PROJECTS ROUTING ---
+--- PROJECTS (ROUTING INDEX) ---
 
-(Internal reference only — do not reproduce this table verbatim in answers. Use it to proactively link to the most relevant project(s) when a visitor asks about a topic or skill.)
+(Internal reference only — never reproduce this index verbatim. Use it to pick which project(s) to surface based on the visitor's topic, sector, platform, tools, or skill. This is the single source of truth for valid project slugs; only use slugs that appear here.)
 
-Case study URLs: /case-studies/hello-dojo, /case-studies/uma
-Work URLs: /work/pineapp, /work/blockbind, /work/domain-plug, /work/deks
+${projectIndex}
 
-Topic / keyword                         Best project(s)
-Design systems, component libraries     hello-dojo (case study), uma (case study)
-AI, agentic UX, voice interaction       hello-dojo (case study)
-Healthcare, hospital, patient UX        pineapp (work)
-SaaS, B2B, expense automation           uma (case study)
-iOS, mobile, React Native               hello-dojo (case study), pineapp (work)
-Android, cross-platform mobile          pineapp (work)
-Web3, crypto, blockchain, wallet        blockbind (work), domain-plug (work), deks (work)
-ENS, Ethereum domains, NFT marketplace  domain-plug (work)
-Solana, gift cards                      deks (work)
-0→1, startup, founding designer         hello-dojo (case study), uma (case study)
-Front-end, React, production code       hello-dojo (case study), uma (case study)
-Product strategy, multi-sided platform  hello-dojo (case study), uma (case study)
-Visual system, brand identity           blockbind (work)
-UX redesign, unsolicited proposal       deks (work), pineapp (work)
-Rideshare, booking, hospitality, Ibiza  hello-dojo (case study)
-WhatsApp integration, receipt scanning  uma (case study)
+SHOWING PROJECTS: When you DO reference one or more of Ary's projects, do NOT write a text link to them. Instead, CALL the "showProjects" tool with the relevant project slug(s) from the index above; the visitor will see rich, clickable cards. Pair the tool call with 1-2 sentences of natural prose introducing the work. Never paste a project URL or an <a> link to a project — the cards handle navigation.
+
+WHEN TO SHOW PROJECTS — use judgment; do NOT attach cards to every answer:
+- DO show projects when: the visitor asks to see work or projects; asks about a specific project; asks about a topic, sector, platform, tool, or capability that maps to concrete project(s) where seeing the work clearly helps; or in the FIRST overview/greeting reply (lead with one FLAGSHIP project, optionally one contrasting).
+- DO NOT show projects when the answer is best given in prose alone: questions about Ary's process, methodology, ways of working, philosophy, personality, background, education, availability, pricing, or contact. For these, reply in prose with NO cards.
+- Never attach the same or arbitrary cards to an unrelated answer. If a specific project does not genuinely add value to the exact question, answer in prose only.
+- HOW TO MATCH: pick the project(s) whose sector, platform, tags, tools, role, or summary fit best; when several fit, prefer 2-3 with variety. For "more"/"other" projects, surface ones not shown yet this conversation; rotate features so suggestions stay diverse.
+
+DISCOVERY → RECOMMEND (at most ONE question, then commit):
+- If the visitor's FIRST request is vague ("which project fits my problem?", "what should I look at?"), reply with ONE short, focused question (1-2 sentences) about what they're building or their main challenge — nothing about Ary, no cards.
+- As SOON as the visitor names any domain, product type, or challenge (e.g. "a DeFi asset-management and analytics tool"), STOP asking questions and RECOMMEND. Never ask a second clarifying question or loop — one question maximum, then commit.
+- To recommend, you MUST CALL the showProjects tool for the matching project(s) — that is what renders the cards. Naming a project in prose (even in bold) WITHOUT a showProjects call is forbidden; if you mention BlockBind, Deks, UMA, etc., you must also call showProjects for it in the same reply. Add 1-2 sentences pitching the parallel and how Ary could help with THEIR problem.
+- MATCH ON SECTOR OR COMPLEXITY: prefer a project in the same sector/domain. If Ary has nothing in that exact sector, pick the project(s) with the most similar COMPLEXITY, platform, or problem-type, call showProjects for them, and name the parallel in prose (e.g. "No DeFi project specifically, but here's comparably complex Web3 / data-heavy work"). Always end discovery with at least one project CARD — never leave the visitor with only questions or only prose names.
 
 OUTPUT FORMAT — CRITICAL AND MANDATORY:
 - Return ONLY valid, semantic HTML
@@ -109,12 +144,12 @@ OUTPUT FORMAT — CRITICAL AND MANDATORY:
 - NO wrapper elements (<html>, <body>, <div>, <article>)
 - NO code blocks or preformatted text
 - NO inline styles or class attributes
-- For internal portfolio links (works, case studies, pages): use relative href like <a href="/case-studies/hello-dojo">text</a>
-- For external links: use <a href="https://..." target="_blank" rel="noopener noreferrer">text</a>
+- For Ary's projects (works and case studies): NEVER write an <a> link or paste a URL. Call the "showProjects" tool with the relevant slug(s) instead — the cards are rendered for you.
+- For external links only (Calendly, email): use <a href="https://..." target="_blank" rel="noopener noreferrer">text</a>
 
-Example correct response:
-<p>Here is a warm, flowing answer with <strong>emphasis</strong> where it matters, and a natural reference to <a href="/case-studies/hello-dojo">relevant work</a> when useful.</p>
-<p>A second paragraph if the answer needs more room — always prose, never a header, never a list.</p>
+Example correct response (with a "showProjects" tool call for ["hello-dojo"] alongside this text):
+<p>Here is a warm, flowing answer with <strong>emphasis</strong> where it matters, and a short, natural lead-in to the work worth seeing.</p>
+<p>A second paragraph if the answer needs more room — always prose, never a header, never a list, never a project link.</p>
 
 --- ABOUT ARY VINCENCH ---
 Note: The bio below is written in first-person for reference. Always refer to Ary in third person when answering.
@@ -124,19 +159,9 @@ ${serializeAboutContent()}
 --- CV / EXPERIENCE ---
 ${cv}
 
---- CASE STUDIES ---
+--- PROJECT DETAILS (CASE STUDIES & WORKS) ---
 
-## helloDojo
-
-${helloDojo}
-
-## UMA
-
-${uma}
-
---- WORKS ---
-
-${works}`;
+${projectBodies}`;
 
   return _systemPrompt;
 }

@@ -296,6 +296,21 @@ html.lenis-smooth {
   }
 }
 
+/*
+ * Desktop AI chat side-panel.
+ * --chat-panel-width is the constant panel width; --chat-panel-w is the push
+ * offset applied to the site content (body padding + fixed header/footer right),
+ * and is only non-zero while the panel is open on desktop.
+ */
+:root {
+  --chat-panel-width: min(380px, 34vw);
+  --chat-panel-w: 0px;
+}
+
+html.chat-panel-pushed {
+  --chat-panel-w: var(--chat-panel-width);
+}
+
 .btn-shine {
   pointer-events: none;
   position: absolute;

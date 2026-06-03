@@ -10,6 +10,16 @@ interface RelatedRailProps {
   className?: string;
 }
 
+/**
+ * In the compact "Explore more" rail, drop the "— Subtitle" suffix
+ * (e.g. "helloDojo — Customer App" → "helloDojo") so titles stay short and
+ * don't overflow when the desktop chat panel shrinks the page.
+ */
+function railTitle(title: string): string {
+  const main = title.split("—")[0]?.trim();
+  return main && main.length > 0 ? main : title;
+}
+
 export async function RelatedRail({ items, className }: RelatedRailProps) {
   if (items.length === 0) return null;
 
@@ -35,23 +45,23 @@ export async function RelatedRail({ items, className }: RelatedRailProps) {
               data-related-card-source="case_study_right_rail"
               aria-label={`${item.eyebrow}: ${item.title}`}
               className={cn(
-                "group -mx-2 flex items-start gap-3 rounded-lg p-2",
+                "group -mx-2 flex items-center gap-3 rounded-lg p-2",
                 "transition-colors duration-150",
                 "hover:bg-muted/40 focus-visible:bg-muted/40",
                 "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
               )}
             >
-              <div className="bg-muted relative size-14 shrink-0 overflow-hidden rounded-md">
+              <div className="bg-muted relative size-11 shrink-0 overflow-hidden rounded-md">
                 <Image
                   src={item.coverImage}
                   alt=""
                   fill
-                  sizes="56px"
+                  sizes="44px"
                   className="object-cover"
                   aria-hidden
                 />
               </div>
-              <div className="flex min-w-0 flex-col gap-0.5 pt-0.5">
+              <div className="flex min-w-0 flex-col gap-0.5">
                 <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
                   {item.eyebrow}
                 </span>
@@ -61,7 +71,7 @@ export async function RelatedRail({ items, className }: RelatedRailProps) {
                     "transition-transform duration-150 group-hover:translate-x-px",
                   )}
                 >
-                  {item.title}
+                  {railTitle(item.title)}
                 </span>
               </div>
             </Link>

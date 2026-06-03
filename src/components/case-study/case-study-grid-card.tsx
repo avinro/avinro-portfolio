@@ -8,11 +8,21 @@ import type { CaseStudy } from "@/lib/content/case-studies";
 interface CaseStudyGridCardProps {
   cs: CaseStudy;
   className?: string;
+  /** Keep the overlay always visible (mobile look) instead of revealing on hover. */
+  eager?: boolean;
 }
 
 const CARD_SIZES = "(min-width: 768px) 50vw, 100vw";
 
-function CardOverlay({ title, badges }: { title: string; badges: readonly string[] }) {
+function CardOverlay({
+  title,
+  badges,
+  eager,
+}: {
+  title: string;
+  badges: readonly string[];
+  eager?: boolean;
+}) {
   return (
     <>
       <div
@@ -20,8 +30,8 @@ function CardOverlay({ title, badges }: { title: string; badges: readonly string
         className={cn(
           "absolute inset-0",
           "opacity-100",
-          "md:opacity-0 md:transition-opacity md:duration-300",
-          "md:group-hover:opacity-100 md:group-focus-visible:opacity-100",
+          !eager && "md:opacity-0 md:transition-opacity md:duration-300",
+          !eager && "md:group-hover:opacity-100 md:group-focus-visible:opacity-100",
         )}
         style={{
           background:
@@ -32,10 +42,10 @@ function CardOverlay({ title, badges }: { title: string; badges: readonly string
         className={cn(
           "absolute bottom-0 left-0 z-10 flex flex-col gap-2 p-4 sm:p-5",
           "translate-y-0 opacity-100",
-          "md:translate-y-2 md:opacity-0",
-          "md:transition-all md:duration-300 md:ease-out",
-          "md:group-hover:translate-y-0 md:group-hover:opacity-100",
-          "md:group-focus-visible:translate-y-0 md:group-focus-visible:opacity-100",
+          !eager && "md:translate-y-2 md:opacity-0",
+          !eager && "md:transition-all md:duration-300 md:ease-out",
+          !eager && "md:group-hover:translate-y-0 md:group-hover:opacity-100",
+          !eager && "md:group-focus-visible:translate-y-0 md:group-focus-visible:opacity-100",
         )}
       >
         <h3 className="font-display text-lg font-semibold tracking-tight text-white sm:text-xl">
@@ -57,7 +67,7 @@ function CardOverlay({ title, badges }: { title: string; badges: readonly string
   );
 }
 
-export function CaseStudyGridCard({ cs, className }: CaseStudyGridCardProps) {
+export function CaseStudyGridCard({ cs, className, eager }: CaseStudyGridCardProps) {
   const { frontmatter } = cs;
   const badges = [frontmatter.sector, frontmatter.softwareType, frontmatter.role] as const;
   const cardStyle = { aspectRatio: "16/9" };
@@ -83,7 +93,7 @@ export function CaseStudyGridCard({ cs, className }: CaseStudyGridCardProps) {
           className="bg-muted w-full rounded-xl"
           style={cardStyle}
         >
-          <CardOverlay title={frontmatter.title} badges={badges} />
+          <CardOverlay title={frontmatter.title} badges={badges} eager={eager} />
         </PixelTransition>
       ) : (
         <div className="bg-muted relative w-full overflow-hidden rounded-xl" style={cardStyle}>
@@ -95,7 +105,7 @@ export function CaseStudyGridCard({ cs, className }: CaseStudyGridCardProps) {
             priority={frontmatter.order === 1}
             className="object-cover"
           />
-          <CardOverlay title={frontmatter.title} badges={badges} />
+          <CardOverlay title={frontmatter.title} badges={badges} eager={eager} />
         </div>
       )}
     </Link>

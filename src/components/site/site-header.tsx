@@ -110,7 +110,13 @@ export function SiteHeader() {
   }, [isMenuOpen]);
 
   return (
-    <header className={cn("fixed inset-x-0 top-0", isMenuOpen ? "z-50" : "z-40")}>
+    <header
+      className={cn(
+        "fixed top-0 right-[var(--chat-panel-w)] left-0",
+        "transition-[right] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none",
+        isMenuOpen ? "z-50" : "z-40",
+      )}
+    >
       <a
         href="#main-content"
         className="focus-ring bg-primary text-primary-foreground absolute top-4 left-4 z-50 -translate-y-16 rounded-md px-4 py-2 text-sm font-medium transition-transform focus:translate-y-0"
