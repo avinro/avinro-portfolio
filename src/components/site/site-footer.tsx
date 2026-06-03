@@ -36,7 +36,7 @@ export function SiteFooter() {
   return (
     <footer
       data-curtain-footer
-      className="border-background/10 bg-foreground text-background pointer-events-none fixed inset-x-0 bottom-0 z-0 flex h-[calc(100dvh-72px)] flex-col border-t"
+      className="border-background/10 bg-foreground text-background pointer-events-none fixed right-[var(--chat-panel-w)] bottom-0 left-0 z-0 flex h-[calc(100dvh-72px)] flex-col border-t transition-[right] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
     >
       <div className="pointer-events-auto mx-auto flex h-full w-full max-w-[1440px] flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
         <section

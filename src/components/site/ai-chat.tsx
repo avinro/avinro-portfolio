@@ -1,29 +1,25 @@
 "use client";
 
-import {
-  useState,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  memo,
-  forwardRef,
-  useMemo,
-} from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, memo, forwardRef } from "react";
 import DOMPurify from "dompurify";
-import { useTranslations } from "next-intl";
-import { BotMessageSquare, ArrowUp, Square, AlertCircle } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { BotMessageSquare, ArrowUp, Square, AlertCircle, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/site/lenis-provider";
+import { useChatPanel } from "@/components/site/chat-panel-context";
+import { WorkGalleryCard } from "@/components/work/work-gallery-card";
+import { CaseStudyGridCard } from "@/components/case-study/case-study-grid-card";
+import { localizeWorkCategory } from "@/lib/content/work-category";
+import type { WorkFrontmatter } from "@/lib/content/works";
+import type { CaseStudyFrontmatter } from "@/lib/content/case-studies";
 import { track } from "@/lib/analytics/events";
 import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 import { ViviThinkingIndicator } from "@/components/site/vivi-thinking-indicator";
@@ -41,9 +37,28 @@ function sanitizeHtml(html: string): string {
   });
 }
 
+type ChatCard =
+  | { type: "work"; frontmatter: WorkFrontmatter }
+  | { type: "case-study"; frontmatter: CaseStudyFrontmatter };
+
+interface ChatApiResponse {
+  html: string;
+  cards: ChatCard[];
+}
+
+// The listing cards (WorkGalleryCard / CaseStudyGridCard) only read `.frontmatter`,
+// so a placeholder reading time keeps the Work / CaseStudy prop shape satisfied.
+const EMPTY_READING_TIME = { text: "", minutes: 0, words: 0 };
+
 type ChatMessage =
   | { id: string; role: "user"; content: string }
-  | { id: string; role: "assistant"; content: string; assistantHtml: string };
+  | {
+      id: string;
+      role: "assistant";
+      content: string;
+      assistantHtml: string;
+      cards: ChatCard[];
+    };
 
 const UserBubble = memo(function UserBubble({
   message,
@@ -59,41 +74,73 @@ const UserBubble = memo(function UserBubble({
   );
 });
 
+const ProjectCardList = memo(function ProjectCardList({
+  cards,
+  onNavigate,
+}: {
+  cards: ChatCard[];
+  onNavigate?: () => void;
+}) {
+  const tWork = useTranslations("work");
+  if (cards.length === 0) return null;
+  return (
+    // onNavigate (mobile only) closes the full-screen sheet once a card is tapped.
+    <div
+      className="mt-3 grid gap-3"
+      onClick={onNavigate}
+      role={onNavigate ? "presentation" : undefined}
+    >
+      {cards.map((card) =>
+        card.type === "work" ? (
+          <WorkGalleryCard
+            key={`work-${card.frontmatter.slug}`}
+            work={{ frontmatter: card.frontmatter, content: "", readingTime: EMPTY_READING_TIME }}
+            categoryLabel={localizeWorkCategory(card.frontmatter.category, tWork)}
+            eager
+          />
+        ) : (
+          <CaseStudyGridCard
+            key={`cs-${card.frontmatter.slug}`}
+            cs={{ frontmatter: card.frontmatter, content: "", readingTime: EMPTY_READING_TIME }}
+            eager
+          />
+        ),
+      )}
+    </div>
+  );
+});
+
 const AssistantBubble = memo(function AssistantBubble({
   message,
+  onCardNavigate,
 }: {
   message: Extract<ChatMessage, { role: "assistant" }>;
+  onCardNavigate?: () => void;
 }) {
   return (
-    <div className="prose-chat mr-auto max-w-[95%]">
-      <div dangerouslySetInnerHTML={{ __html: message.assistantHtml }} />
+    <div className="mr-auto max-w-[95%]">
+      {message.assistantHtml.trim() && (
+        <div className="prose-chat" dangerouslySetInnerHTML={{ __html: message.assistantHtml }} />
+      )}
+      <ProjectCardList cards={message.cards} onNavigate={onCardNavigate} />
     </div>
   );
 });
 
-const StreamingAssistant = memo(function StreamingAssistant({ content }: { content: string }) {
-  const html = useMemo(() => sanitizeHtml(content), [content]);
-  return (
-    <div className="prose-chat mr-auto max-w-[95%]">
-      <div dangerouslySetInnerHTML={{ __html: html }} />
-      <span
-        className="text-foreground/80 animate-pulse motion-reduce:animate-none"
-        aria-hidden="true"
-      >
-        ▌
-      </span>
-    </div>
-  );
-});
-
-const MessageList = memo(function MessageList({ messages }: { messages: ChatMessage[] }) {
+const MessageList = memo(function MessageList({
+  messages,
+  onCardNavigate,
+}: {
+  messages: ChatMessage[];
+  onCardNavigate?: () => void;
+}) {
   return (
     <>
       {messages.map((message) =>
         message.role === "user" ? (
           <UserBubble key={message.id} message={message} />
         ) : (
-          <AssistantBubble key={message.id} message={message} />
+          <AssistantBubble key={message.id} message={message} onCardNavigate={onCardNavigate} />
         ),
       )}
     </>
@@ -119,30 +166,36 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   );
 }
 
-interface SuggestionChipsProps {
-  onSelect: (text: string) => void;
-}
-
-function SuggestionChips({ onSelect }: SuggestionChipsProps) {
+function EmptyState({ onSelect }: { onSelect: (text: string) => void }) {
   const t = useTranslations("aiChat");
   const chips = t.raw("suggestions") as string[];
   return (
-    <div className="space-y-2">
-      {chips.map((chip) => (
-        <button
-          key={chip}
-          onClick={() => {
-            onSelect(chip);
-          }}
-          type="button"
-          className={cn(
-            "border-border bg-background/50 hover:bg-muted block w-full touch-manipulation rounded-lg border",
-            "min-h-11 px-3 py-2 text-left text-sm transition-colors",
-          )}
-        >
-          {chip}
-        </button>
-      ))}
+    <div className="flex h-full flex-col items-center justify-center gap-8">
+      <div className="text-center">
+        <BotMessageSquare className="text-muted-foreground mx-auto mb-3 size-8" aria-hidden />
+        <h3 className="font-display mb-2 text-xl font-semibold tracking-tight">
+          {t("greetingTitle")}
+        </h3>
+        <p className="text-muted-foreground text-sm">{t("greetingSubtitle")}</p>
+      </div>
+
+      <div className="w-full max-w-xs space-y-2">
+        {chips.map((chip) => (
+          <button
+            key={chip}
+            onClick={() => {
+              onSelect(chip);
+            }}
+            type="button"
+            className={cn(
+              "border-border bg-background/50 hover:bg-muted block w-full touch-manipulation rounded-lg border",
+              "min-h-11 px-3 py-2 text-left text-sm transition-colors",
+            )}
+          >
+            {chip}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -204,7 +257,8 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
         rows={1}
         className={cn(
           "border-border bg-muted min-h-11 flex-1 resize-none rounded-xl border",
-          "px-3.5 py-2.5 font-sans text-sm",
+          // text-base (16px) on mobile prevents iOS auto-zoom on focus; 14px on desktop.
+          "px-3.5 py-2.5 font-sans text-base md:text-sm",
           "placeholder:text-muted-foreground",
           "focus:ring-ring focus:ring-2 focus:outline-none",
           "max-h-[120px] overflow-y-auto",
@@ -246,13 +300,94 @@ const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(function ChatI
 
 const MOBILE_MAX_BREAKPOINT = 767.5;
 
+interface ChatBodyProps {
+  messages: ChatMessage[];
+  isLoading: boolean;
+  streamingActive: boolean;
+  error: string | null;
+  input: string;
+  onInputChange: (value: string) => void;
+  onSubmit: (e: React.SyntheticEvent) => void;
+  onStop: () => void;
+  onRetry: () => void;
+  onSelectSuggestion: (text: string) => void;
+  onCardNavigate?: () => void;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  onScroll: () => void;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+  footerPaddingBottom: string;
+}
+
+/** Shared conversation log + input. Each shell (sheet / panel) supplies its own header. */
+function ChatBody({
+  messages,
+  isLoading,
+  streamingActive,
+  error,
+  input,
+  onInputChange,
+  onSubmit,
+  onStop,
+  onRetry,
+  onSelectSuggestion,
+  onCardNavigate,
+  scrollRef,
+  onScroll,
+  textareaRef,
+  footerPaddingBottom,
+}: ChatBodyProps) {
+  const t = useTranslations("aiChat");
+
+  return (
+    <>
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        role="log"
+        aria-label={t("conversationAria")}
+        aria-busy={isLoading}
+        // Lenis hijacks wheel/touch globally on desktop; this opts the chat scroll
+        // region out so it scrolls natively instead of moving the page behind it.
+        data-lenis-prevent
+        className="bg-muted/70 min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto overscroll-y-contain px-4 py-4 dark:bg-black/40"
+      >
+        {messages.length === 0 && !streamingActive && !isLoading && (
+          <EmptyState onSelect={onSelectSuggestion} />
+        )}
+
+        <MessageList messages={messages} onCardNavigate={onCardNavigate} />
+
+        {isLoading && <ViviThinkingIndicator />}
+
+        {error && <ErrorState onRetry={onRetry} />}
+      </div>
+
+      <div
+        className="bg-muted/70 shrink-0 px-4 pt-4 dark:bg-black/40"
+        style={{ paddingBottom: footerPaddingBottom }}
+      >
+        <ChatInput
+          ref={textareaRef}
+          value={input}
+          onChange={onInputChange}
+          onSubmit={onSubmit}
+          disabled={isLoading}
+          isLoading={isLoading}
+          onStop={onStop}
+        />
+      </div>
+    </>
+  );
+}
+
 export function AiChat() {
   const t = useTranslations("aiChat");
-  const [open, setOpen] = useState(false);
+  const locale = useLocale();
+  const { open, setOpen, toggle } = useChatPanel();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [streamingContent, setStreamingContent] = useState("");
+  const [streamingActive, setStreamingActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
 
@@ -260,6 +395,9 @@ export function AiChat() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const lastFailedMessagesRef = useRef<ChatMessage[] | null>(null);
+  // Project slugs already shown as cards this conversation — sent to the API so
+  // the model favors new projects, and never re-rendered as a duplicate card.
+  const shownCardSlugsRef = useRef<Set<string>>(new Set());
   const lenis = useLenis();
   const { scrollRef, onScroll, markForceStick, scrollToBottomIfNeeded } = useStickToBottom();
   const { keyboardInset, viewportHeight } = useVisualViewportInset(open && isMobileViewport);
@@ -277,92 +415,76 @@ export function AiChat() {
     };
   }, []);
 
-  const sendWithMessages = useCallback(async (nextMessages: ChatMessage[]): Promise<void> => {
-    if (nextMessages.length === 0) return;
-    if (nextMessages[nextMessages.length - 1]?.role !== "user") return;
+  const sendWithMessages = useCallback(
+    async (nextMessages: ChatMessage[]): Promise<void> => {
+      if (nextMessages.length === 0) return;
+      if (nextMessages[nextMessages.length - 1]?.role !== "user") return;
 
-    setStreamingContent("");
-    setError(null);
-    setIsLoading(true);
-    lastFailedMessagesRef.current = null;
+      setStreamingActive(true);
+      setError(null);
+      setIsLoading(true);
+      lastFailedMessagesRef.current = null;
 
-    const controller = new AbortController();
-    abortRef.current = controller;
+      const controller = new AbortController();
+      abortRef.current = controller;
 
-    let accumulated = "";
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+            locale,
+            shownSlugs: Array.from(shownCardSlugsRef.current),
+          }),
+          signal: controller.signal,
+        });
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
-        }),
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          response.status === 403
-            ? "AI is disabled"
-            : response.status === 500
-              ? "Server error"
-              : "Failed to get response",
-        );
-      }
-
-      if (!response.body) throw new Error("No response body");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      while (!done) {
-        const { done: isDone, value } = await reader.read();
-        done = isDone;
-        if (value) {
-          accumulated += decoder.decode(value, { stream: true });
-          setStreamingContent(accumulated);
+        if (!response.ok) {
+          throw new Error(
+            response.status === 403
+              ? "AI is disabled"
+              : response.status === 500
+                ? "Server error"
+                : "Failed to get response",
+          );
         }
-      }
 
-      if (!accumulated.trim()) {
-        throw new Error(
-          "Received an empty reply. If this persists, verify Gemini API credentials for production deployments.",
-        );
-      }
+        const data = (await response.json()) as ChatApiResponse;
+        const html = typeof data.html === "string" ? data.html : "";
+        const cards = Array.isArray(data.cards) ? data.cards : [];
 
-      const assistant: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: accumulated,
-        assistantHtml: sanitizeHtml(accumulated),
-      };
-      setMessages([...nextMessages, assistant]);
-      setStreamingContent("");
-      track({ name: "ai_chat_message_sent", props: { messageCount: nextMessages.length + 1 } });
-    } catch (err) {
-      const e = err as Error;
-      if (e.name === "AbortError") {
-        if (accumulated.trim().length > 0) {
-          const assistant: ChatMessage = {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: accumulated,
-            assistantHtml: sanitizeHtml(accumulated),
-          };
-          setMessages([...nextMessages, assistant]);
+        // A reply with no prose but with project cards is still valid.
+        if (!html.trim() && cards.length === 0) {
+          throw new Error(
+            "Received an empty reply. If this persists, verify Gemini API credentials for production deployments.",
+          );
         }
-        setStreamingContent("");
-      } else {
-        setError(e.message || "Failed to get response");
-        lastFailedMessagesRef.current = nextMessages;
-        setStreamingContent("");
+
+        const assistant: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: html,
+          assistantHtml: sanitizeHtml(html),
+          cards,
+        };
+        cards.forEach((card) => shownCardSlugsRef.current.add(card.frontmatter.slug));
+        setMessages([...nextMessages, assistant]);
+        track({ name: "ai_chat_message_sent", props: { messageCount: nextMessages.length + 1 } });
+      } catch (err) {
+        const e = err as Error;
+        if (e.name !== "AbortError") {
+          setError(e.message || "Failed to get response");
+          lastFailedMessagesRef.current = nextMessages;
+        }
+      } finally {
+        setStreamingActive(false);
+        setIsLoading(false);
+        abortRef.current = null;
       }
-    } finally {
-      setIsLoading(false);
-      abortRef.current = null;
-    }
-  }, []);
+    },
+    [locale],
+  );
 
   const sendMessage = useCallback(
     (text: string) => {
@@ -389,18 +511,47 @@ export function AiChat() {
     if (!open) return;
     const instant = isLoading;
     scrollToBottomIfNeeded({ instant });
-  }, [open, messages, streamingContent, isLoading, scrollToBottomIfNeeded]);
+  }, [open, messages, isLoading, scrollToBottomIfNeeded]);
 
+  // On mobile the sheet locks the page; on the desktop push-panel the shrunk
+  // site content stays scrollable, so Lenis must keep running.
   useEffect(() => {
-    if (!open || !lenis) return;
+    if (!open || !lenis || !isMobileViewport) return;
     lenis.stop();
     return () => {
       lenis.start();
       scheduleRefreshLenisBounds(lenis);
     };
-  }, [open, lenis]);
+  }, [open, lenis, isMobileViewport]);
 
-  const handleOpenChange = (newOpen: boolean): void => {
+  // Escape closes the desktop panel (the mobile sheet handles Escape itself).
+  useEffect(() => {
+    if (!open || isMobileViewport) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, isMobileViewport, setOpen]);
+
+  // Focus the input when the desktop panel opens; restore focus to the FAB on close.
+  const prevOpenRef = useRef(open);
+  useEffect(() => {
+    if (isMobileViewport) return;
+    const wasOpen = prevOpenRef.current;
+    prevOpenRef.current = open;
+    if (open && !wasOpen) {
+      window.setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 300);
+    } else if (!open && wasOpen) {
+      fabRef.current?.focus();
+    }
+  }, [open, isMobileViewport]);
+
+  const handleSheetOpenChange = (newOpen: boolean): void => {
     if (!newOpen) {
       document.body.style.removeProperty("pointer-events");
     } else {
@@ -408,6 +559,17 @@ export function AiChat() {
       track({ name: "ai_chat_open", props: {} });
     }
     setOpen(newOpen);
+  };
+
+  const handleToggle = (): void => {
+    const next = !open;
+    if (next) {
+      markForceStick();
+      track({ name: "ai_chat_open", props: {} });
+    } else {
+      document.body.style.removeProperty("pointer-events");
+    }
+    toggle();
   };
 
   const handleSubmit = (e: React.SyntheticEvent): void => {
@@ -433,116 +595,128 @@ export function AiChat() {
       : undefined;
 
   const footerPaddingBottom = `max(env(safe-area-inset-bottom), ${String(keyboardInset)}px, 1rem)`;
+  const desktopFooterPaddingBottom = "max(env(safe-area-inset-bottom), 1.5rem)";
+
+  const closeCard = isMobileViewport
+    ? () => {
+        setOpen(false);
+      }
+    : undefined;
+
+  const chatBody = (paddingBottom: string) => (
+    <ChatBody
+      messages={messages}
+      isLoading={isLoading}
+      streamingActive={streamingActive}
+      error={error}
+      input={input}
+      onInputChange={setInput}
+      onSubmit={handleSubmit}
+      onStop={handleStop}
+      onRetry={handleRetry}
+      onSelectSuggestion={sendMessage}
+      onCardNavigate={closeCard}
+      scrollRef={scrollRef}
+      onScroll={onScroll}
+      textareaRef={textareaRef}
+      footerPaddingBottom={paddingBottom}
+    />
+  );
 
   return (
-    <Sheet open={open} onOpenChange={handleOpenChange}>
+    <>
       <Tooltip>
         <TooltipTrigger asChild>
-          <SheetTrigger asChild>
-            <button
-              ref={fabRef}
-              className={cn(
-                "fixed z-[45]",
-                "right-4 bottom-8",
-                "md:right-6",
-                "bg-primary text-primary-foreground",
-                "flex size-14 items-center justify-center rounded-full",
-                "transition-all duration-200",
-                "hover:scale-110 hover:shadow-lg motion-reduce:hover:scale-100 motion-reduce:hover:shadow-md",
-                "active:scale-95 motion-reduce:active:scale-100",
-                "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-                "touch-manipulation select-none",
-              )}
-              aria-haspopup="dialog"
-              aria-label={t("triggerAria")}
-              type="button"
-            >
-              {!open && (
-                <span
-                  className="bg-primary/40 pulse-short absolute inset-0 rounded-full motion-reduce:hidden"
-                  aria-hidden
-                />
-              )}
+          <button
+            ref={fabRef}
+            onClick={handleToggle}
+            className={cn(
+              // Below the mobile sheet (z-50) so it hides behind it; above the
+              // desktop push-panel (z-50) so the close affordance stays clickable.
+              "fixed z-40 md:z-[60]",
+              "right-4 bottom-8",
+              "md:right-6",
+              open && "md:right-[calc(var(--chat-panel-w)+1.5rem)]",
+              "bg-primary text-primary-foreground",
+              "flex size-14 items-center justify-center rounded-full",
+              "transition-all duration-300",
+              "hover:scale-110 hover:shadow-lg motion-reduce:hover:scale-100 motion-reduce:hover:shadow-md",
+              "active:scale-95 motion-reduce:active:scale-100",
+              "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+              "touch-manipulation select-none",
+            )}
+            aria-haspopup={isMobileViewport ? "dialog" : undefined}
+            aria-expanded={open}
+            aria-label={open ? t("closeAria") : t("triggerAria")}
+            type="button"
+          >
+            {!open && (
+              <span
+                className="bg-primary/40 pulse-short absolute inset-0 rounded-full motion-reduce:hidden"
+                aria-hidden
+              />
+            )}
+            {open ? (
+              <X className="relative size-6" aria-hidden />
+            ) : (
               <BotMessageSquare className="relative size-6" aria-hidden />
-            </button>
-          </SheetTrigger>
+            )}
+          </button>
         </TooltipTrigger>
-        <TooltipContent side="top" sideOffset={4} align="end" className="max-w-xs">
-          {t("tooltip")}
-        </TooltipContent>
+        {!open && (
+          <TooltipContent side="top" sideOffset={4} align="end" className="max-w-xs">
+            {t("tooltip")}
+          </TooltipContent>
+        )}
       </Tooltip>
 
-      <SheetContent
-        variant="chat"
-        className="flex flex-col"
-        style={sheetMobileStyle}
-        onOpenAutoFocus={(e) => {
-          e.preventDefault();
-          window.setTimeout(() => {
-            textareaRef.current?.focus();
-          }, 300);
-        }}
-        onCloseAutoFocus={(e) => {
-          e.preventDefault();
-          fabRef.current?.focus();
-        }}
-      >
-        <SheetHeader
+      {isMobileViewport ? (
+        <Sheet open={open} onOpenChange={handleSheetOpenChange}>
+          <SheetContent
+            variant="chat"
+            className="flex flex-col"
+            style={sheetMobileStyle}
+            onOpenAutoFocus={(e) => {
+              e.preventDefault();
+              window.setTimeout(() => {
+                textareaRef.current?.focus();
+              }, 300);
+            }}
+            onCloseAutoFocus={(e) => {
+              e.preventDefault();
+              fabRef.current?.focus();
+            }}
+          >
+            <SheetHeader
+              className={cn(
+                "mt-0 shrink-0 gap-0 px-4 pr-14 pb-4 sm:px-6 sm:pb-6",
+                compactHeader && "pb-2",
+              )}
+              style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
+            >
+              <SheetTitle className={cn(compactHeader && "text-xl sm:text-2xl")}>
+                {t("sheetTitle")}
+              </SheetTitle>
+              {!compactHeader && <SheetDescription>{t("sheetDescription")}</SheetDescription>}
+            </SheetHeader>
+
+            {chatBody(footerPaddingBottom)}
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <aside
+          aria-label={t("panelAria")}
+          inert={!open}
           className={cn(
-            "mt-0 shrink-0 gap-0 px-4 pr-14 pb-4 sm:px-6 sm:pb-6",
-            compactHeader && "pb-2",
+            "bg-background fixed top-0 right-0 z-50 flex h-dvh w-[var(--chat-panel-width)] flex-col",
+            "border-border border-l",
+            "transition-transform duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none",
+            open ? "translate-x-0" : "pointer-events-none translate-x-full",
           )}
-          style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
         >
-          <SheetTitle className={cn(compactHeader && "text-xl sm:text-2xl")}>
-            {t("sheetTitle")}
-          </SheetTitle>
-          {!compactHeader && <SheetDescription>{t("sheetDescription")}</SheetDescription>}
-        </SheetHeader>
-
-        <div
-          ref={scrollRef}
-          onScroll={onScroll}
-          role="log"
-          aria-label={t("conversationAria")}
-          aria-busy={isLoading}
-          className="bg-muted/70 min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto overscroll-y-contain px-4 py-4 sm:px-6 dark:bg-black/40"
-        >
-          {messages.length === 0 && !streamingContent && !isLoading && (
-            <SuggestionChips
-              onSelect={(text) => {
-                sendMessage(text);
-              }}
-            />
-          )}
-
-          <MessageList messages={messages} />
-
-          {isLoading &&
-            (streamingContent ? (
-              <StreamingAssistant content={streamingContent} />
-            ) : (
-              <ViviThinkingIndicator />
-            ))}
-
-          {error && <ErrorState onRetry={handleRetry} />}
-        </div>
-
-        <div
-          className="bg-muted/70 shrink-0 px-4 sm:px-6 dark:bg-black/40"
-          style={{ paddingBottom: footerPaddingBottom }}
-        >
-          <ChatInput
-            ref={textareaRef}
-            value={input}
-            onChange={setInput}
-            onSubmit={handleSubmit}
-            disabled={isLoading}
-            isLoading={isLoading}
-            onStop={handleStop}
-          />
-        </div>
-      </SheetContent>
-    </Sheet>
+          {chatBody(desktopFooterPaddingBottom)}
+        </aside>
+      )}
+    </>
   );
 }

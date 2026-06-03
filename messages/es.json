@@ -212,15 +212,19 @@
   },
   "aiChat": {
     "triggerAria": "Chatea con Vivi sobre el trabajo de Ary",
+    "closeAria": "Cerrar chat",
+    "panelAria": "Chatea con Vivi",
+    "greetingTitle": "Hola, soy Vivi",
+    "greetingSubtitle": "Pregunta sobre el trabajo, la experiencia y las skills de diseño de Ary.",
     "tooltip": "Hola, soy Vivi, la asistente de Ary. Puedes preguntarme lo que quieras sobre su trabajo y experiencia.",
     "sheetTitle": "Chatea con Vivi",
     "sheetDescription": "Pregunta sobre el trabajo, la experiencia y la especialidad en diseño de Ary.",
     "conversationAria": "Conversación con Vivi",
     "suggestions": [
-      "¿Cuáles son las mayores fortalezas de diseño de Ary?",
-      "Cuéntame sobre el caso de estudio de helloDojo",
-      "¿Qué experiencia tiene Ary con sistemas de diseño?",
-      "¿Cómo es el proceso de diseño de Ary?"
+      "Muéstrame un proyecto destacado",
+      "¿Qué proyecto encaja con mi problema?",
+      "¿Cómo es el proceso de diseño de Ary?",
+      "¿Qué experiencia tiene Ary con sistemas de diseño?"
     ],
     "inputPlaceholder": "Pregúntale a Vivi sobre el trabajo de Ary…",
     "inputAria": "Campo de mensaje para Vivi",

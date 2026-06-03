@@ -85,7 +85,7 @@ export default async function LocaleLayout({
       className={`${googleSansFlex.variable} ${manrope.variable} ${geistMono.variable} ${INTRO_CHECKING_HTML_CLASS} h-full antialiased`}
     >
       <head />
-      <body className="flex min-h-dvh flex-col">
+      <body className="flex min-h-dvh flex-col motion-reduce:transition-none md:pr-[var(--chat-panel-w)] md:transition-[padding] md:duration-[400ms] md:ease-[cubic-bezier(0.4,0,0.2,1)]">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <PostHogProvider />
           <AnalyticsClickDelegator />

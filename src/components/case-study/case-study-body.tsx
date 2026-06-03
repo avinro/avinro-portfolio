@@ -18,7 +18,7 @@ export function CaseStudyBody({ headings, children, rail, className }: CaseStudy
       <div
         className={cn(
           "flex flex-col",
-          rail && "xl:grid xl:grid-cols-[minmax(0,1fr)_16rem] xl:gap-8",
+          rail && "xl:grid xl:grid-cols-[minmax(0,1fr)_13rem] xl:gap-8",
           className,
         )}
       >
@@ -34,7 +34,7 @@ export function CaseStudyBody({ headings, children, rail, className }: CaseStudy
         "flex flex-col",
         "lg:grid lg:gap-12",
         rail
-          ? "lg:grid-cols-[14rem_minmax(0,1fr)] xl:grid-cols-[12rem_minmax(0,1fr)_16rem] xl:gap-8"
+          ? "lg:grid-cols-[14rem_minmax(0,1fr)] xl:grid-cols-[12rem_minmax(0,1fr)_13rem] xl:gap-8"
           : "lg:grid-cols-[14rem_minmax(0,1fr)]",
         className,
       )}

@@ -212,15 +212,19 @@
   },
   "aiChat": {
     "triggerAria": "Chat with Vivi about Ary's work",
+    "closeAria": "Close chat",
+    "panelAria": "Chat with Vivi",
+    "greetingTitle": "Hi, I'm Vivi",
+    "greetingSubtitle": "Ask about Ary's work, experience, and design skills.",
     "tooltip": "Hi, I'm Vivi, Ary's assistant. You can ask me anything about their work and experience.",
     "sheetTitle": "Chat with Vivi",
     "sheetDescription": "Ask about Ary's work, experience, and design expertise.",
     "conversationAria": "Conversation with Vivi",
     "suggestions": [
-      "What are Ary's strongest design skills?",
-      "Tell me about the helloDojo case study",
-      "What's Ary's experience with design systems?",
-      "What is Ary's design process?"
+      "Show me a standout project",
+      "Which project fits my problem?",
+      "What is Ary's design process?",
+      "What's Ary's experience with design systems?"
     ],
     "inputPlaceholder": "Ask Vivi about Ary's work…",
     "inputAria": "Message input for Vivi",

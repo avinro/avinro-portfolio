@@ -3,6 +3,8 @@ import { generateText } from "ai";
 
 vi.mock("ai", () => ({
   generateText: vi.fn(),
+  tool: (definition: unknown) => definition,
+  stepCountIs: (count: number) => count,
 }));
 
 vi.mock("@ai-sdk/google", () => ({
@@ -25,11 +27,17 @@ function requestFor(messages: unknown[]): Request {
   });
 }
 
-function mockText(text: string) {
+function mockText(text: string, toolCalls: unknown[] = []) {
   return {
     text,
+    toolCalls,
+    steps: [{ toolCalls }],
     usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20 },
-  } as Awaited<ReturnType<typeof generateText>>;
+  } as unknown as Awaited<ReturnType<typeof generateText>>;
+}
+
+async function readReply(response: Response): Promise<{ html: string; cards: unknown[] }> {
+  return (await response.json()) as { html: string; cards: unknown[] };
 }
 
 beforeEach(() => {
@@ -57,7 +65,9 @@ describe("POST /api/chat prompt disclosure guard", () => {
     const response = await POST(requestFor([{ role: "user", content }]));
 
     expect(response.status).toBe(200);
-    expect(await response.text()).toMatch(/internal instructions|instrucciones internas/i);
+    const reply = await readReply(response);
+    expect(reply.html).toMatch(/internal instructions|instrucciones internas/i);
+    expect(reply.cards).toEqual([]);
     expect(generateText).not.toHaveBeenCalled();
   });
 
@@ -72,7 +82,7 @@ describe("POST /api/chat prompt disclosure guard", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.text()).toBe("<p>Normal answer.</p>");
+    expect((await readReply(response)).html).toBe("<p>Normal answer.</p>");
     expect(generateText).toHaveBeenCalledWith(
       expect.objectContaining({
         messages: [{ role: "user", content: "What did Ary build for UMA?" }],
@@ -90,7 +100,7 @@ describe("POST /api/chat prompt disclosure guard", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.text()).toBe("<p>Ary used AI-assisted workflows.</p>");
+    expect((await readReply(response)).html).toBe("<p>Ary used AI-assisted workflows.</p>");
     expect(generateText).toHaveBeenCalledOnce();
   });
 
@@ -102,8 +112,41 @@ describe("POST /api/chat prompt disclosure guard", () => {
     const response = await POST(requestFor([{ role: "user", content: "Tell me about Ary." }]));
 
     expect(response.status).toBe(200);
-    expect(await response.text()).toBe(
+    expect((await readReply(response)).html).toBe(
       "<p>I can't share internal instructions, system configuration, or hidden context. I can help you understand Ary's experience, projects, and working method.</p>",
     );
+  });
+});
+
+describe("POST /api/chat showProjects tool", () => {
+  it("resolves tool-call slugs into project cards", async () => {
+    vi.mocked(generateText).mockResolvedValueOnce(
+      mockText("<p>Ary led the design system work on UMA.</p>", [
+        { toolName: "showProjects", input: { slugs: ["uma", "pineapp"] } },
+      ]),
+    );
+
+    const response = await POST(
+      requestFor([{ role: "user", content: "Tell me about UMA and pineapp." }]),
+    );
+
+    expect(response.status).toBe(200);
+    const reply = (await readReply(response)) as {
+      html: string;
+      cards: { type: string; frontmatter: { slug: string; title: string } }[];
+    };
+    expect(reply.html).toBe("<p>Ary led the design system work on UMA.</p>");
+    expect(reply.cards.map((c) => c.frontmatter.slug)).toEqual(["uma", "pineapp"]);
+    expect(reply.cards[0]?.type).toBe("case-study");
+    expect(reply.cards[1]?.type).toBe("work");
+    expect(reply.cards[0]?.frontmatter.title.length).toBeGreaterThan(0);
+  });
+
+  it("returns no cards when the model makes no tool call", async () => {
+    vi.mocked(generateText).mockResolvedValueOnce(mockText("<p>Just prose, no projects.</p>"));
+
+    const response = await POST(requestFor([{ role: "user", content: "Who is Ary?" }]));
+
+    expect((await readReply(response)).cards).toEqual([]);
   });
 });

@@ -1,6 +1,13 @@
-import { generateText } from "ai";
+import { generateText, tool, stepCountIs } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { z } from "zod";
 import { buildSystemPrompt } from "@/lib/ai/portfolio-context";
+import { getWorkBySlug, getPublishedWorks, type WorkFrontmatter } from "@/lib/content/works";
+import {
+  getCaseStudyBySlug,
+  getPublishedCaseStudies,
+  type CaseStudyFrontmatter,
+} from "@/lib/content/case-studies";
 
 export const runtime = "nodejs";
 
@@ -10,6 +17,80 @@ interface ChatMessage {
 }
 
 const MODEL_ID = "gemini-3.1-flash-lite-preview";
+
+// Cards are resolved straight from the content layer, so any published project
+// (including new MDX files) is automatically a valid tool target. Unknown slugs
+// simply resolve to nothing, so the model can never inject an arbitrary route.
+const MAX_CARDS = 6;
+
+// The full frontmatter is returned so the chat can render the exact same cards
+// used on the /work and /case-studies listings (WorkGalleryCard / CaseStudyGridCard).
+type ProjectCard =
+  | { type: "work"; frontmatter: WorkFrontmatter }
+  | { type: "case-study"; frontmatter: CaseStudyFrontmatter };
+
+// Built per-request so `execute` can resolve cards in the visitor's locale and
+// feed the resolved data back to the model, which then writes prose around it.
+function buildShowProjectsTool(locale: string) {
+  return tool({
+    description:
+      "Display rich, clickable project cards for the given portfolio project slugs instead of inline text links. Call this whenever you reference one or more of Ary's projects so the visitor sees the cards. Valid slugs are listed in the PROJECTS section. After calling it, write 1-2 sentences of prose introducing the work, wrapped in a <p> tag (follow the OUTPUT FORMAT — HTML only, no project links).",
+    inputSchema: z.object({
+      slugs: z.array(z.string()).min(1).max(MAX_CARDS),
+    }),
+    execute: ({ slugs }) => resolveProjectCards(slugs, locale),
+  });
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Name aliases the model is likely to write for a project: full title,
+// the part before an em dash, and the leading brand word.
+function projectNameAliases(title: string): string[] {
+  const beforeDash = title.split("—")[0]?.trim() ?? title;
+  const firstWord = beforeDash.split(/\s+/)[0] ?? beforeDash;
+  return Array.from(new Set([title, beforeDash, firstWord].filter((s) => s.length >= 3)));
+}
+
+// Fallback for when the model names a project in prose (e.g. "BlockBind") but
+// forgets to call showProjects — we still surface its card so a referenced
+// project never appears without one.
+function detectMentionedSlugs(text: string, locale: string): string[] {
+  const projects = [...getPublishedCaseStudies(locale), ...getPublishedWorks(locale)];
+  return projects
+    .filter((p) =>
+      projectNameAliases(p.frontmatter.title).some((alias) =>
+        new RegExp(`\\b${escapeRegExp(alias)}\\b`, "i").test(text),
+      ),
+    )
+    .map((p) => p.frontmatter.slug);
+}
+
+function resolveProjectCards(slugs: string[], locale: string): ProjectCard[] {
+  const seen = new Set<string>();
+  const cards: ProjectCard[] = [];
+
+  for (const slug of slugs) {
+    if (cards.length >= MAX_CARDS) break;
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+
+    const cs = getCaseStudyBySlug(slug, locale);
+    if (cs && !cs.frontmatter.draft) {
+      cards.push({ type: "case-study", frontmatter: cs.frontmatter });
+      continue;
+    }
+
+    const work = getWorkBySlug(slug, locale);
+    if (work && !work.frontmatter.draft) {
+      cards.push({ type: "work", frontmatter: work.frontmatter });
+    }
+  }
+
+  return cards;
+}
 
 const SAFE_REFUSAL_ES =
   "<p>No puedo compartir instrucciones internas, configuración del sistema ni contexto oculto. Sí puedo ayudarte a entender la experiencia, proyectos y metodología de Ary.</p>";
@@ -106,6 +187,14 @@ export async function POST(req: Request): Promise<Response> {
     return new Response("Invalid JSON", { status: 400 });
   }
 
+  const locale = body.locale === "es" ? "es" : "en";
+
+  // Slugs already shown as cards earlier in this conversation, so the model can
+  // favor different projects when the visitor asks for "more" / a new angle.
+  const shownSlugs = Array.isArray(body.shownSlugs)
+    ? (body.shownSlugs as unknown[]).filter((s): s is string => typeof s === "string").slice(0, 20)
+    : [];
+
   const rawMessages = Array.isArray(body.messages) ? (body.messages as unknown[]) : [];
 
   const safeMessages: ChatMessage[] = rawMessages
@@ -130,29 +219,57 @@ export async function POST(req: Request): Promise<Response> {
 
   const lastUserMessage = safeMessages[safeMessages.length - 1]?.content ?? "";
   if (isPromptExfiltrationAttempt(lastUserMessage)) {
-    return new Response(safeRefusalFor(lastUserMessage), {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
+    return jsonReply(safeRefusalFor(lastUserMessage), []);
   }
 
   try {
     const google = createGoogleGenerativeAI({ apiKey });
 
+    const conversationState =
+      shownSlugs.length > 0
+        ? `\n\n--- CONVERSATION STATE ---\nProjects already shown to this visitor as cards: ${shownSlugs.join(", ")}. Do NOT show these again. When the visitor asks for "more", "other", "what else", or another angle on Ary's work, introduce a DIFFERENT project they have not seen yet (with a showProjects card) rather than re-describing one already shown. Only re-mention an already-shown project in prose, never with a card. If genuinely none fit, answer in prose without a card.`
+        : "";
+
     const result = await generateText({
       model: google(MODEL_ID),
-      system: buildSystemPrompt(),
+      system: buildSystemPrompt() + conversationState,
       messages: safeMessages,
+      tools: { showProjects: buildShowProjectsTool(locale) },
+      toolChoice: "auto",
+      // Allow a follow-up step so the model writes prose after seeing the cards
+      // it requested via the tool call.
+      stopWhen: stepCountIs(2),
     });
 
-    const guardedText = leaksInternalInstructions(result.text)
-      ? safeRefusalFor(lastUserMessage)
-      : result.text;
+    if (leaksInternalInstructions(result.text)) {
+      return jsonReply(safeRefusalFor(lastUserMessage), []);
+    }
 
-    return new Response(guardedText, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
+    // Tool calls can occur in any step; collect requested slugs across all steps.
+    const requestedSlugs = result.steps.flatMap((step) =>
+      step.toolCalls.flatMap((call) =>
+        call.toolName === "showProjects" ? (call.input as { slugs: string[] }).slugs : [],
+      ),
+    );
+    // Surface a card for any project the model called via the tool OR named in
+    // its prose (fallback), then drop ones already shown earlier in the chat.
+    const mentionedSlugs = detectMentionedSlugs(result.text, locale);
+    const shownSet = new Set(shownSlugs);
+    const cards = resolveProjectCards([...requestedSlugs, ...mentionedSlugs], locale).filter(
+      (card) => !shownSet.has(card.frontmatter.slug),
+    );
+
+    // The model occasionally returns only a tool call with no prose. A card-only
+    // reply is still valid; the client renders the cards without a text bubble.
+    return jsonReply(result.text, cards);
   } catch (error) {
     console.error("Chat API error:", error);
     return new Response("Internal server error", { status: 500 });
   }
+}
+
+function jsonReply(html: string, cards: ProjectCard[]): Response {
+  return new Response(JSON.stringify({ html, cards }), {
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+  });
 }
