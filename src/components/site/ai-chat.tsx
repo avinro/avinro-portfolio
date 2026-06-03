@@ -17,6 +17,7 @@ import { useLenis } from "@/components/site/lenis-provider";
 import { useChatPanel } from "@/components/site/chat-panel-context";
 import { WorkGalleryCard } from "@/components/work/work-gallery-card";
 import { CaseStudyGridCard } from "@/components/case-study/case-study-grid-card";
+import { ChatContactActions } from "@/components/site/chat-contact-actions";
 import { localizeWorkCategory } from "@/lib/content/work-category";
 import type { WorkFrontmatter } from "@/lib/content/works";
 import type { CaseStudyFrontmatter } from "@/lib/content/case-studies";
@@ -44,6 +45,8 @@ type ChatCard =
 interface ChatApiResponse {
   html: string;
   cards: ChatCard[];
+  contact?: boolean;
+  contactKind?: "pricing" | "reach" | "generic";
 }
 
 // The listing cards (WorkGalleryCard / CaseStudyGridCard) only read `.frontmatter`,
@@ -58,6 +61,8 @@ type ChatMessage =
       content: string;
       assistantHtml: string;
       cards: ChatCard[];
+      contact: boolean;
+      contactKind: "pricing" | "reach" | "generic";
     };
 
 const UserBubble = memo(function UserBubble({
@@ -119,10 +124,15 @@ const AssistantBubble = memo(function AssistantBubble({
 }) {
   return (
     <div className="mr-auto max-w-[95%]">
-      {message.assistantHtml.trim() && (
+      {!message.contact && message.assistantHtml.trim() && (
         <div className="prose-chat" dangerouslySetInnerHTML={{ __html: message.assistantHtml }} />
       )}
       <ProjectCardList cards={message.cards} onNavigate={onCardNavigate} />
+      {/* Contact replies always use the curated, argumentative intro for consistent
+          quality, regardless of whatever prose the model produced. */}
+      {message.contact && (
+        <ChatContactActions onAct={onCardNavigate} showIntro kind={message.contactKind} />
+      )}
     </div>
   );
 });
@@ -453,9 +463,14 @@ export function AiChat() {
         const data = (await response.json()) as ChatApiResponse;
         const html = typeof data.html === "string" ? data.html : "";
         const cards = Array.isArray(data.cards) ? data.cards : [];
+        const contact = data.contact === true;
+        const contactKind =
+          data.contactKind === "pricing" || data.contactKind === "reach"
+            ? data.contactKind
+            : "generic";
 
-        // A reply with no prose but with project cards is still valid.
-        if (!html.trim() && cards.length === 0) {
+        // A reply with no prose is still valid if it carries cards or contact CTAs.
+        if (!html.trim() && cards.length === 0 && !contact) {
           throw new Error(
             "Received an empty reply. If this persists, verify Gemini API credentials for production deployments.",
           );
@@ -467,6 +482,8 @@ export function AiChat() {
           content: html,
           assistantHtml: sanitizeHtml(html),
           cards,
+          contact,
+          contactKind,
         };
         cards.forEach((card) => shownCardSlugsRef.current.add(card.frontmatter.slug));
         setMessages([...nextMessages, assistant]);

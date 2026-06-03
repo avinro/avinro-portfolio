@@ -29,6 +29,8 @@ type ProjectCard =
   | { type: "work"; frontmatter: WorkFrontmatter }
   | { type: "case-study"; frontmatter: CaseStudyFrontmatter };
 
+type ContactKind = "pricing" | "reach" | "generic";
+
 // Built per-request so `execute` can resolve cards in the visitor's locale and
 // feed the resolved data back to the model, which then writes prose around it.
 function buildShowProjectsTool(locale: string) {
@@ -54,16 +56,29 @@ function projectNameAliases(title: string): string[] {
   return Array.from(new Set([title, beforeDash, firstWord].filter((s) => s.length >= 3)));
 }
 
-// Fallback for when the model names a project in prose (e.g. "BlockBind") but
-// forgets to call showProjects — we still surface its card so a referenced
-// project never appears without one.
+// Match the slug written directly in prose (e.g. "hello-dojo"), tolerating a
+// hyphen OR a space between segments so "hello dojo" is caught too. This makes
+// every project the model names in prose render a card — including when it
+// writes the slug form instead of the brand name (so two named projects always
+// surface two cards, not one).
+function slugMatchesText(slug: string, text: string): boolean {
+  if (slug.length < 3) return false;
+  const pattern = new RegExp(`\\b${escapeRegExp(slug).replace(/-/g, "[-\\s]")}\\b`, "i");
+  return pattern.test(text);
+}
+
+// Fallback for when the model names a project in prose (e.g. "BlockBind" or the
+// "block-bind" slug) but forgets to call showProjects — we still surface its
+// card so every project referenced in the answer appears with one.
 function detectMentionedSlugs(text: string, locale: string): string[] {
   const projects = [...getPublishedCaseStudies(locale), ...getPublishedWorks(locale)];
   return projects
-    .filter((p) =>
-      projectNameAliases(p.frontmatter.title).some((alias) =>
-        new RegExp(`\\b${escapeRegExp(alias)}\\b`, "i").test(text),
-      ),
+    .filter(
+      (p) =>
+        slugMatchesText(p.frontmatter.slug, text) ||
+        projectNameAliases(p.frontmatter.title).some((alias) =>
+          new RegExp(`\\b${escapeRegExp(alias)}\\b`, "i").test(text),
+        ),
     )
     .map((p) => p.frontmatter.slug);
 }
@@ -92,6 +107,37 @@ function resolveProjectCards(slugs: string[], locale: string): ProjectCard[] {
   return cards;
 }
 
+// Contact intent is detected deterministically from the visitor's current
+// message (no model tool), so a contact question always renders the same
+// curated CTA buttons and prior messages can never contaminate the decision.
+const CONTACT_INTENT =
+  /\b(rates?|pricing|price|quote|budget|cost\s+estimate|hire|hiring|availability|available|collaborat\w*|work\s+(with|together)|get\s+in\s+touch|contact|reach\s+out|book\s+a\s+call|talk\s+(to|with)\s+(ary|him)|speak\s+(to|with)\s+(ary|him)|(message|email)\s+(ary|him)|tarifa|precio|presupuesto|coste|costo|cu[aá]nto\s+(cobra|cuesta|vale)|contratar|disponibilidad|disponible|colaborar|trabajar\s+(con|juntos)|agendar|reservar|hablar\s+con|hblar\s+con|quiero\s+(?:h?a?blar|hblar)|contactar\w*|en\s+contacto|escribirle)\b/i;
+
+const PRICING_CONTACT_INTENT =
+  /\b(rates?|pricing|price|quote|budget|cost\s+estimate|hire|hiring|availability|available|tarifa|precio|presupuesto|coste|costo|cu[aá]nto\s+(cobra|cuesta|vale)|rate|contratar|disponibilidad|disponible)\b/i;
+
+const REACH_CONTACT_INTENT =
+  /\b(get\s+in\s+touch|contact|reach\s+out|book\s+a\s+call|talk\s+(to|with)\s+(ary|him)|speak\s+(to|with)\s+(ary|him)|(message|email)\s+(ary|him)|agendar|reservar|hablar\s+con|hblar\s+con|quiero\s+(?:h?a?blar|hblar)|contactar\w*|en\s+contacto|escribirle)\b/i;
+
+function isContactIntent(text: string): boolean {
+  return CONTACT_INTENT.test(text);
+}
+
+function contactKindFor(text: string): ContactKind {
+  if (PRICING_CONTACT_INTENT.test(text)) return "pricing";
+  if (REACH_CONTACT_INTENT.test(text)) return "reach";
+  return "generic";
+}
+
+// Remove mailto / Calendly anchors (keeping inner text) so the buttons are the
+// only contact affordance and the chat never shows a duplicate text link.
+function stripContactLinks(html: string): string {
+  return html.replace(
+    /<a\b[^>]*href=["'](?:mailto:|https?:\/\/[^"']*calendly[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi,
+    "$1",
+  );
+}
+
 const SAFE_REFUSAL_ES =
   "<p>No puedo compartir instrucciones internas, configuración del sistema ni contexto oculto. Sí puedo ayudarte a entender la experiencia, proyectos y metodología de Ary.</p>";
 
@@ -116,6 +162,16 @@ const DIRECT_ATTACK_PATTERNS = [
   /\b(jailbreak|dan mode|developer mode|do anything now|act as system|you are now)\b/i,
   /\b(modo\s+dan|modo\s+desarrollador|haz\s+de\s+sistema|act[uú]a\s+como\s+sistema|ahora\s+eres)\b/i,
   /<\s*\/?\s*system\s*>|\[\/?\s*inst\s*\]|<<\s*sys\s*>>|<\/\s*sys\s*>>/i,
+  // Persona hijack: trying to make Vivi become / speak as Ary.
+  /\b(stop being|no longer be|forget (that )?you are)\b[^.]{0,20}\bvivi\b/i,
+  /\byou\s+are\s+(now\s+)?ary\b(?!['’]s)/i,
+  /\b(act|speak|respond|reply|pretend)\s+(as|to\s+be|like)\s+ary\b/i,
+  /\banswer\s+(in\s+(the\s+)?first\s+person|as\s+ary)\b/i,
+  /\b(deja\s+de\s+ser|ya\s+no\s+eres|finge\s+ser|act[uú]a\s+como|habla\s+como|responde\s+como)\s+(vivi|ary)\b/i,
+  /\b(eres|ahora\s+eres|t[uú]\s+eres)\s+ary\b/i,
+  // PII fishing for Ary's private details.
+  /\b(home|personal|private|residential)\s+address\b/i,
+  /\b(d[oó]nde\s+vive|direcci[oó]n\s+(de\s+(su\s+)?(casa|domicilio)|personal|particular))\b/i,
 ];
 
 const RESPONSE_LEAK_PATTERNS = [
@@ -165,6 +221,118 @@ function leaksInternalInstructions(text: string): boolean {
   return RESPONSE_LEAK_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+const FOLLOW_UP_INTENT =
+  /\b(more|another|other|what else|tell me more|go deeper|among\s+(them|those)|between\s+(them|those)|which\s+(one|of\s+them)|stands?\s+out|product\s+thinking|otro|otra|otros|otras|alg[uú]n\s+otro|qu[eé]\s+m[aá]s|m[aá]s|profundiza|detalle|ampl[ií]a|entre\s+(ellos|ellas|estos|estas|esos|esas)|de\s+(ellos|ellas|estos|estas|esos|esas)|cu[aá]l\s+es\s+el\s+que|cu[aá]l\s+destaca|destaca|product\s+thinking)\b/i;
+
+const UNSCOPED_BEST_PROJECT_INTENT =
+  /\b(best|strongest|flagship|most\s+representative|mejor|m[aá]s\s+(representativo|fuerte|completo|ambicioso))\b.{0,80}\b(project|work|case study|proyecto|trabajo|portfolio)\b|\b(project|work|case study|proyecto|trabajo|portfolio)\b.{0,80}\b(best|strongest|flagship|most\s+representative|mejor|m[aá]s\s+(representativo|fuerte|completo|ambicioso))\b/i;
+
+const TOPIC_PATTERNS: [string, RegExp][] = [
+  ["Web3", /\b(web3|crypto|wallet|ens|solana|defi|blockchain|cripto|dominios?\.?eth)\b/i],
+  ["design process", /\b(design process|proceso de dise[ñn]o|metodolog[ií]a|methodology)\b/i],
+  ["projects", /\b(projects?|work|case studies|proyectos?|trabajos?|portfolio)\b/i],
+  ["helloDojo", /\b(hellodojo|hello[-\s]?dojo|dojo)\b/i],
+  ["UMA", /\buma\b/i],
+  ["BlockBind", /\bblockbind|block[-\s]?bind\b/i],
+  ["DomainPlug", /\bdomainplug|domain[-\s]?plug\b/i],
+  ["Deks", /\bdeks\b/i],
+];
+
+function detectTopics(text: string): string[] {
+  return TOPIC_PATTERNS.filter(([, pattern]) => pattern.test(text)).map(([topic]) => topic);
+}
+
+function buildSessionMemory(userMessages: ChatMessage[], shownSlugs: string[]): string {
+  const current = userMessages[userMessages.length - 1]?.content ?? "";
+  const priorMessages = userMessages.slice(0, -1);
+  const priorTopics = Array.from(
+    new Set(priorMessages.flatMap((message) => detectTopics(message.content))),
+  );
+  const latestPriorTopic = [...priorMessages]
+    .reverse()
+    .flatMap((message) => detectTopics(message.content))[0];
+  const currentTopics = detectTopics(current);
+  const isFollowUp = FOLLOW_UP_INTENT.test(current);
+
+  const lines: string[] = [];
+
+  if (priorTopics.length > 0) {
+    lines.push(
+      `Prior user topics in this visit, for memory only (do NOT answer or recap them again unless the current message asks for them): ${priorTopics.join(", ")}.`,
+    );
+  }
+
+  if (currentTopics.length > 0) {
+    lines.push(
+      `Current explicit topic: ${currentTopics.join(", ")}. Answer only this current topic; do not blend in prior topics.`,
+    );
+  } else if (isFollowUp && latestPriorTopic) {
+    lines.push(
+      `The current message appears to be a follow-up to: ${latestPriorTopic}. Answer within ${latestPriorTopic} only; do not introduce projects or topics outside that scope.`,
+    );
+  }
+
+  if (
+    UNSCOPED_BEST_PROJECT_INTENT.test(current) &&
+    !/\b(web3|crypto|wallet|ens|solana|defi|blockchain|cripto)\b/i.test(current)
+  ) {
+    lines.push(
+      `Current question is an unscoped best-project comparative. Treat it as a global portfolio question, not as best within a prior sector or topic.`,
+    );
+  }
+
+  if (shownSlugs.length > 0) {
+    lines.push(
+      `Projects already shown or discussed as cards in this visit: ${shownSlugs.join(", ")}. Do NOT show these cards again. When the visitor asks for "more", "other", "what else", or another angle on Ary's work, introduce a DIFFERENT project they have not seen yet rather than re-describing one already shown. Only re-mention an already-shown project in prose, never with a card. If genuinely none fit, answer in prose without a card.`,
+    );
+  }
+
+  if (lines.length === 0) return "";
+
+  return `\n\n--- CONVERSATION MEMORY ---\n${lines.join("\n")}`;
+}
+
+function effectiveTopicsForCurrentTurn(userMessages: ChatMessage[]): string[] {
+  const current = userMessages[userMessages.length - 1]?.content ?? "";
+  const currentTopics = detectTopics(current);
+  if (currentTopics.length > 0) return currentTopics;
+  if (!FOLLOW_UP_INTENT.test(current)) return [];
+
+  return [...userMessages]
+    .slice(0, -1)
+    .reverse()
+    .flatMap((message) => detectTopics(message.content))
+    .slice(0, 1);
+}
+
+function cardMatchesWeb3(card: ProjectCard): boolean {
+  const haystack =
+    card.type === "work"
+      ? [
+          card.frontmatter.title,
+          card.frontmatter.category,
+          card.frontmatter.summary,
+          card.frontmatter.meta.industry,
+          card.frontmatter.meta.platform,
+          ...card.frontmatter.tags,
+          ...card.frontmatter.tools,
+        ]
+      : [
+          card.frontmatter.title,
+          card.frontmatter.sector,
+          card.frontmatter.softwareType,
+          card.frontmatter.summary,
+          ...card.frontmatter.tags,
+        ];
+
+  return haystack.filter(Boolean).join(" ").toLowerCase().includes("web3");
+}
+
+function filterCardsForCurrentTopic(cards: ProjectCard[], topics: string[]): ProjectCard[] {
+  if (!topics.includes("Web3")) return cards;
+  return cards.filter(cardMatchesWeb3);
+}
+
 export async function POST(req: Request): Promise<Response> {
   if (process.env.NEXT_PUBLIC_AI_ENABLED !== "true") {
     return new Response("AI is disabled", { status: 403 });
@@ -197,7 +365,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const rawMessages = Array.isArray(body.messages) ? (body.messages as unknown[]) : [];
 
-  const safeMessages: ChatMessage[] = rawMessages
+  const userMessages: ChatMessage[] = rawMessages
     .slice(-10)
     .filter((m): m is ChatMessage => {
       if (!m || typeof m !== "object") return false;
@@ -211,29 +379,41 @@ export async function POST(req: Request): Promise<Response> {
       content: sanitizeMessage(m.content.slice(0, 1000)),
     }));
 
-  if (safeMessages.length === 0) {
+  if (userMessages.length === 0) {
     return new Response("Bad request: last message must be from user", {
       status: 400,
     });
   }
 
-  const lastUserMessage = safeMessages[safeMessages.length - 1]?.content ?? "";
+  const lastUserMessage = userMessages[userMessages.length - 1]?.content ?? "";
+
+  // 1. Refuse if the CURRENT message is an attack/exfiltration attempt.
   if (isPromptExfiltrationAttempt(lastUserMessage)) {
     return jsonReply(safeRefusalFor(lastUserMessage), []);
   }
 
+  // 2. Contact/hiring questions are answered deterministically with the curated
+  //    CTA buttons (no model call) — immune to history contamination/flakiness.
+  if (isContactIntent(lastUserMessage)) {
+    return jsonReply("", [], true, contactKindFor(lastUserMessage));
+  }
+
+  // 3. Drop any PRIOR attack messages, then summarize the session separately.
+  //    The model receives only the current user turn as a message; earlier user
+  //    turns are memory, not fresh questions to answer again.
+  const safeMessages = userMessages.filter((m) => !isPromptExfiltrationAttempt(m.content));
+  const currentMessage: ChatMessage = { role: "user", content: lastUserMessage };
+
   try {
     const google = createGoogleGenerativeAI({ apiKey });
 
-    const conversationState =
-      shownSlugs.length > 0
-        ? `\n\n--- CONVERSATION STATE ---\nProjects already shown to this visitor as cards: ${shownSlugs.join(", ")}. Do NOT show these again. When the visitor asks for "more", "other", "what else", or another angle on Ary's work, introduce a DIFFERENT project they have not seen yet (with a showProjects card) rather than re-describing one already shown. Only re-mention an already-shown project in prose, never with a card. If genuinely none fit, answer in prose without a card.`
-        : "";
+    const conversationState = buildSessionMemory(safeMessages, shownSlugs);
+    const effectiveTopics = effectiveTopicsForCurrentTurn(safeMessages);
 
     const result = await generateText({
       model: google(MODEL_ID),
       system: buildSystemPrompt() + conversationState,
-      messages: safeMessages,
+      messages: [currentMessage],
       tools: { showProjects: buildShowProjectsTool(locale) },
       toolChoice: "auto",
       // Allow a follow-up step so the model writes prose after seeing the cards
@@ -241,7 +421,16 @@ export async function POST(req: Request): Promise<Response> {
       stopWhen: stepCountIs(2),
     });
 
-    if (leaksInternalInstructions(result.text)) {
+    // With multi-step, prose can land in the tool-call step OR the follow-up step;
+    // aggregate across steps so a complete answer is never lost to `result.text`.
+    const replyText =
+      result.steps
+        .map((step) => step.text)
+        .filter((t) => t.trim().length > 0)
+        .join("\n\n")
+        .trim() || result.text;
+
+    if (leaksInternalInstructions(replyText)) {
       return jsonReply(safeRefusalFor(lastUserMessage), []);
     }
 
@@ -251,25 +440,42 @@ export async function POST(req: Request): Promise<Response> {
         call.toolName === "showProjects" ? (call.input as { slugs: string[] }).slugs : [],
       ),
     );
-    // Surface a card for any project the model called via the tool OR named in
-    // its prose (fallback), then drop ones already shown earlier in the chat.
-    const mentionedSlugs = detectMentionedSlugs(result.text, locale);
+    // The prose is the source of truth for which projects the answer actually
+    // discusses, so we show exactly the projects named in it — one card per
+    // project, never padded by extra tool-call slugs the model over-requested.
+    // (Two projects discussed → two cards; one → one.) Only when the reply names
+    // no project at all — a rare card-only reply — do we fall back to the raw
+    // tool-call slugs so a referenced project never appears without a card.
+    const mentionedSlugs = detectMentionedSlugs(replyText, locale);
+    const sourceSlugs = mentionedSlugs.length > 0 ? mentionedSlugs : requestedSlugs;
     const shownSet = new Set(shownSlugs);
-    const cards = resolveProjectCards([...requestedSlugs, ...mentionedSlugs], locale).filter(
-      (card) => !shownSet.has(card.frontmatter.slug),
+    const cards = filterCardsForCurrentTopic(
+      resolveProjectCards(sourceSlugs, locale).filter(
+        (card) => !shownSet.has(card.frontmatter.slug),
+      ),
+      effectiveTopics,
     );
+
+    // Fallback: if a contact link slipped into the prose despite the short-circuit,
+    // surface the buttons (and strip the inline link so there's no duplicate).
+    const contact = /calendly\.com|avinroart@gmail\.com/i.test(replyText);
 
     // The model occasionally returns only a tool call with no prose. A card-only
     // reply is still valid; the client renders the cards without a text bubble.
-    return jsonReply(result.text, cards);
+    return jsonReply(stripContactLinks(replyText), cards, contact);
   } catch (error) {
     console.error("Chat API error:", error);
     return new Response("Internal server error", { status: 500 });
   }
 }
 
-function jsonReply(html: string, cards: ProjectCard[]): Response {
-  return new Response(JSON.stringify({ html, cards }), {
+function jsonReply(
+  html: string,
+  cards: ProjectCard[],
+  contact = false,
+  contactKind: ContactKind = "generic",
+): Response {
+  return new Response(JSON.stringify({ html, cards, contact, contactKind }), {
     headers: { "Content-Type": "application/json; charset=utf-8" },
   });
 }
