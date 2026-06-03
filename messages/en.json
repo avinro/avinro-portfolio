@@ -216,6 +216,8 @@
     "panelAria": "Chat with Vivi",
     "greetingTitle": "Hi, I'm Vivi",
     "greetingSubtitle": "Ask about Ary's work, experience, and design skills.",
+    "contactIntro": "Ary's rate and availability depend on the scope, stage, and goals of each project, so he scopes them directly with each client rather than quoting a generic number. The fastest way is a quick call or an email:",
+    "contactReachIntro": "You can reach Ary directly by call or email. If you want to discuss an idea, a collaboration, or whether there is a fit for your project, these are the fastest channels:",
     "tooltip": "Hi, I'm Vivi, Ary's assistant. You can ask me anything about their work and experience.",
     "sheetTitle": "Chat with Vivi",
     "sheetDescription": "Ask about Ary's work, experience, and design expertise.",

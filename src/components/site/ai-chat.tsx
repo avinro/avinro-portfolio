@@ -17,6 +17,7 @@ import { useLenis } from "@/components/site/lenis-provider";
 import { useChatPanel } from "@/components/site/chat-panel-context";
 import { WorkGalleryCard } from "@/components/work/work-gallery-card";
 import { CaseStudyGridCard } from "@/components/case-study/case-study-grid-card";
+import { ChatContactActions } from "@/components/site/chat-contact-actions";
 import { localizeWorkCategory } from "@/lib/content/work-category";
 import type { WorkFrontmatter } from "@/lib/content/works";
 import type { CaseStudyFrontmatter } from "@/lib/content/case-studies";
@@ -25,7 +26,6 @@ import { scheduleRefreshLenisBounds } from "@/lib/scroll/refresh-lenis-bounds";
 import { ViviThinkingIndicator } from "@/components/site/vivi-thinking-indicator";
 import { useStickToBottom } from "@/hooks/use-stick-to-bottom";
 import { useVisualViewportInset } from "@/hooks/use-visual-viewport-inset";
-import { useLandscapeCompactHeader } from "@/hooks/use-landscape-compact-header";
 
 const ALLOWED_TAGS = ["p", "ul", "li", "strong", "a"];
 const ALLOWED_ATTRS = ["href", "target", "rel"];
@@ -44,6 +44,8 @@ type ChatCard =
 interface ChatApiResponse {
   html: string;
   cards: ChatCard[];
+  contact?: boolean;
+  contactKind?: "pricing" | "reach" | "generic";
 }
 
 // The listing cards (WorkGalleryCard / CaseStudyGridCard) only read `.frontmatter`,
@@ -58,6 +60,8 @@ type ChatMessage =
       content: string;
       assistantHtml: string;
       cards: ChatCard[];
+      contact: boolean;
+      contactKind: "pricing" | "reach" | "generic";
     };
 
 const UserBubble = memo(function UserBubble({
@@ -119,10 +123,15 @@ const AssistantBubble = memo(function AssistantBubble({
 }) {
   return (
     <div className="mr-auto max-w-[95%]">
-      {message.assistantHtml.trim() && (
+      {!message.contact && message.assistantHtml.trim() && (
         <div className="prose-chat" dangerouslySetInnerHTML={{ __html: message.assistantHtml }} />
       )}
       <ProjectCardList cards={message.cards} onNavigate={onCardNavigate} />
+      {/* Contact replies always use the curated, argumentative intro for consistent
+          quality, regardless of whatever prose the model produced. */}
+      {message.contact && (
+        <ChatContactActions onAct={onCardNavigate} showIntro kind={message.contactKind} />
+      )}
     </div>
   );
 });
@@ -400,8 +409,7 @@ export function AiChat() {
   const shownCardSlugsRef = useRef<Set<string>>(new Set());
   const lenis = useLenis();
   const { scrollRef, onScroll, markForceStick, scrollToBottomIfNeeded } = useStickToBottom();
-  const { keyboardInset, viewportHeight } = useVisualViewportInset(open && isMobileViewport);
-  const compactHeader = useLandscapeCompactHeader(open);
+  const { viewportHeight, offsetTop } = useVisualViewportInset(open && isMobileViewport);
 
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${String(MOBILE_MAX_BREAKPOINT)}px)`);
@@ -453,9 +461,14 @@ export function AiChat() {
         const data = (await response.json()) as ChatApiResponse;
         const html = typeof data.html === "string" ? data.html : "";
         const cards = Array.isArray(data.cards) ? data.cards : [];
+        const contact = data.contact === true;
+        const contactKind =
+          data.contactKind === "pricing" || data.contactKind === "reach"
+            ? data.contactKind
+            : "generic";
 
-        // A reply with no prose but with project cards is still valid.
-        if (!html.trim() && cards.length === 0) {
+        // A reply with no prose is still valid if it carries cards or contact CTAs.
+        if (!html.trim() && cards.length === 0 && !contact) {
           throw new Error(
             "Received an empty reply. If this persists, verify Gemini API credentials for production deployments.",
           );
@@ -467,6 +480,8 @@ export function AiChat() {
           content: html,
           assistantHtml: sanitizeHtml(html),
           cards,
+          contact,
+          contactKind,
         };
         cards.forEach((card) => shownCardSlugsRef.current.add(card.frontmatter.slug));
         setMessages([...nextMessages, assistant]);
@@ -586,15 +601,23 @@ export function AiChat() {
     }
   };
 
+  // Pin the sheet to the visual viewport: size it to the visible height and
+  // push its top down by `offsetTop`. Without the offset, iOS keeps the fixed
+  // sheet glued to the layout-viewport top while the keyboard scrolls the page,
+  // detaching the sheet and exposing the blurred page behind it. `top` is used
+  // (not `transform`) so it never clobbers the slide-in entrance animation.
   const sheetMobileStyle =
     isMobileViewport && open
       ? {
           height: `${String(viewportHeight)}px`,
           maxHeight: `${String(viewportHeight)}px`,
+          top: `${String(offsetTop)}px`,
         }
       : undefined;
 
-  const footerPaddingBottom = `max(env(safe-area-inset-bottom), ${String(keyboardInset)}px, 1rem)`;
+  // The sheet bottom already lands just above the keyboard (height tracks the
+  // visual viewport), so the footer only needs the home-indicator safe area.
+  const footerPaddingBottom = "max(env(safe-area-inset-bottom), 1rem)";
   const desktopFooterPaddingBottom = "max(env(safe-area-inset-bottom), 1.5rem)";
 
   const closeCard = isMobileViewport
@@ -687,18 +710,22 @@ export function AiChat() {
               fabRef.current?.focus();
             }}
           >
-            <SheetHeader
-              className={cn(
-                "mt-0 shrink-0 gap-0 px-4 pr-14 pb-4 sm:px-6 sm:pb-6",
-                compactHeader && "pb-2",
-              )}
-              style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
-            >
-              <SheetTitle className={cn(compactHeader && "text-xl sm:text-2xl")}>
-                {t("sheetTitle")}
-              </SheetTitle>
-              {!compactHeader && <SheetDescription>{t("sheetDescription")}</SheetDescription>}
+            {/* On mobile the visible "Chat with Vivi" header is dropped to reclaim
+                vertical space. Radix still requires an accessible title +
+                description, so they stay as sr-only; the floating close button
+                (rendered by SheetContent) becomes the only visible chrome. */}
+            <SheetHeader className="sr-only">
+              <SheetTitle>{t("sheetTitle")}</SheetTitle>
+              <SheetDescription>{t("sheetDescription")}</SheetDescription>
             </SheetHeader>
+
+            {/* Safe-area spacer: clears the notch and reserves room for the
+                floating close button so the conversation never sits under it. */}
+            <div
+              aria-hidden
+              className="shrink-0"
+              style={{ height: "calc(max(env(safe-area-inset-top), 1rem) + 3rem)" }}
+            />
 
             {chatBody(footerPaddingBottom)}
           </SheetContent>
