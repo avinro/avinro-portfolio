@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { CaseStudy } from "@/lib/content/case-studies";
-import { SITE_URL, OWNER_NAME, OWNER_JOB_TITLE } from "@/lib/seo/site";
+import { SITE_URL, OWNER_NAME, OWNER_JOB_TITLE, SOCIAL_LINKS } from "@/lib/seo/site";
 
 /**
  * Serialise a JSON-LD payload to a string safe for dangerouslySetInnerHTML.
@@ -28,10 +28,6 @@ function absoluteUrl(pathOrUrl: string): string {
 /**
  * Injects a JSON-LD Person schema for the portfolio owner.
  *
- * `sameAs` is intentionally omitted until real social profile URLs are added
- * to SOCIAL_LINKS in src/lib/seo/site.ts — placeholder URLs are invalid
- * schema.org data and can hurt rich-result eligibility.
- *
  * Place at the top of <main> on / and /about.
  */
 export function PersonJsonLd() {
@@ -41,6 +37,7 @@ export function PersonJsonLd() {
     name: OWNER_NAME,
     jobTitle: OWNER_JOB_TITLE,
     url: SITE_URL,
+    sameAs: Object.values(SOCIAL_LINKS),
   };
 
   return (
