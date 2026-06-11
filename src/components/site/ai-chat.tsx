@@ -4,13 +4,7 @@ import { useState, useRef, useEffect, useLayoutEffect, useCallback, memo, forwar
 import DOMPurify from "dompurify";
 import { useLocale, useTranslations } from "next-intl";
 import { BotMessageSquare, ArrowUp, Square, AlertCircle, X } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/site/lenis-provider";
@@ -710,22 +704,8 @@ export function AiChat() {
               fabRef.current?.focus();
             }}
           >
-            {/* On mobile the visible "Chat with Vivi" header is dropped to reclaim
-                vertical space. Radix still requires an accessible title +
-                description, so they stay as sr-only; the floating close button
-                (rendered by SheetContent) becomes the only visible chrome. */}
-            <SheetHeader className="sr-only">
-              <SheetTitle>{t("sheetTitle")}</SheetTitle>
-              <SheetDescription>{t("sheetDescription")}</SheetDescription>
-            </SheetHeader>
-
-            {/* Safe-area spacer: clears the notch and reserves room for the
-                floating close button so the conversation never sits under it. */}
-            <div
-              aria-hidden
-              className="shrink-0"
-              style={{ height: "calc(max(env(safe-area-inset-top), 1rem) + 3rem)" }}
-            />
+            <SheetTitle className="sr-only">{t("sheetTitle")}</SheetTitle>
+            <SheetDescription className="sr-only">{t("sheetDescription")}</SheetDescription>
 
             {chatBody(footerPaddingBottom)}
           </SheetContent>

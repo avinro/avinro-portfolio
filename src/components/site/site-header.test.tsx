@@ -50,12 +50,15 @@ describe("SiteHeader", () => {
     expect(html).toContain('aria-label="Open menu"');
   });
 
-  it("hamburger button is mobile-only (md:hidden class)", () => {
+  it("hamburger button is mobile-only (inside an md:hidden group)", () => {
     const html = renderToStaticMarkup(<SiteHeader />);
     const triggerIdx = html.indexOf('aria-label="Open menu"');
     expect(triggerIdx).toBeGreaterThan(-1);
-    const triggerSlice = html.slice(Math.max(0, triggerIdx - 400), triggerIdx + 200);
-    expect(triggerSlice).toContain("md:hidden");
+    // The hamburger now shares an md:hidden wrapper with the mobile language
+    // switcher, so the class lives on the enclosing group rather than the button.
+    const groupOpen = html.lastIndexOf('class="flex items-center gap-1 md:hidden"', triggerIdx);
+    expect(groupOpen).toBeGreaterThan(-1);
+    expect(groupOpen).toBeLessThan(triggerIdx);
   });
 
   it("hamburger button has aria-expanded and aria-controls attributes", () => {

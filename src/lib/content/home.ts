@@ -127,7 +127,6 @@ export const homeContent: HomeContent = {
     { src: "/about/lifestyle/05.webp", alt: "" },
     { src: "/about/lifestyle/06.webp", alt: "" },
     { src: "/about/lifestyle/07.webp", alt: "" },
-    { src: "/about/lifestyle/08.webp", alt: "" },
     { src: "/about/lifestyle/09.webp", alt: "" },
     { src: "/about/lifestyle/10.webp", alt: "" },
   ],

@@ -56,7 +56,7 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     range: [0.26, 0.88],
     xFrom: -130,
     xTo: 130,
-    top: "62%",
+    top: "67%",
     rotate: "-3deg",
     width: "min(43vw, 288px)",
     height: "min(60vw, 400px)",
@@ -104,16 +104,6 @@ const IMAGE_CONFIGS: ImageConfig[] = [
     height: "min(40vw, 268px)",
     zIndex: 20,
     hideOnMobile: true,
-  },
-  {
-    range: [0.29, 0.91],
-    xFrom: 130,
-    xTo: -130,
-    top: "82%",
-    rotate: "2deg",
-    width: "min(46vw, 305px)",
-    height: "min(62vw, 415px)",
-    zIndex: 0,
   },
   {
     range: [0.36, 0.97],
@@ -192,7 +182,7 @@ function StaticCollage() {
       rotate: "5deg",
     },
     {
-      bottom: "12%",
+      bottom: "7%",
       right: "4%",
       width: "min(42%, 288px)",
       height: "min(30%, 400px)",
@@ -225,13 +215,6 @@ function StaticCollage() {
       width: "min(44%, 380px)",
       height: "min(21%, 268px)",
       rotate: "-5deg",
-    },
-    {
-      top: "18%",
-      left: "20%",
-      width: "min(38%, 305px)",
-      height: "min(31%, 415px)",
-      rotate: "2deg",
     },
     {
       bottom: "20%",

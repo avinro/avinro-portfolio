@@ -5,6 +5,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { persistLocaleChoice } from "@/i18n/locale-cookie";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -33,9 +34,9 @@ export function LanguageSwitcher({
   const t = useTranslations("languageSwitcher");
 
   const switchLocale = (next: "en" | "es") => {
-    if (next !== locale) {
-      router.replace(pathname, { locale: next });
-    }
+    if (next === locale) return;
+    persistLocaleChoice(next);
+    router.replace(pathname, { locale: next });
   };
 
   return (
