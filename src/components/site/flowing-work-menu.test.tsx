@@ -90,8 +90,15 @@ describe("FlowingWorkMenu", () => {
 
   it("renders each item title in the markup", () => {
     const html = renderToStaticMarkup(<FlowingWorkMenu items={mockItems} />);
-    expect(html).toContain("helloDojo — Customer App");
+    expect(html).toContain("helloDojo —");
+    expect(html).toContain("Customer App");
     expect(html).toContain("DomainPlug");
+  });
+
+  it("splits the helloDojo title across two lines in the static row", () => {
+    const html = renderToStaticMarkup(<FlowingWorkMenu items={mockItems} />);
+    expect(html).toContain('<span class="block">helloDojo —</span>');
+    expect(html).toContain('<span class="block">Customer App</span>');
   });
 
   it("renders kind badges to distinguish content types", () => {

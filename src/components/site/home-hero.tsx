@@ -51,14 +51,22 @@ export function HomeHero() {
             setIsCircleHovered(false);
           }}
         >
-          <div className="relative" style={{ width: 120, height: 120 }}>
+          <div
+            className="relative"
+            // Fluid diameter, scaled 1.5×: min 180px (11.25rem), max 234px (14.625rem).
+            // The circular text, profile image and everything inside scale from this.
+            style={{
+              width: "clamp(11.25rem, 45vw, 14.625rem)",
+              height: "clamp(11.25rem, 45vw, 14.625rem)",
+            }}
+          >
             <CircularText
               text={isCircleHovered ? t("hero.circularTextHover") : t("hero.circularText")}
               textChangeTransition="shuffle"
               spinDuration={20}
               onHover="slowDown"
-              size={120}
-              fontSize="0.65rem"
+              size="100%"
+              fontSize="clamp(0.975rem, 3.9vw, 1.2675rem)"
               aria-hidden="true"
               className="text-foreground/60"
             />
@@ -71,7 +79,7 @@ export function HomeHero() {
                 src={hero.profileImageSrc}
                 alt=""
                 fill
-                sizes="80px"
+                sizes="144px"
                 className="object-cover transition-transform duration-[800ms] ease-in-out group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 priority
               />
@@ -96,27 +104,27 @@ export function HomeHero() {
               setIsCircleHovered(false);
             }}
           >
-            <div className="relative" style={{ width: 180, height: 180 }}>
+            <div className="relative" style={{ width: 270, height: 270 }}>
               <CircularText
                 text={isCircleHovered ? t("hero.circularTextHover") : t("hero.circularText")}
                 textChangeTransition="shuffle"
                 spinDuration={20}
                 onHover="slowDown"
-                size={180}
-                fontSize="1rem"
+                size={270}
+                fontSize="1.5rem"
                 aria-hidden="true"
                 className="text-foreground/60"
               />
               <div
                 aria-hidden="true"
                 className="bg-muted pointer-events-none absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
-                style={{ width: "calc(70%" }}
+                style={{ width: "70%" }}
               >
                 <Image
                   src={hero.profileImageSrc}
                   alt=""
                   fill
-                  sizes="120px"
+                  sizes="180px"
                   className="object-cover transition-transform duration-[800ms] ease-in-out group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   priority
                 />
@@ -151,6 +159,7 @@ export function HomeHero() {
               toFontVariationSettings="'wght' 900, 'opsz' 40"
               radius={200}
               falloff="gaussian"
+              staticAnchor="top-left"
               className="font-display font-semibold text-balance"
               style={{
                 display: "block",

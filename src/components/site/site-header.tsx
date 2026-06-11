@@ -193,40 +193,43 @@ export function SiteHeader() {
               </Button>
             </ContactSheet>
           </nav>
-          <button
-            type="button"
-            onClick={() => {
-              setIsMenuOpen((v) => !v);
-            }}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-nav-panel"
-            aria-label={isMenuOpen ? tNav("closeMenu") : tNav("openMenu")}
-            className="focus-ring relative flex h-[44px] w-[44px] items-center justify-center rounded-md md:hidden"
-          >
-            <span className="relative block h-[14px] w-5" aria-hidden="true">
-              <span
-                className={cn(
-                  "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
-                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
-                  isMenuOpen ? "top-[6px] rotate-45" : "top-0 rotate-0",
-                )}
-              />
-              <span
-                className={cn(
-                  "absolute top-[6px] left-0 h-0.5 w-full rounded-sm bg-current",
-                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
-                  isMenuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
-                )}
-              />
-              <span
-                className={cn(
-                  "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
-                  "transition-all duration-300 ease-in-out motion-reduce:transition-none",
-                  isMenuOpen ? "top-[6px] -rotate-45" : "top-[12px] rotate-0",
-                )}
-              />
-            </span>
-          </button>
+          <div className="flex items-center gap-1 md:hidden">
+            <LanguageSwitcher variant="mobile" className="px-1" />
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen((v) => !v);
+              }}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-nav-panel"
+              aria-label={isMenuOpen ? tNav("closeMenu") : tNav("openMenu")}
+              className="focus-ring relative flex h-[44px] w-[44px] items-center justify-center rounded-md"
+            >
+              <span className="relative block h-[14px] w-5" aria-hidden="true">
+                <span
+                  className={cn(
+                    "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
+                    "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                    isMenuOpen ? "top-[6px] rotate-45" : "top-0 rotate-0",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute top-[6px] left-0 h-0.5 w-full rounded-sm bg-current",
+                    "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                    isMenuOpen ? "scale-x-0 opacity-0" : "scale-x-100 opacity-100",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute left-0 h-0.5 w-full origin-center rounded-sm bg-current",
+                    "transition-all duration-300 ease-in-out motion-reduce:transition-none",
+                    isMenuOpen ? "top-[6px] -rotate-45" : "top-[12px] rotate-0",
+                  )}
+                />
+              </span>
+            </button>
+          </div>
         </div>
         <div
           id="mobile-nav-panel"
@@ -266,15 +269,6 @@ export function SiteHeader() {
                 </SiteTextLink>
               );
             })}
-            <LanguageSwitcher
-              variant="mobile"
-              className={cn(
-                isMenuOpen
-                  ? "animate-in fade-in-0 slide-in-from-bottom-2 fill-mode-both duration-300"
-                  : "pointer-events-none [transform:none] [animation:none] opacity-0",
-              )}
-              style={isMenuOpen ? { animationDelay: "460ms" } : undefined}
-            />
           </nav>
           <div
             className={cn(

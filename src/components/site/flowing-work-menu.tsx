@@ -39,6 +39,7 @@ function findClosestEdge(
 function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boolean }) {
   const t = useTranslations("workMenu");
   const href = item.kind === "work" ? `/work/${item.slug}` : `/case-studies/${item.slug}`;
+  const splitHelloDojoTitle = item.slug === "hello-dojo" ? item.title.split(" — ", 2) : null;
   const ariaLabel =
     item.kind === "work"
       ? t("viewWork", { title: item.title })
@@ -52,8 +53,15 @@ function StaticWorkRow({ item, isFirst }: { item: SelectedWorkItem; isFirst: boo
       aria-label={ariaLabel}
     >
       <div className="flex min-w-0 items-center gap-6">
-        <span className="font-display text-foreground text-2xl font-semibold tracking-tight uppercase sm:text-3xl">
-          {item.title}
+        <span className="font-display text-foreground text-2xl leading-none font-semibold tracking-tight uppercase sm:text-3xl">
+          {splitHelloDojoTitle?.length === 2 ? (
+            <>
+              <span className="block">{splitHelloDojoTitle[0]} —</span>
+              <span className="block">{splitHelloDojoTitle[1]}</span>
+            </>
+          ) : (
+            item.title
+          )}
         </span>
         <span className="text-muted-foreground hidden font-mono text-[10px] tracking-widest uppercase sm:inline">
           {item.kind === "work" ? t("work") : t("caseStudy")}

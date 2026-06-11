@@ -72,6 +72,7 @@ function SheetContent({
           className={cn(
             "focus-ring absolute flex min-h-11 min-w-11 items-center justify-center rounded-full opacity-60 transition-opacity hover:opacity-100 disabled:pointer-events-none",
             "top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))]",
+            variant === "chat" && "bg-white text-black opacity-100 shadow-md",
           )}
           aria-label="Close"
         >

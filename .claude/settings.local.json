@@ -21,5 +21,8 @@
       "Bash(npx prettier *)",
       "Bash(node -e \"const p=require\\('next-intl/package.json'\\); console.log\\('next-intl', p.version\\)\")"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "claude-c-research"
+  ]
 }

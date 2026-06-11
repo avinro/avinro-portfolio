@@ -11,7 +11,8 @@ export type CircularTextChangeTransition = "none" | "shuffle";
 
 export interface CircularTextProps {
   text: string;
-  size?: number;
+  /** Diameter as a number (px) or any CSS length (e.g. a `clamp()` for fluid sizing). */
+  size?: number | string;
   spinDuration?: number;
   onHover?: CircularTextOnHover;
   className?: string;
@@ -313,7 +314,8 @@ export function CircularText({
             style={{
               transform,
               WebkitTransform: transform,
-              fontSize: fontSize ?? Math.max(12, size * 0.12),
+              fontSize:
+                fontSize ?? (typeof size === "number" ? Math.max(12, size * 0.12) : "0.12em"),
               opacity: visible ? 1 : 0,
               visibility: visible ? "visible" : "hidden",
               transition:

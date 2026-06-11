@@ -50,7 +50,18 @@
       "greeting": "Hey, I'm Ary",
       "bio": "Designer, builder, problem solver. Outside of work, probably traveling, working out, watching anime, or spending time with people I care about.",
       "linkLabel": "More about me",
-      "aria": "About"
+      "aria": "About",
+      "imageCaptions": [
+        "Recharging with the best company",
+        "Humor makes life taste better",
+        "Little getaways that bring us closer",
+        "Just a normal winter day",
+        "The gym is my therapy session",
+        "Cuban food, just like back in Cuba",
+        "Friends who live far away, but never feel far",
+        "The whole family together",
+        "Almost the whole crew, in summer mode"
+      ]
     },
     "finalCta": {
       "heading": "Have something you're trying to build - but not sure how to structure or ship it?",

@@ -50,7 +50,18 @@
       "greeting": "Hola, soy Ary",
       "bio": "Diseñador, builder y solucionador de problemas. Fuera del trabajo, probablemente viajando, entrenando, viendo anime o pasando tiempo con la gente que quiero.",
       "linkLabel": "Más sobre mí",
-      "aria": "Sobre mí"
+      "aria": "Sobre mí",
+      "imageCaptions": [
+        "Recargando pilas con la mejor compañía",
+        "El humor es el sazón de la vida",
+        "Escapadas para volver a conectar",
+        "Un día cualquiera de invierno",
+        "El gimnasio: mi sesión de terapia",
+        "Comida cubana, como si estuviéramos en Cuba",
+        "Amigos que viven lejos, pero siempre cerca",
+        "La familia al completo",
+        "Casi toda la pandilla, en modo verano"
+      ]
     },
     "finalCta": {
       "heading": "¿Tienes algo que quieres construir, pero no sabes cómo estructurarlo o lanzarlo?",
