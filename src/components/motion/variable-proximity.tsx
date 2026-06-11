@@ -67,6 +67,13 @@ export interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> 
   className?: string;
   onClick?: () => void;
   style?: CSSProperties;
+  /**
+   * On devices without hover (touch / coarse pointer) there is no cursor to
+   * drive the proximity effect, so it would stay static. When set, those
+   * devices apply the effect from a fixed origin instead of the live pointer,
+   * keeping the same radius. Currently only `"top-left"` is supported.
+   */
+  staticAnchor?: "top-left";
 }
 
 const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((props, ref) => {
@@ -80,6 +87,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     className = "",
     onClick,
     style,
+    staticAnchor,
     ...restProps
   } = props;
 
@@ -88,6 +96,39 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
+
+  // Static-origin mode for hover-less devices (see `staticAnchor`).
+  const noHoverRef = useRef(false);
+  const staticDirtyRef = useRef(true);
+  const settleUntilRef = useRef(0);
+
+  useEffect(() => {
+    if (!staticAnchor) return;
+    const mq = window.matchMedia("(hover: none)");
+    const applyHover = () => {
+      noHoverRef.current = mq.matches;
+      // Recompute through the entrance animation / font swap once we know the mode.
+      staticDirtyRef.current = true;
+      settleUntilRef.current = performance.now() + 1200;
+    };
+    applyHover();
+    mq.addEventListener("change", applyHover);
+
+    // Letter metrics shift on these; flag a recompute of the fixed gradient.
+    const markDirty = () => {
+      staticDirtyRef.current = true;
+      settleUntilRef.current = performance.now() + 600;
+    };
+    window.addEventListener("resize", markDirty);
+    window.addEventListener("orientationchange", markDirty);
+    void document.fonts.ready.then(markDirty);
+
+    return () => {
+      mq.removeEventListener("change", applyHover);
+      window.removeEventListener("resize", markDirty);
+      window.removeEventListener("orientationchange", markDirty);
+    };
+  }, [staticAnchor]);
 
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const interpolatedSettingsRef = useRef<string[]>([]);
@@ -138,9 +179,26 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
   useAnimationFrame(() => {
     if (reducedMotionRef.current) return;
     if (!containerRef.current) return;
-    const { x, y } = mousePositionRef.current;
-    if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) return;
-    lastPositionRef.current = { x, y };
+
+    const useStatic = Boolean(staticAnchor) && noHoverRef.current;
+
+    let originX: number;
+    let originY: number;
+    if (useStatic) {
+      // Fixed origin at the container's top-left corner.
+      originX = 0;
+      originY = 0;
+      const now = performance.now();
+      // While settling (entrance / font swap) recompute every frame; once stable
+      // compute one last time and idle until something flags it dirty again.
+      if (!staticDirtyRef.current && now > settleUntilRef.current) return;
+      if (now > settleUntilRef.current) staticDirtyRef.current = false;
+    } else {
+      originX = mousePositionRef.current.x;
+      originY = mousePositionRef.current.y;
+      if (lastPositionRef.current.x === originX && lastPositionRef.current.y === originY) return;
+      lastPositionRef.current = { x: originX, y: originY };
+    }
 
     const containerRect = containerRef.current.getBoundingClientRect();
 
@@ -151,12 +209,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
       const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
       const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
 
-      const distance = calculateDistance(
-        mousePositionRef.current.x,
-        mousePositionRef.current.y,
-        letterCenterX,
-        letterCenterY,
-      );
+      const distance = calculateDistance(originX, originY, letterCenterX, letterCenterY);
 
       if (distance >= radius) {
         letterRef.style.fontVariationSettings = fromFontVariationSettings;

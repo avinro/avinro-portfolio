@@ -159,6 +159,7 @@ export function HomeHero() {
               toFontVariationSettings="'wght' 900, 'opsz' 40"
               radius={200}
               falloff="gaussian"
+              staticAnchor="top-left"
               className="font-display font-semibold text-balance"
               style={{
                 display: "block",
