@@ -16,7 +16,7 @@ interface ChatMessage {
   content: string;
 }
 
-const MODEL_ID = "gemini-3.1-flash-lite-preview";
+const MODEL_ID = "gemini-3.1-flash-lite";
 
 // Cards are resolved straight from the content layer, so any published project
 // (including new MDX files) is automatically a valid tool target. Unknown slugs
