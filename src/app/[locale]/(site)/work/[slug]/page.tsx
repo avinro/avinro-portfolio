@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { getWorkBySlug, getWorkSlugs, getPublishedWorkNeighbors } from "@/lib/content/works";
 import { SITE_URL, SITE_NAME } from "@/lib/seo/site";
+import { buildLocaleAlternates } from "@/lib/seo/alternates";
 import { mdxOptions } from "@/lib/mdx/options";
 import { workMdxComponents } from "@/components/work/work-mdx-components";
 import { WorkGalleryFigure } from "@/components/work/work-gallery-figure";
@@ -35,20 +36,19 @@ export async function generateMetadata({
   const { frontmatter } = work;
   const title = `${frontmatter.title} | ${SITE_NAME}`;
   const description = frontmatter.summary;
-  const url = `${SITE_URL}/work/${slug}`;
+  const canonicalPath = locale === "es" ? `/es/work/${slug}` : `/work/${slug}`;
+  const url = `${SITE_URL}${canonicalPath}`;
 
   return {
     title,
     description,
-    alternates: {
-      canonical: `/work/${slug}`,
-    },
+    alternates: buildLocaleAlternates(locale, `/work/${slug}`),
     openGraph: {
       title,
       description,
       url,
       siteName: SITE_NAME,
-      locale: "en_US",
+      locale: locale === "es" ? "es_ES" : "en_US",
       type: "article",
       images: [
         {

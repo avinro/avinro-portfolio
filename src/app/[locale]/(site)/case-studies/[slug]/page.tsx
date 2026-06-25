@@ -13,6 +13,7 @@ import {
 } from "@/lib/content/case-studies";
 import { extractTocHeadings } from "@/lib/content/toc";
 import { SITE_URL, SITE_NAME } from "@/lib/seo/site";
+import { buildLocaleAlternates } from "@/lib/seo/alternates";
 import { CreativeWorkJsonLd } from "@/lib/seo/json-ld";
 import { mdxOptions } from "@/lib/mdx/options";
 import { mdxComponents, Stats } from "@/components/mdx/components";
@@ -42,20 +43,19 @@ export async function generateMetadata({
   const { frontmatter } = cs;
   const title = `${frontmatter.title} | ${SITE_NAME}`;
   const description = frontmatter.outcome;
-  const url = `${SITE_URL}/case-studies/${slug}`;
+  const canonicalPath = locale === "es" ? `/es/case-studies/${slug}` : `/case-studies/${slug}`;
+  const url = `${SITE_URL}${canonicalPath}`;
 
   return {
     title,
     description,
-    alternates: {
-      canonical: `/case-studies/${slug}`,
-    },
+    alternates: buildLocaleAlternates(locale, `/case-studies/${slug}`),
     openGraph: {
       title,
       description,
       url,
       siteName: SITE_NAME,
-      locale: "en_US",
+      locale: locale === "es" ? "es_ES" : "en_US",
       type: "article",
       images: [
         {
