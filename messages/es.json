@@ -318,9 +318,9 @@
     "lastUpdated": "Última actualización: Mayo de 2026"
   },
   "notFound": {
-    "kicker": "404",
-    "body": "Esta página no existe o se ha movido.",
-    "cta": "Volver al inicio"
+    "kicker": "Te perdiste en la matrix",
+    "body": "Esta página se escapó por una grieta de la simulación.",
+    "cta": "Volver a la realidad"
   },
   "languageSwitcher": {
     "label": "Idioma",
