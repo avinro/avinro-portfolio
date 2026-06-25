@@ -70,7 +70,10 @@ export function ContactSheet({ children, ctaPosition = "unknown" }: ContactSheet
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>{children}</SheetTrigger>
 
-      <SheetContent>
+      {/* Lift above the desktop chat panel (z-50) and its close FAB (z-[60]) so the
+          sheet covers the agent entirely instead of letting the close button poke
+          through. */}
+      <SheetContent className="z-[65]" overlayClassName="z-[65]">
         <div
           className="flex h-full flex-col"
           style={{ paddingTop: "max(env(safe-area-inset-top), 1.5rem)" }}
