@@ -52,6 +52,9 @@ export async function generateMetadata({
     },
     description: t("siteDescription"),
     metadataBase: new URL(SITE_URL),
+    verification: {
+      google: "bFtdfET_VPVuq0w0-Sw5ogdtjBRfA6NqbakJefKIPl8",
+    },
     openGraph: {
       type: "website",
       locale: safeLocale === "es" ? "es_ES" : "en_US",
