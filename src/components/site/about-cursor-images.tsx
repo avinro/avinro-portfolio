@@ -127,6 +127,8 @@ interface ScrollPanImageProps {
 
 const HOVER_SPRING = { damping: 30, stiffness: 140, mass: 1.4 } as const;
 const CAPTION_SPRING = { damping: 30, stiffness: 350, mass: 1 } as const;
+const CAPTION_CURSOR_OFFSET = 8;
+const CAPTION_FALLBACK_WIDTH = 208;
 
 interface FloatingImageCardProps {
   src: string;
@@ -142,6 +144,7 @@ function FloatingImageCard({
   onHoverChange,
 }: FloatingImageCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const captionRef = useRef<HTMLSpanElement>(null);
   const [lastY, setLastY] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isTouchActive, setIsTouchActive] = useState(false);
@@ -162,8 +165,13 @@ function FloatingImageCard({
     const offsetY = event.clientY - rect.top - rect.height / 2;
 
     const localX = event.clientX - rect.left;
-    cursorX.set(localX > rect.width / 2 ? localX - 208 : localX + 16);
-    cursorY.set(event.clientY - rect.top + 8);
+    const captionWidth = captionRef.current?.offsetWidth ?? CAPTION_FALLBACK_WIDTH;
+    cursorX.set(
+      localX > rect.width / 2
+        ? localX - captionWidth - CAPTION_CURSOR_OFFSET
+        : localX + CAPTION_CURSOR_OFFSET,
+    );
+    cursorY.set(event.clientY - rect.top + CAPTION_CURSOR_OFFSET);
 
     if (reducedMotion) return;
 
@@ -174,7 +182,8 @@ function FloatingImageCard({
     setLastY(offsetY);
   }
 
-  function handlePointerEnter() {
+  function handlePointerEnter(event: React.PointerEvent<HTMLDivElement>) {
+    handlePointerMove(event);
     setIsHovered(true);
     onHoverChange?.(true);
     if (!reducedMotion) captionOpacity.set(1);
@@ -240,27 +249,19 @@ function FloatingImageCard({
         />
       </motion.div>
 
-      {reducedMotion ? (
-        <span
-          aria-hidden="true"
-          className={`pointer-events-none absolute top-3 right-3 z-30 max-w-52 rounded bg-white px-2.5 py-1 font-mono text-[10px] leading-snug text-[#2d2d2d] shadow-sm ${isHovered ? "opacity-100" : "opacity-0"}`}
-        >
-          {caption}
-        </span>
-      ) : (
-        <motion.span
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-0 z-30 max-w-52 rounded bg-white px-2.5 py-1 font-mono text-[10px] leading-snug text-[#2d2d2d] shadow-sm"
-          style={{
-            x: cursorX,
-            y: cursorY,
-            opacity: captionOpacity,
-            rotate: captionRotate,
-          }}
-        >
-          {caption}
-        </motion.span>
-      )}
+      <motion.span
+        ref={captionRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 z-30 max-w-52 rounded bg-white px-2.5 py-1 font-mono text-[10px] leading-snug text-[#2d2d2d] shadow-sm"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          opacity: reducedMotion ? (isHovered ? 1 : 0) : captionOpacity,
+          rotate: reducedMotion ? 0 : captionRotate,
+        }}
+      >
+        {caption}
+      </motion.span>
     </div>
   );
 }

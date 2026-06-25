@@ -319,6 +319,11 @@ interface ChatBodyProps {
   onScroll: () => void;
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
   footerPaddingBottom: string;
+  // When true (mobile sheet), the input is pulled out of flow and floated at the
+  // bottom so only it rises above the keyboard — the log keeps its size and
+  // reserves space underneath instead of the whole panel resizing.
+  floatingInput: boolean;
+  keyboardInset: number;
 }
 
 /** Shared conversation log + input. Each shell (sheet / panel) supplies its own header. */
@@ -338,8 +343,29 @@ function ChatBody({
   onScroll,
   textareaRef,
   footerPaddingBottom,
+  floatingInput,
+  keyboardInset,
 }: ChatBodyProps) {
   const t = useTranslations("aiChat");
+
+  // Measure the floating input so the log can reserve exactly its height (the
+  // textarea autogrows) plus the keyboard inset, keeping the last message clear.
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [footerHeight, setFooterHeight] = useState(0);
+  useLayoutEffect(() => {
+    if (!floatingInput) return;
+    const el = footerRef.current;
+    if (!el) return;
+    const measure = () => {
+      setFooterHeight(el.offsetHeight);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+    };
+  }, [floatingInput]);
 
   return (
     <>
@@ -353,6 +379,9 @@ function ChatBody({
         // region out so it scrolls natively instead of moving the page behind it.
         data-lenis-prevent
         className="bg-muted/70 min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto overscroll-y-contain px-4 py-4 dark:bg-black/40"
+        style={
+          floatingInput ? { paddingBottom: `${String(footerHeight + keyboardInset)}px` } : undefined
+        }
       >
         {messages.length === 0 && !streamingActive && !isLoading && (
           <EmptyState onSelect={onSelectSuggestion} />
@@ -366,8 +395,19 @@ function ChatBody({
       </div>
 
       <div
-        className="bg-muted/70 shrink-0 px-4 pt-4 dark:bg-black/40"
-        style={{ paddingBottom: footerPaddingBottom }}
+        ref={footerRef}
+        className={cn(
+          "bg-muted/70 px-4 pt-4 dark:bg-black/40",
+          floatingInput ? "border-border/50 absolute inset-x-0 bottom-0 z-10 border-t" : "shrink-0",
+        )}
+        style={{
+          paddingBottom: footerPaddingBottom,
+          // Lift only the input above the keyboard; the log behind it stays put.
+          transform:
+            floatingInput && keyboardInset > 0
+              ? `translateY(-${String(keyboardInset)}px)`
+              : undefined,
+        }}
       >
         <ChatInput
           ref={textareaRef}
@@ -403,7 +443,7 @@ export function AiChat() {
   const shownCardSlugsRef = useRef<Set<string>>(new Set());
   const lenis = useLenis();
   const { scrollRef, onScroll, markForceStick, scrollToBottomIfNeeded } = useStickToBottom();
-  const { viewportHeight, offsetTop } = useVisualViewportInset(open && isMobileViewport);
+  const { keyboardInset } = useVisualViewportInset(open && isMobileViewport);
 
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${String(MOBILE_MAX_BREAKPOINT)}px)`);
@@ -522,6 +562,13 @@ export function AiChat() {
     scrollToBottomIfNeeded({ instant });
   }, [open, messages, isLoading, scrollToBottomIfNeeded]);
 
+  // When the mobile keyboard opens/closes the reserved bottom space changes;
+  // keep the latest message pinned above the floating input if the user was there.
+  useEffect(() => {
+    if (!open || !isMobileViewport) return;
+    scrollToBottomIfNeeded({ instant: true });
+  }, [keyboardInset, open, isMobileViewport, scrollToBottomIfNeeded]);
+
   // On mobile the sheet locks the page; on the desktop push-panel the shrunk
   // site content stays scrollable, so Lenis must keep running.
   useEffect(() => {
@@ -595,22 +642,10 @@ export function AiChat() {
     }
   };
 
-  // Pin the sheet to the visual viewport: size it to the visible height and
-  // push its top down by `offsetTop`. Without the offset, iOS keeps the fixed
-  // sheet glued to the layout-viewport top while the keyboard scrolls the page,
-  // detaching the sheet and exposing the blurred page behind it. `top` is used
-  // (not `transform`) so it never clobbers the slide-in entrance animation.
-  const sheetMobileStyle =
-    isMobileViewport && open
-      ? {
-          height: `${String(viewportHeight)}px`,
-          maxHeight: `${String(viewportHeight)}px`,
-          top: `${String(offsetTop)}px`,
-        }
-      : undefined;
-
-  // The sheet bottom already lands just above the keyboard (height tracks the
-  // visual viewport), so the footer only needs the home-indicator safe area.
+  // The mobile sheet stays full-screen (it never resizes to the visual viewport),
+  // so the page never shows behind it. Instead the floating input lifts above the
+  // keyboard; keeping the focused field visible also stops iOS from scrolling the
+  // page, which is what used to detach the sheet and shift the whole panel.
   const footerPaddingBottom = "max(env(safe-area-inset-bottom), 1rem)";
   const desktopFooterPaddingBottom = "max(env(safe-area-inset-bottom), 1.5rem)";
 
@@ -620,7 +655,7 @@ export function AiChat() {
       }
     : undefined;
 
-  const chatBody = (paddingBottom: string) => (
+  const chatBody = (paddingBottom: string, floatingInput: boolean) => (
     <ChatBody
       messages={messages}
       isLoading={isLoading}
@@ -637,6 +672,8 @@ export function AiChat() {
       onScroll={onScroll}
       textareaRef={textareaRef}
       footerPaddingBottom={paddingBottom}
+      floatingInput={floatingInput}
+      keyboardInset={floatingInput ? keyboardInset : 0}
     />
   );
 
@@ -692,7 +729,6 @@ export function AiChat() {
           <SheetContent
             variant="chat"
             className="flex flex-col"
-            style={sheetMobileStyle}
             onOpenAutoFocus={(e) => {
               e.preventDefault();
               window.setTimeout(() => {
@@ -707,7 +743,7 @@ export function AiChat() {
             <SheetTitle className="sr-only">{t("sheetTitle")}</SheetTitle>
             <SheetDescription className="sr-only">{t("sheetDescription")}</SheetDescription>
 
-            {chatBody(footerPaddingBottom)}
+            {chatBody(footerPaddingBottom, true)}
           </SheetContent>
         </Sheet>
       ) : (
@@ -721,7 +757,7 @@ export function AiChat() {
             open ? "translate-x-0" : "pointer-events-none translate-x-full",
           )}
         >
-          {chatBody(desktopFooterPaddingBottom)}
+          {chatBody(desktopFooterPaddingBottom, false)}
         </aside>
       )}
     </>

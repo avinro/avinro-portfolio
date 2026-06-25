@@ -66,14 +66,14 @@ export function HomeHero() {
               spinDuration={20}
               onHover="slowDown"
               size="100%"
-              fontSize="clamp(0.975rem, 3.9vw, 1.2675rem)"
+              fontSize="clamp(0.875rem, 3.5vw, 1.1375rem)"
               aria-hidden="true"
               className="text-foreground/60"
             />
             <div
               aria-hidden="true"
               className="bg-muted pointer-events-none absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
-              style={{ width: "calc(60% + 4px)" }}
+              style={{ width: "calc(68% + 4px)" }}
             >
               <Image
                 src={hero.profileImageSrc}
