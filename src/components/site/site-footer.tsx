@@ -1,6 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/navigation";
@@ -13,6 +15,11 @@ import { LinkedinIcon } from "@/components/site/icons/linkedin-icon";
 import { siteUnderlineBarClassName } from "@/components/site/site-link-underline";
 import { SiteTextLink } from "@/components/site/site-text-link";
 import { isNavSectionActive } from "@/lib/navigation/nav-active";
+
+const PixelBlast = dynamic(
+  () => import("@/components/motion/pixel-blast").then((m) => m.PixelBlast),
+  { ssr: false },
+);
 
 const footerLinks = [
   { labelKey: "work", href: "/work" },
@@ -33,12 +40,46 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   const { finalCta } = homeContent;
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = (matches: boolean) => {
+      setIsMobile(matches);
+    };
+    update(mq.matches);
+    const fn = (e: MediaQueryListEvent) => {
+      update(e.matches);
+    };
+    mq.addEventListener("change", fn);
+    return () => {
+      mq.removeEventListener("change", fn);
+    };
+  }, []);
+
   return (
     <footer
       data-curtain-footer
       className="border-background/10 bg-foreground text-background pointer-events-none fixed right-[var(--chat-panel-w)] bottom-0 left-0 z-0 flex h-[calc(100dvh-72px)] flex-col border-t transition-[right] duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] motion-reduce:transition-none"
     >
-      <div className="pointer-events-auto mx-auto flex h-full w-full max-w-[1440px] flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        <PixelBlast
+          variant="diamond"
+          pixelSize={3}
+          color="#3d3d3d"
+          patternScale={isMobile ? 1.8 : 3.5}
+          patternDensity={isMobile ? 0.75 : 0.7}
+          pixelSizeJitter={0.5}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid={false}
+          speed={0.95}
+          edgeFade={0.05}
+          transparent={false}
+        />
+      </div>
+      <div className="pointer-events-auto relative z-10 mx-auto flex h-full w-full max-w-[1440px] flex-col justify-between gap-12 px-4 py-12 pb-6 sm:px-6 lg:px-8">
         <section
           aria-labelledby="footer-cta-title"
           className="flex flex-1 flex-col justify-center gap-8 py-12"
