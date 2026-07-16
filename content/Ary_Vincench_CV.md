@@ -1,6 +1,6 @@
 # Ary Vincench
 
-**Product Design Engineer**  
+**Product Designer**  
 Strategic UI/UX | Engineering-aware design systems | AI-assisted front-end execution
 Madrid, Spain
 
@@ -11,7 +11,7 @@ Madrid, Spain
 
 ## Professional Profile
 
-Product Design Engineer with 9+ years of experience in design and 5+ years building SaaS and multi-sided platforms from zero to production. I sit at the intersection of product strategy, interaction design, and front-end implementation — defining user journeys, owning design systems end-to-end, and closing the gap between Figma and code using AI-assisted workflows (Cursor, Claude, Codex).
+Product Designer with 9+ years of experience in design and 5+ years building SaaS and multi-sided platforms from zero to production. I sit at the intersection of product strategy, interaction design, and front-end implementation — defining user journeys, owning design systems end-to-end, and closing the gap between Figma and code using AI-assisted workflows (Cursor, Claude, Codex).
 
 Strong in zero-to-one environments and fast-moving product teams where design and engineering need to move as one.
 

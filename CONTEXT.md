@@ -4,7 +4,7 @@
 
 **Owner:** Ary Vincench (Avinro)  
 **Email:** avinroart@gmail.com  
-**Title:** Product Design Engineer  
+**Title:** Product Designer  
 **Location:** Madrid, Spain  
 **Type:** Personal portfolio website  
 **URL:** https://www.avinro.com  
@@ -31,7 +31,7 @@ The site serves as:
 
 ## About Avinro (Ary Vincench)
 
-**Product Design Engineer** with 9+ years of experience designing and shipping **SaaS and multi-sided platforms**.
+**Product Designer** with 9+ years of experience designing and shipping **SaaS and multi-sided platforms**.
 
 ### Core Expertise
 

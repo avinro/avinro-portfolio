@@ -75,7 +75,7 @@ export const homeContent: HomeContent = {
   },
   hero: {
     badgeText: "Open to Work",
-    headline: "Product Design Engineer shipping vision into reality",
+    headline: "Product Designer shipping vision into reality",
     subheadline:
       "I've shipped SaaS products for B2B and B2C teams — from 0→1 discovery to launch. Most projects fail between idea and execution; I help close that gap.",
     circularText: "Strategy & execution · Product design · ",

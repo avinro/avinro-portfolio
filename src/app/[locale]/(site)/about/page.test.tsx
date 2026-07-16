@@ -8,7 +8,7 @@ import AboutPage from "./page";
  *
  * Verifies:
  *   - All sr-only section headings are present in the markup
- *   - Page h1 is rendered with the Product Design Engineer identity
+ *   - Page h1 is rendered with the Product Designer identity
  *   - Portrait placeholder is visible and labelled
  *   - Process stages are rendered
  */
@@ -24,8 +24,8 @@ describe("AboutPage", () => {
     expect(html).toBeTruthy();
   });
 
-  it("renders the page h1 with Product Design Engineer identity", () => {
-    expect(html).toContain("Product Design Engineer");
+  it("renders the page h1 with Product Designer identity", () => {
+    expect(html).toContain("Product Designer");
   });
 
   it("renders the sr-only Experience section heading", () => {

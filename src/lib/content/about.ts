@@ -52,7 +52,7 @@ export const aboutContent: AboutContent = {
   hero: {
     portraitSrc: "/images/about.jpg",
     bio: [
-      "I'm Ary — Product Design Engineer working at the intersection of strategy, design, and execution.",
+      "I'm Ary — Product Designer working at the intersection of strategy, design, and execution.",
       "I help teams turn unclear ideas into structured products they can actually ship. My work spans 0→1 products, multi-app ecosystems, and design systems built to last beyond the first release.",
       "I care deeply about the gap between concept and delivery — and I've spent the last several years closing it across different industries, team sizes, and constraints.",
     ],

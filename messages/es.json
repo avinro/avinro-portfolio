@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteDescription": "Product Design Engineer que convierte visión en realidad"
+    "siteDescription": "Diseñador de Producto que convierte visión en realidad"
   },
   "nav": {
     "work": "Trabajo",
@@ -27,7 +27,7 @@
     },
     "hero": {
       "badgeText": "Disponible para trabajar",
-      "headline": "Product Design Engineer llevando visión a realidad",
+      "headline": "Diseñador de Producto llevando visión a realidad",
       "subheadline": "He lanzado productos SaaS para equipos B2B y B2C, desde descubrimiento 0->1 hasta lanzamiento. Muchos proyectos fallan entre la idea y la ejecución; ayudo a cerrar esa brecha.",
       "circularText": "Estrategia y ejecución · Diseño de producto · ",
       "circularTextHover": "Conóceme · Mi trayectoria · ",
@@ -74,19 +74,19 @@
   },
   "about": {
     "title": "Sobre mí",
-    "pageDescription": "Product Design Engineer trabajando en la intersección de estrategia, diseño e implementación front-end. Trayectoria, experiencia, herramientas y filosofía de diseño.",
+    "pageDescription": "Diseñador de Producto trabajando en la intersección de estrategia, diseño e implementación front-end. Trayectoria, experiencia, herramientas y filosofía de diseño.",
     "og": {
-      "title": "Avinro — Product Design Engineer",
-      "description": "Product Design Engineer trabajando en la intersección de estrategia, diseño e implementación front-end."
+      "title": "Avinro — Diseñador de Producto",
+      "description": "Diseñador de Producto trabajando en la intersección de estrategia, diseño e implementación front-end."
     },
     "portraitAria": "Retrato de Ary",
     "portraitAlt": "Ary — retrato",
     "interestsAria": "Intereses",
     "interests": ["amante del anime", "fan de bad bunny", "videojuegos", "entusiasta de cripto"],
     "hero": {
-      "headline": "Product Design Engineer.",
+      "headline": "Diseñador de Producto.",
       "bio": [
-        "Soy Ary, Product Design Engineer trabajando en la intersección de estrategia, diseño y ejecución.",
+        "Soy Ary, Diseñador de Producto trabajando en la intersección de estrategia, diseño y ejecución.",
         "Ayudo a equipos a convertir ideas poco claras en productos estructurados que sí pueden lanzar. Mi trabajo abarca productos 0->1, ecosistemas multi-app y sistemas de diseño pensados para durar más allá del primer release.",
         "Me importa profundamente la brecha entre concepto y entrega, y durante los últimos años me he dedicado a cerrarla en distintas industrias, tamaños de equipo y restricciones."
       ]
